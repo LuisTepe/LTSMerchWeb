@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheckOut Shipping</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-column">
+            <div class="logo">
+                <img class="logo-img" src="~/img/firma.png" alt="Logo">
+            </div>
+            <div class="info-section">
+                <h3>Datos</h3>
+                <table>
+                    <tr>
+                        <td>Contacto</td>
+                        <td><span>ejemplo@ejemplo.com</span></td>
+                        <td><a href="#">Cambiar</a></td>
+                    </tr>
+                    <tr>
+                        <td>Enviar a</td>
+                        <td><span>Calle XX, CP, Hmo Son, MX</span></td>
+                        <td><a href="#">Cambiar</a></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="shipping-section">
+                <h3>Método de envío</h3>
+                <table>
+                    <tr>
+                        <td><input type="radio" name="shipping" value="1"></td>
+                        <td>Paquetería 1</td>
+                        <td class="price">$XX.XX</td>
+                    </tr>
+                    <tr>
+                        <td><input type="radio" name="shipping" value="2"></td>
+                        <td>Paquetería 2</td>
+                        <td class="price">$XX.XX</td>
+                    </tr>
+                    <tr>
+                        <td><input type="radio" name="shipping" value="3"></td>
+                        <td>Paquetería 3</td>
+                        <td class="price">$XX.XX</td>
+                    </tr>
+                </table>
+            </div>
+            <hr class="divider">
+            <div class="action-container">
+                <a asp-area="" asp-controller="Products" asp-action="ShoppingCart" class="back-link"> Regresar a información</a>
+                <form action="@Url.Action("CheckOutPayment", "Products")" method="get">
+                    <button type="submit" class="btn-next">Siguiente</button>
+                </form>
+            </div>
+            <hr class="divider">
+        </div>
+        <div class="right-column">
+            <div>
+                <div class="cart-items">
+                    <div class="cart-item">
+                        <div class="image-container">
+                            <img class="image-cart" src="~/img/tshirt.png" alt="tshirt">
+                            <span class="quantity-bubble">1</span>
+                        </div>
+                        <p>Title T-SHIRT M</p>
+                        <span>$XX.XX</span>
+                    </div>
+                    <div class="cart-item">
+                        <div class="image-container">
+                            <img class="image-cart" src="~/img/cap.png" alt="cap">
+                            <span class="quantity-bubble">2</span>
+                        </div>
+                        <p>Title CAP</p>
+                        <span>$XX.XX</span>
+                    </div>
+                    <div class="cart-item">
+                        <div class="image-container">
+                            <img class="image-cart" src="~/img/hoodie.png" alt="hoodie">
+                            <span class="quantity-bubble">1</span>
+                        </div>
+                        <p>Title HOODIE L</p>
+                        <span>$XX.XX</span>
+                    </div>
+                </div>
+                <div class="discount-code">
+                    <input type="text" placeholder="Ingresar código de descuento">
+                    <button>Aplicar</button>
+                </div>
+                <div class="summary">
+                    <p>Subtotal <span>$XX.XX</span></p>
+                    <p>Envío <span>$XX.XX</span></p>
+                    <p class="total">TOTAL <span><span class="currency">MXN</span> $XX.XX</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

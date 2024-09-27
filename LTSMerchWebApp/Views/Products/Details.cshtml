@@ -1,0 +1,82 @@
+﻿
+<link rel="stylesheet" href="~/css/stylesProducDetails.css" asp-append-version="true">
+
+<main class="mt-5">
+    <section class="product justify-content-center">
+        <div class="row">
+            <!-- Thumbnails -->
+            <div class="col-12 col-md-2 d-flex flex-column align-items-center product-thumbnails mb-3 mb-md-0">
+                <img id="thumbnail-front" src="~/img/camisa-delante.png" alt="Frente de la camiseta" class="img-thumbnail" onclick="changeMainImage('thumbnail-front')">
+                <span>FRENTE</span>
+                <img id="thumbnail-back" src="~/img/camisa-atras.png" alt="Espalda de la camiseta" class="img-thumbnail mt-2" onclick="changeMainImage('thumbnail-back')">
+                <span>DETRÁS</span>
+            </div>
+
+            <!-- Main Product Image -->
+            <div class="col-12 col-md-6 product-images text-center mb-3 mb-md-0">
+                <img id="main-product-image" src="~/img/camisa-delante.png" alt="Frente de la camiseta" class="img-fluid main-product-image">
+                <!-- Dots below image (optional) -->
+                <div class="dots mt-3">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-12 col-md-4 product-info">
+                <h1 class="product-title">LTS Checkout</h1>
+                <p class="price">$XX.XX</p>
+
+                <div class="quantity mb-3">
+                    <label for="quantity" class="form-label">CANTIDAD:</label>
+                    <div class="quantity-buttons d-flex align-items-left">
+                        <button class="btn-cantidad">-</button>
+                        <span class="quantity-value mx-2">1</span>
+                        <button class="btn-cantidad">+</button>
+                    </div>
+                </div>
+
+                <div class="sizes mb-3">
+                    <label>Tallas:</label>
+                    <div>
+                        <span class="badge bg-black">XS</span>
+                        <span class="badge bg-black">S</span>
+                        <span class="badge bg-primary">M</span>
+                        <span class="badge bg-black">L</span>
+                        <span class="badge bg-black">XL</span>
+                        <span class="badge bg-black">2XL</span>
+                    </div>
+                </div>
+
+                <div class="colors mb-3">
+                    <label>Colores:</label>
+                    <div>
+                        <div class="color black d-inline-block"
+                             style="width: 20px; height: 20px; background-color: black;"></div>
+                        <div class="color white d-inline-block"
+                             style="width: 20px; height: 20px; background-color: white; border: 1px solid #ccc;"></div>
+                        <div class="color grey d-inline-block"
+                             style="width: 20px; height: 20px; background-color: grey;"></div>
+                        <div class="color blue d-inline-block"
+                             style="width: 20px; height: 20px; background-color: blue;"></div>
+                        <div class="color red d-inline-block" style="width: 20px; height: 20px; background-color: red;">
+                        </div>
+                    </div>
+                </div>
+
+                <form action="@Url.Action("ShoppingCart", "Products")" method="get">
+                    <button type="submit" class="btn btn-black btn-lg">AGREGAR</button>
+                </form>
+                <p class="description mt-3">Descripción del artículo.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    function changeMainImage(thumbnailId) {
+        var thumbnail = document.getElementById(thumbnailId);
+        var mainImage = document.getElementById("main-product-image");
+        mainImage.src = thumbnail.src;
+    }
+</script>

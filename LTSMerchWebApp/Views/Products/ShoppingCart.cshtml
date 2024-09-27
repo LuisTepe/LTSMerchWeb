@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;900&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+        }
+        h1, h5 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+        }
+        p, span, button {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+        }
+        .cart-header {
+            margin: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-header h1 {
+            font-weight: 900;
+        }
+        .cart-header p {
+            font-size: 0.9rem;
+        }
+        .close-button {
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+        }
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .product-details {
+            display: flex;
+            align-items: center;
+        }
+        .product-details img {
+            width: 100px;
+            margin-right: 20px;
+            border-radius: 10px;
+        }
+        .product-info {
+            margin-right: 20px;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+        .quantity-control button {
+            background-color: white;
+            color: black;
+            border: none;
+            width: 25px;
+            height: 25px;
+            margin: 0 5px;
+            font-weight: bold;
+        }
+        .quantity-control span {
+            margin: 0 5px;
+            font-size: 1.2rem;
+        }
+        .subtotal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            border-top: 1px solid #6c757d;
+            padding-top: 20px;
+        }
+        .checkout-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: white;
+            color: black;
+            font-weight: bold;
+            padding: 15px;
+            border: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-header">
+        <div>
+            <h1>tu carrito</h1>
+            <p>número de items: 3</p>
+        </div>
+        <div class="close-button">&times;</div>
+    </div>
+
+    <div class="container">
+        <div class="product-item">
+            <div class="product-details">
+                <img src="~/images/tshirt.png" alt="T-SHIRT">
+                <div class="product-info">
+                    <h5>title t-shirt m</h5>
+                    <p>entrega estimada: 25 de septiembre de 2024</p>
+                    <div class="quantity-control">
+                        <button>-</button>
+                        <span>1</span>
+                        <button>+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-price">
+                <h5>$XX.XX</h5>
+            </div>
+        </div>
+
+        <div class="product-item">
+            <div class="product-details">
+                <img src="~/images/cap.png" alt="CAP">
+                <div class="product-info">
+                    <h5>title cap</h5>
+                    <p>entrega estimada: 28 de septiembre de 2024</p>
+                    <div class="quantity-control">
+                        <button>-</button>
+                        <span>2</span>
+                        <button>+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-price">
+                <h5>$XX.XX</h5>
+            </div>
+        </div>
+
+        <div class="product-item">
+            <div class="product-details">
+                <img src="~/images/hoodie.png" alt="HOODIE">
+                <div class="product-info">
+                    <h5>title hoodie l</h5>
+                    <p>entrega estimada: 30 de septiembre de 2024</p>
+                    <div class="quantity-control">
+                        <button>-</button>
+                        <span>1</span>
+                        <button>+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-price">
+                <h5>$XX.XX</h5>
+            </div>
+        </div>
+
+        <div class="subtotal">
+            <p>subtotal</p>
+            <h5>$XX.XX</h5>
+        </div>
+        <p>envíos e iva al pagar</p>
+        <form action="@Url.Action("CheckOutShipping", "Products")" method="get">
+            <button type="submit" class="checkout-button">PAGAR</button>
+        </form>
+        
+    </div>
+
+    <!-- Bootstrap JS y Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

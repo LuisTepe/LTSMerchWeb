@@ -1,0 +1,62 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.pd-header {
+    background-color: black;
+    color: white;
+    padding: 1rem 2rem;
+}
+
+.pd-header .logo-text {
+    font-family: cursive;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.pd-header nav a {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-left: 1.5rem;
+    text-decoration: none;
+}
+
+.pd-header .user-cart a {
+    color: white;
+    margin-left: 1.5rem;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+    footer a {
+        font-weight: bolder;
+        color: #000000;
+        text-transform: uppercase;
+        text-decoration: none;
+    }

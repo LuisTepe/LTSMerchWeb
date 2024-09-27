@@ -1,0 +1,96 @@
+﻿<style>
+        .product-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-top: 10px;
+    }
+
+    .price {
+        font-size: 1.1rem;
+        color: #555;
+    }
+
+    .img-fluid {
+        max-width: 80%; /* Asegurarse de que las imágenes no ocupen más espacio del necesario */
+        height: auto;
+    }
+
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Producto 1 -->
+        <div class="col-md-4 text-center mb-4">
+            <a href="@Url.Action("Details", "Products", new { id = 1 })">
+                <img src="~/img/camisa-delante.png" alt="Producto 1" class="img-fluid">
+            </a>
+            <h5 class="product-title mt-3">TITLE TEE</h5>
+            <p class="price">$XX.XX</p>
+        </div>
+        <!-- Producto 2 -->
+        <div class="col-md-4 text-center mb-4">
+            <a href="@Url.Action("Details", "Products", new { id = 2 })">
+                <img src="~/img/tshirt.png" alt="Producto 2" class="img-fluid">
+            </a>
+            <h5 class="product-title mt-3">TITLE TEE</h5>
+            <p class="price">$XX.XX</p>
+        </div>
+        <!-- Producto 3 -->
+        <div class="col-md-4 text-center mb-4">
+            <a href="@Url.Action("Details", "Products", new { id = 3 })">
+                <img src="~/img/hoodie.png" alt="Producto 3" class="img-fluid">
+            </a>
+            <h5 class="product-title mt-3">TITLE ZIP UP HOODIE</h5>
+            <p class="price">$XX.XX</p>
+        </div>
+        <!-- Producto 4 -->
+        <div class="col-md-4 text-center mb-4">
+            <a href="@Url.Action("Details", "Products", new { id = 4 })">
+                <img src="~/img/hoodie.png" alt="Producto 4" class="img-fluid">
+            </a>
+            <h5 class="product-title mt-3">TITLE HOODIE</h5>
+            <p class="price">$XX.XX</p>
+        </div>
+        <!-- Producto 5 -->
+        <div class="col-md-4 text-center mb-4">
+            <a href="@Url.Action("Details", "Products", new { id = 5 })">
+                <img src="~/img/hoodie.png" alt="Producto 5" class="img-fluid">
+            </a>
+            <h5 class="product-title mt-3">TITLE HOODIE</h5>
+            <p class="price">$XX.XX</p>
+        </div>
+        <!-- Producto 6 -->
+        <div class="col-md-4 text-center mb-4">
+            <a href="@Url.Action("Details", "Products", new { id = 6 })">
+                <img src="~/img/cap.png" alt="Producto 6" class="img-fluid">
+            </a>
+            <h5 class="product-title mt-3">TITLE CAP</h5>
+            <p class="price">$XX.XX</p>
+        </div>
+        <!-- Producto 7 -->
+        <div class="col-md-4 text-center mb-4">
+            <a href="@Url.Action("Details", "Products", new { id = 7 })">
+                <img src="~/img/hoodie.png" alt="Producto 7" class="img-fluid">
+            </a>
+            <h5 class="product-title mt-3">TITLE SWEATER</h5>
+            <p class="price">$XX.XX</p>
+        </div>
+        <!-- Producto 8 -->
+        <div class="col-md-4 text-center mb-4">
+            <a href="@Url.Action("Details", "Products", new { id = 8 })">
+                <img src="~/img/hoodie.png" alt="Producto 8" class="img-fluid">
+            </a>
+            <h5 class="product-title mt-3">TITLE WINTER HAT</h5>
+            <p class="price">$XX.XX</p>
+        </div>
+        <!-- Producto 9 -->
+        <div class="col-md-4 text-center mb-4">
+            <a href="@Url.Action("Details", "Products", new { id = 9 })">
+                <img src="~/img/hoodie.png" alt="Producto 9" class="img-fluid">
+            </a>
+            <h5 class="product-title mt-3">TITLE TOTE BAG</h5>
+            <p class="price">$XX.XX</p>
+        </div>
+    </div>
+</div>

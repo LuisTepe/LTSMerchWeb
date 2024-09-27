@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LTSMerchWebApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/StylesLogIn.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LTSMerchWebApp.styles.css" asp-append-version="true" />
+
+
+</head>
+<body>
+    <header class="pd-header p-3">
+        <nav class="d-flex align-items-center">
+            <div class="d-flex justify-content-start">
+                <a asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-link">Producto</a>
+                <a asp-area="" asp-controller="Products" asp-action="Index" class="btn btn-link">Merch</a>
+            </div>
+            <div class="d-flex justify-content-center flex-grow-1 text-center">
+                <a asp-area="" asp-controller="Products" asp-action="Index">
+                    <img src="~/img/firma-negro.png" alt="firma" width="125">
+                </a>
+            </div>
+            <div class="d-flex justify-content-end user-cart">
+                <a href="#"><img src="~/img/lupa.png" alt="Buscar" width="26"></a>
+                <a asp-area="" asp-controller="Home" asp-action="Login"><img src="~/img/user.png" alt="Iniciar Sesion" width="24"></a>
+                <a asp-area="" asp-controller="Products" asp-action="ShoppingCart"><img src="~/img/carrito.png" alt="Carrito" width="30"></a>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer>
+        <div class="container-left">
+            <img src="~/img/logosinfondo.png" alt="firma" width="125">
+
+            <section class="about">
+                <a href="#">AYUDA Y SOPORTE</a>
+                <a href="#">TERMINOS</a>
+                <a href="#">PRIVACIDAD</a>
+                <a href="#">OPCION DE COOKIES</a>
+            </section>
+        </div>
+
+
+        <div class="container-right">
+            <section class="social">
+                <img src="~/img/spotify.png" alt="spotify" width="34">
+                <img src="~/img/Music.png" alt="musica" width="34">
+                <img src="~/img/youtube.png" alt="youtube" width="34">
+                <img src="~/img/instagram.png" alt="instagram" width="34">
+                <img src="~/img/twitter.png" alt="twitter" width="34">
+                <img src="~/img/facebook.png" alt="facebook" width="34">
+            </section>
+
+            <section class="info">
+                <h5>CONTACTANOS</h5>
+                <h2>662 XXX XXXX</h2>
+            </section>
+        </div>
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
