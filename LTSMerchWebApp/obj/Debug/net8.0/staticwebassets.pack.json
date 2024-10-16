@@ -101,6 +101,18 @@
       "PackagePath": "staticwebassets\\img\\lupa.png"
     },
     {
+      "Id": "C:\\Users\\luis_\\source\\repos\\LTSMerchWebApp\\LTSMerchWebApp\\wwwroot\\img\\products\\cap.png",
+      "PackagePath": "staticwebassets\\img\\products\\cap.png"
+    },
+    {
+      "Id": "C:\\Users\\luis_\\source\\repos\\LTSMerchWebApp\\LTSMerchWebApp\\wwwroot\\img\\products\\hoodie.png",
+      "PackagePath": "staticwebassets\\img\\products\\hoodie.png"
+    },
+    {
+      "Id": "C:\\Users\\luis_\\source\\repos\\LTSMerchWebApp\\LTSMerchWebApp\\wwwroot\\img\\products\\tshirt.png",
+      "PackagePath": "staticwebassets\\img\\products\\tshirt.png"
+    },
+    {
       "Id": "C:\\Users\\luis_\\source\\repos\\LTSMerchWebApp\\LTSMerchWebApp\\wwwroot\\img\\spotify.png",
       "PackagePath": "staticwebassets\\img\\spotify.png"
     },
