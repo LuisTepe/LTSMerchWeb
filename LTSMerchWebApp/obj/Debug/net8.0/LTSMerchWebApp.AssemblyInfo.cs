@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LTSMerchWebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+097d18d2611b6f2ffdd004b689036a718ff91fca")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3792440d9afc30f7979f86ccee7b945075fd9e6e")]
 [assembly: System.Reflection.AssemblyProductAttribute("LTSMerchWebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LTSMerchWebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
