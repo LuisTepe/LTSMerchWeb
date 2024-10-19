@@ -26,6 +26,9 @@ SET time_zone = "+00:00";
 --
 -- Estructura de tabla para la tabla `carts`
 --
+CREATE DATABASE lts_merch_store;
+
+USE lts_merch_store;
 
 CREATE TABLE `carts` (
   `cart_id` int(11) NOT NULL,
