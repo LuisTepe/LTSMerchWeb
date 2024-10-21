@@ -42,7 +42,7 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(order);
+            return PartialView("_DetailsPartial", order);
         }
 
         // GET: Orders/Create
@@ -50,12 +50,10 @@ namespace LTSMerchWebApp.Controllers
         {
             ViewData["StatusTypeId"] = new SelectList(_context.OrderStatusTypes, "StatusTypeId", "StatusTypeId");
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
-            return View();
+            return PartialView("_CreatePartial");
         }
 
         // POST: Orders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OrderId,UserId,Total,ShippingAddress,StatusTypeId,CreatedAt")] Order order)
@@ -68,7 +66,7 @@ namespace LTSMerchWebApp.Controllers
             }
             ViewData["StatusTypeId"] = new SelectList(_context.OrderStatusTypes, "StatusTypeId", "StatusTypeId", order.StatusTypeId);
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", order.UserId);
-            return View(order);
+            return PartialView("_CreatePartial", order);
         }
 
         // GET: Orders/Edit/5
@@ -86,12 +84,10 @@ namespace LTSMerchWebApp.Controllers
             }
             ViewData["StatusTypeId"] = new SelectList(_context.OrderStatusTypes, "StatusTypeId", "StatusTypeId", order.StatusTypeId);
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", order.UserId);
-            return View(order);
+            return PartialView("_EditPartial", order);
         }
 
         // POST: Orders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OrderId,UserId,Total,ShippingAddress,StatusTypeId,CreatedAt")] Order order)
@@ -123,7 +119,7 @@ namespace LTSMerchWebApp.Controllers
             }
             ViewData["StatusTypeId"] = new SelectList(_context.OrderStatusTypes, "StatusTypeId", "StatusTypeId", order.StatusTypeId);
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", order.UserId);
-            return View(order);
+            return PartialView("_EditPartial", order);
         }
 
         // GET: Orders/Delete/5
@@ -143,7 +139,7 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(order);
+            return PartialView("_DeletePartial", order);
         }
 
         // POST: Orders/Delete/5

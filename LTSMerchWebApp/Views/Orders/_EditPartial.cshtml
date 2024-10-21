@@ -1,0 +1,53 @@
+﻿@model LTSMerchWebApp.Models.Order
+
+<div class="sidepanel-form">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="sidepanel-validation-summary"></div>
+
+        <input type="hidden" asp-for="OrderId" />
+
+        <div class="sidepanel-form-group">
+            <label asp-for="UserId" class="sidepanel-form-label"></label>
+            <select asp-for="UserId" class="sidepanel-form-control" asp-items="ViewBag.UserId"></select>
+            <span asp-validation-for="UserId" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label asp-for="Total" class="sidepanel-form-label"></label>
+            <input asp-for="Total" class="sidepanel-form-control" />
+            <span asp-validation-for="Total" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label asp-for="ShippingAddress" class="sidepanel-form-label"></label>
+            <input asp-for="ShippingAddress" class="sidepanel-form-control" />
+            <span asp-validation-for="ShippingAddress" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label asp-for="StatusTypeId" class="sidepanel-form-label"></label>
+            <select asp-for="StatusTypeId" class="sidepanel-form-control" asp-items="ViewBag.StatusTypeId"></select>
+            <span asp-validation-for="StatusTypeId" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label asp-for="CreatedAt" class="sidepanel-form-label"></label>
+            <input asp-for="CreatedAt" class="sidepanel-form-control" />
+            <span asp-validation-for="CreatedAt" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-button-container">
+            <input type="submit" value="Guardar" class="sidepanel-submit-button" />
+        </div>
+    </form>
+
+    <div class="sidepanel-button-container">
+        <a asp-action="Index" class="sidepanel-link">Regresar a la lista</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

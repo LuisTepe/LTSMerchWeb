@@ -1,6 +1,6 @@
 ﻿
 /* Estilo para cualquier elemento con la clase userTable */
-.userTable {
+.generalTable {
     width: 100%;
     font-family: 'Arial', sans-serif;
     border-radius: 20px;
@@ -9,36 +9,36 @@
     overflow: hidden; /* Ensure rounded corners are visible */
 }
 
-    .userTable thead {
+    .generalTable thead {
         background-color: #151515;
         color: white;
         border-radius: 20px;
     }
 
-    .userTable th, .userTable td {
+    .generalTable th, .generalTable td {
         padding: 12px;
     }
 
-    .userTable th {
+    .generalTable th {
         font-weight: bold;
     }
 
-    .userTable tbody tr:nth-child(even) {
+    .generalTable tbody tr:nth-child(even) {
         background-color: #f9f9f9;
         border-radius: 20px;
     }
 
-    .userTable tbody tr:hover {
+    .generalTable tbody tr:hover {
         background-color: #f1f1f1;
     }
 
-    .userTable tbody tr td a {
+    .generalTable tbody tr td a {
         text-decoration: none;
         color: #000;
         font-weight: bold;
     }
 
-        .userTable tbody tr td a:hover {
+        .generalTable tbody tr td a:hover {
             color: #007bff;
         }
 
