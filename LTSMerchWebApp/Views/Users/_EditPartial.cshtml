@@ -1,0 +1,54 @@
+﻿@model LTSMerchWebApp.Models.User
+
+<div class="sidepanel-form">
+    <h3>Editar Usuario</h3>
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="UserId" />
+
+        <div class="sidepanel-form-group">
+            <label asp-for="Name" class="sidepanel-form-label"></label>
+            <input asp-for="Name" class="sidepanel-form-control" />
+            <span asp-validation-for="Name" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label asp-for="Email" class="sidepanel-form-label"></label>
+            <input asp-for="Email" class="sidepanel-form-control" />
+            <span asp-validation-for="Email" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label asp-for="PasswordHash" class="sidepanel-form-label"></label>
+            <input asp-for="PasswordHash" class="sidepanel-form-control" />
+            <span asp-validation-for="PasswordHash" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label asp-for="PhoneNumber" class="sidepanel-form-label"></label>
+            <input asp-for="PhoneNumber" class="sidepanel-form-control" />
+            <span asp-validation-for="PhoneNumber" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label asp-for="Address" class="sidepanel-form-label"></label>
+            <input asp-for="Address" class="sidepanel-form-control" />
+            <span asp-validation-for="Address" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label asp-for="RoleTypeId" class="sidepanel-form-label"></label>
+            <select asp-for="RoleTypeId" class="sidepanel-form-control" asp-items="ViewBag.RoleTypeId"></select>
+            <span asp-validation-for="RoleTypeId" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label asp-for="CreatedAt" class="sidepanel-form-label"></label>
+            <input asp-for="CreatedAt" class="sidepanel-form-control readonly-field" readonly />
+            <span asp-validation-for="CreatedAt" class="sidepanel-validation-error"></span>
+        </div>
+
+        <div class="sidepanel-button-container">
+            <input type="submit" value="Guardar Cambios" class="sidepanel-submit-button" />
+        </div>
+    </form>
+</div>

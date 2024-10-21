@@ -41,6 +41,11 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_DetailsPartial", cart);
+            }
+
             return View(cart);
         }
 
@@ -48,12 +53,16 @@ namespace LTSMerchWebApp.Controllers
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_CreatePartial");
+            }
+
             return View();
         }
 
         // POST: Carts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CartId,UserId,CreatedAt")] Cart cart)
@@ -65,6 +74,12 @@ namespace LTSMerchWebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", cart.UserId);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_CreatePartial", cart);
+            }
+
             return View(cart);
         }
 
@@ -82,12 +97,16 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", cart.UserId);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_EditPartial", cart);
+            }
+
             return View(cart);
         }
 
         // POST: Carts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CartId,UserId,CreatedAt")] Cart cart)
@@ -118,6 +137,12 @@ namespace LTSMerchWebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", cart.UserId);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_EditPartial", cart);
+            }
+
             return View(cart);
         }
 
@@ -135,6 +160,11 @@ namespace LTSMerchWebApp.Controllers
             if (cart == null)
             {
                 return NotFound();
+            }
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_DeletePartial", cart);
             }
 
             return View(cart);

@@ -39,18 +39,16 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(color);
+            return PartialView("_DetailsPartial", color);
         }
 
         // GET: Colors/Create
         public IActionResult Create()
         {
-            return View();
+            return PartialView("_CreatePartial");
         }
 
         // POST: Colors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ColorId,ColorName")] Color color)
@@ -61,7 +59,7 @@ namespace LTSMerchWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(color);
+            return PartialView("_CreatePartial", color);
         }
 
         // GET: Colors/Edit/5
@@ -77,12 +75,10 @@ namespace LTSMerchWebApp.Controllers
             {
                 return NotFound();
             }
-            return View(color);
+            return PartialView("_EditPartial", color);
         }
 
         // POST: Colors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ColorId,ColorName")] Color color)
@@ -112,7 +108,7 @@ namespace LTSMerchWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(color);
+            return PartialView("_EditPartial", color);
         }
 
         // GET: Colors/Delete/5
@@ -130,7 +126,7 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(color);
+            return PartialView("_DeletePartial", color);
         }
 
         // POST: Colors/Delete/5

@@ -39,18 +39,16 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(size);
+            return PartialView("_DetailsPartial", size);
         }
 
         // GET: Sizes/Create
         public IActionResult Create()
         {
-            return View();
+            return PartialView("_CreatePartial");
         }
 
         // POST: Sizes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SizeId,SizeName")] Size size)
@@ -61,7 +59,7 @@ namespace LTSMerchWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(size);
+            return PartialView("_CreatePartial", size);
         }
 
         // GET: Sizes/Edit/5
@@ -77,12 +75,10 @@ namespace LTSMerchWebApp.Controllers
             {
                 return NotFound();
             }
-            return View(size);
+            return PartialView("_EditPartial", size);
         }
 
         // POST: Sizes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("SizeId,SizeName")] Size size)
@@ -112,7 +108,7 @@ namespace LTSMerchWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(size);
+            return PartialView("_EditPartial", size);
         }
 
         // GET: Sizes/Delete/5
@@ -130,7 +126,7 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(size);
+            return PartialView("_DeletePartial", size);
         }
 
         // POST: Sizes/Delete/5
