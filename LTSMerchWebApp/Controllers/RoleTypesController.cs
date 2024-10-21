@@ -39,18 +39,16 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(roleType);
+            return PartialView("_DetailsPartial", roleType);
         }
 
         // GET: RoleTypes/Create
         public IActionResult Create()
         {
-            return View();
+            return PartialView("_CreatePartial");
         }
 
         // POST: RoleTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoleTypeId,RoleName")] RoleType roleType)
@@ -61,7 +59,7 @@ namespace LTSMerchWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(roleType);
+            return PartialView("_CreatePartial", roleType);
         }
 
         // GET: RoleTypes/Edit/5
@@ -77,12 +75,10 @@ namespace LTSMerchWebApp.Controllers
             {
                 return NotFound();
             }
-            return View(roleType);
+            return PartialView("_EditPartial", roleType);
         }
 
         // POST: RoleTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RoleTypeId,RoleName")] RoleType roleType)
@@ -112,7 +108,7 @@ namespace LTSMerchWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(roleType);
+            return PartialView("_EditPartial", roleType);
         }
 
         // GET: RoleTypes/Delete/5
@@ -130,7 +126,7 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(roleType);
+            return PartialView("_DeletePartial", roleType);
         }
 
         // POST: RoleTypes/Delete/5
