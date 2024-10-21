@@ -42,7 +42,7 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(orderDetail);
+            return PartialView("_DetailsPartial", orderDetail);
         }
 
         // GET: OrderDetails/Create
@@ -50,12 +50,10 @@ namespace LTSMerchWebApp.Controllers
         {
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId");
             ViewData["ProductOptionId"] = new SelectList(_context.ProductOptions, "ProductOptionId", "ProductOptionId");
-            return View();
+            return PartialView("_CreatePartial");
         }
 
         // POST: OrderDetails/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OrderDetailId,OrderId,ProductOptionId,Quantity,Price")] OrderDetail orderDetail)
@@ -68,7 +66,7 @@ namespace LTSMerchWebApp.Controllers
             }
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", orderDetail.OrderId);
             ViewData["ProductOptionId"] = new SelectList(_context.ProductOptions, "ProductOptionId", "ProductOptionId", orderDetail.ProductOptionId);
-            return View(orderDetail);
+            return PartialView("_CreatePartial", orderDetail);
         }
 
         // GET: OrderDetails/Edit/5
@@ -86,12 +84,10 @@ namespace LTSMerchWebApp.Controllers
             }
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", orderDetail.OrderId);
             ViewData["ProductOptionId"] = new SelectList(_context.ProductOptions, "ProductOptionId", "ProductOptionId", orderDetail.ProductOptionId);
-            return View(orderDetail);
+            return PartialView("_EditPartial", orderDetail);
         }
 
         // POST: OrderDetails/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OrderDetailId,OrderId,ProductOptionId,Quantity,Price")] OrderDetail orderDetail)
@@ -123,7 +119,7 @@ namespace LTSMerchWebApp.Controllers
             }
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", orderDetail.OrderId);
             ViewData["ProductOptionId"] = new SelectList(_context.ProductOptions, "ProductOptionId", "ProductOptionId", orderDetail.ProductOptionId);
-            return View(orderDetail);
+            return PartialView("_EditPartial", orderDetail);
         }
 
         // GET: OrderDetails/Delete/5
@@ -143,7 +139,7 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(orderDetail);
+            return PartialView("_DeletePartial", orderDetail);
         }
 
         // POST: OrderDetails/Delete/5
