@@ -43,7 +43,7 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(productOption);
+            return PartialView("_DetailsPartial", productOption);
         }
 
         // GET: ProductOptions/Create
@@ -52,12 +52,10 @@ namespace LTSMerchWebApp.Controllers
             ViewData["ColorId"] = new SelectList(_context.Colors, "ColorId", "ColorId");
             ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId");
             ViewData["SizeId"] = new SelectList(_context.Sizes, "SizeId", "SizeId");
-            return View();
+            return PartialView("_CreatePartial");
         }
 
         // POST: ProductOptions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductOptionId,ProductId,SizeId,ColorId,Stock")] ProductOption productOption)
@@ -71,7 +69,7 @@ namespace LTSMerchWebApp.Controllers
             ViewData["ColorId"] = new SelectList(_context.Colors, "ColorId", "ColorId", productOption.ColorId);
             ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productOption.ProductId);
             ViewData["SizeId"] = new SelectList(_context.Sizes, "SizeId", "SizeId", productOption.SizeId);
-            return View(productOption);
+            return PartialView("_CreatePartial", productOption);
         }
 
         // GET: ProductOptions/Edit/5
@@ -90,12 +88,10 @@ namespace LTSMerchWebApp.Controllers
             ViewData["ColorId"] = new SelectList(_context.Colors, "ColorId", "ColorId", productOption.ColorId);
             ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productOption.ProductId);
             ViewData["SizeId"] = new SelectList(_context.Sizes, "SizeId", "SizeId", productOption.SizeId);
-            return View(productOption);
+            return PartialView("_EditPartial", productOption);
         }
 
         // POST: ProductOptions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductOptionId,ProductId,SizeId,ColorId,Stock")] ProductOption productOption)
@@ -128,7 +124,7 @@ namespace LTSMerchWebApp.Controllers
             ViewData["ColorId"] = new SelectList(_context.Colors, "ColorId", "ColorId", productOption.ColorId);
             ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productOption.ProductId);
             ViewData["SizeId"] = new SelectList(_context.Sizes, "SizeId", "SizeId", productOption.SizeId);
-            return View(productOption);
+            return PartialView("_EditPartial", productOption);
         }
 
         // GET: ProductOptions/Delete/5
@@ -149,7 +145,7 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(productOption);
+            return PartialView("_DeletePartial", productOption);
         }
 
         // POST: ProductOptions/Delete/5
