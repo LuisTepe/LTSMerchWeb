@@ -1,0 +1,57 @@
+﻿@model LTSMerchWebApp.Models.User
+
+<div class="sidepanel-form">
+    <h3>Detalles de Usuario</h3>
+    <div class="sidepanel-form-group">
+        <dl class="sidepanel-details">
+            <dt class="sidepanel-details-label">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="sidepanel-details-value">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt class="sidepanel-details-label">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="sidepanel-details-value">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+            <dt class="sidepanel-details-label">
+                @Html.DisplayNameFor(model => model.PasswordHash)
+            </dt>
+            <dd class="sidepanel-details-value">
+                @Html.DisplayFor(model => model.PasswordHash)
+            </dd>
+
+            <dt class="sidepanel-details-label">
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </dt>
+            <dd class="sidepanel-details-value">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+
+            <dt class="sidepanel-details-label">
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+            <dd class="sidepanel-details-value">
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+
+            <dt class="sidepanel-details-label">
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </dt>
+            <dd class="sidepanel-details-value">
+                @Html.DisplayFor(model => model.CreatedAt)
+            </dd>
+
+            <dt class="sidepanel-details-label">
+                @Html.DisplayNameFor(model => model.RoleType)
+            </dt>
+            <dd class="sidepanel-details-value">
+                @Html.DisplayFor(model => model.RoleType.RoleTypeId)
+            </dd>
+        </dl>
+    </div>
+</div>

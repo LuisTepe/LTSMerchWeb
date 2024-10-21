@@ -7,9 +7,9 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href="javascript:void(0);" class="create-link">Create New</a>
 </p>
-<table class="table">
+<table class="userTable">
     <thead>
         <tr>
             <th>
@@ -37,35 +37,103 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PasswordHash)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoleType.RoleTypeId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PasswordHash)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleType.RoleTypeId)
+                </td>
+                <td>
+                    <a href="javascript:void(0);" class="edit-link" data-userid="@item.UserId">Edit</a> |
+                    <a href="javascript:void(0);" class="details-link" data-userid="@item.UserId">Details</a> |
+                    <a href="javascript:void(0);" class="delete-link" data-userid="@item.UserId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<!-- Side Panel for Create Form -->
+<div id="side-panel-create" class="side-panel">
+    <button class="close-panel btn btn-secondary">Close</button>
+    <div id="create-form-container"></div>
+</div>
+
+<!-- Side Panel for Edit Form -->
+<div id="side-panel-edit" class="side-panel">
+    <button class="close-panel btn btn-secondary">Close</button>
+    <div id="edit-form-container"></div>
+</div>
+
+<!-- Side Panel for Details -->
+<div id="side-panel-details" class="side-panel">
+    <button class="close-panel btn btn-secondary">Close</button>
+    <div id="details-container"></div>
+</div>
+
+<!-- Side Panel for Delete Confirmation -->
+<div id="side-panel-delete" class="side-panel">
+    <button class="close-panel btn btn-secondary">Close</button>
+    <div id="delete-container"></div>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            function loadSidePanel(url, containerId, panelId) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $(containerId).html(data);
+                        $(panelId).show();
+                    }
+                });
+            }
+
+            $('.create-link').click(function () {
+                loadSidePanel('/Users/Create', '#create-form-container', '#side-panel-create');
+            });
+
+            $('.edit-link').click(function () {
+                var userId = $(this).data('userid');
+                loadSidePanel('/Users/Edit/' + userId, '#edit-form-container', '#side-panel-edit');
+            });
+
+            $('.details-link').click(function () {
+                var userId = $(this).data('userid');
+                loadSidePanel('/Users/Details/' + userId, '#details-container', '#side-panel-details');
+            });
+
+            $('.delete-link').click(function () {
+                var userId = $(this).data('userid');
+                loadSidePanel('/Users/Delete/' + userId, '#delete-container', '#side-panel-delete');
+            });
+
+            $('.close-panel').click(function () {
+                $(this).closest('.side-panel').hide();
+                $(this).siblings('div').html('');
+            });
+        });
+    </script>
+}
+

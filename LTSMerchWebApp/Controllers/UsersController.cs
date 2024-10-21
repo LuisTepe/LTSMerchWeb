@@ -41,6 +41,12 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
+            // If the request is an AJAX call, return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_DetailsPartial", user);
+            }
+
             return View(user);
         }
 
@@ -48,12 +54,17 @@ namespace LTSMerchWebApp.Controllers
         public IActionResult Create()
         {
             ViewData["RoleTypeId"] = new SelectList(_context.RoleTypes, "RoleTypeId", "RoleTypeId");
+
+            // If the request is an AJAX call, return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_CreatePartial");
+            }
+
             return View();
         }
 
         // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserId,Name,Email,PasswordHash,PhoneNumber,Address,RoleTypeId,CreatedAt")] User user)
@@ -62,9 +73,23 @@ namespace LTSMerchWebApp.Controllers
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+
+                // If it's an AJAX call, you can send a JSON response or just close the panel via JavaScript.
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = true });
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["RoleTypeId"] = new SelectList(_context.RoleTypes, "RoleTypeId", "RoleTypeId", user.RoleTypeId);
+
+            // If it's an AJAX call, return the partial view with validation errors
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_CreatePartial", user);
+            }
+
             return View(user);
         }
 
@@ -81,13 +106,19 @@ namespace LTSMerchWebApp.Controllers
             {
                 return NotFound();
             }
+
             ViewData["RoleTypeId"] = new SelectList(_context.RoleTypes, "RoleTypeId", "RoleTypeId", user.RoleTypeId);
+
+            // If the request is an AJAX call, return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_EditPartial", user);
+            }
+
             return View(user);
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserId,Name,Email,PasswordHash,PhoneNumber,Address,RoleTypeId,CreatedAt")] User user)
@@ -115,9 +146,24 @@ namespace LTSMerchWebApp.Controllers
                         throw;
                     }
                 }
+
+                // If it's an AJAX call, you can send a JSON response or just close the panel via JavaScript.
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = true });
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["RoleTypeId"] = new SelectList(_context.RoleTypes, "RoleTypeId", "RoleTypeId", user.RoleTypeId);
+
+            // If it's an AJAX call, return the partial view with validation errors
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_EditPartial", user);
+            }
+
             return View(user);
         }
 
@@ -137,6 +183,12 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
+            // If the request is an AJAX call, return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_DeletePartial", user);
+            }
+
             return View(user);
         }
 
@@ -152,6 +204,13 @@ namespace LTSMerchWebApp.Controllers
             }
 
             await _context.SaveChangesAsync();
+
+            // If it's an AJAX call, you can send a JSON response or just close the panel via JavaScript.
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true });
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
