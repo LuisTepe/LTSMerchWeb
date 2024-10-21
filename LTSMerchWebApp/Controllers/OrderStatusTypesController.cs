@@ -39,18 +39,16 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(orderStatusType);
+            return PartialView("_DetailsPartial", orderStatusType);
         }
 
         // GET: OrderStatusTypes/Create
         public IActionResult Create()
         {
-            return View();
+            return PartialView("_CreatePartial");
         }
 
         // POST: OrderStatusTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StatusTypeId,StatusName")] OrderStatusType orderStatusType)
@@ -61,7 +59,7 @@ namespace LTSMerchWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(orderStatusType);
+            return PartialView("_CreatePartial", orderStatusType);
         }
 
         // GET: OrderStatusTypes/Edit/5
@@ -77,12 +75,10 @@ namespace LTSMerchWebApp.Controllers
             {
                 return NotFound();
             }
-            return View(orderStatusType);
+            return PartialView("_EditPartial", orderStatusType);
         }
 
         // POST: OrderStatusTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("StatusTypeId,StatusName")] OrderStatusType orderStatusType)
@@ -112,7 +108,7 @@ namespace LTSMerchWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(orderStatusType);
+            return PartialView("_EditPartial", orderStatusType);
         }
 
         // GET: OrderStatusTypes/Delete/5
@@ -130,7 +126,7 @@ namespace LTSMerchWebApp.Controllers
                 return NotFound();
             }
 
-            return View(orderStatusType);
+            return PartialView("_DeletePartial", orderStatusType);
         }
 
         // POST: OrderStatusTypes/Delete/5

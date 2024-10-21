@@ -1,0 +1,19 @@
+﻿@model LTSMerchWebApp.Models.OrderStatusType
+
+<div class="sidepanel-form">
+    <div class="sidepanel-form-group">
+        <dl class="sidepanel-details">
+            <dt class="sidepanel-details-label">
+                @Html.DisplayNameFor(model => model.StatusName)
+            </dt>
+            <dd class="sidepanel-details-value">
+                @Html.DisplayFor(model => model.StatusName)
+            </dd>
+        </dl>
+
+        <div class="sidepanel-button-container">
+            <a asp-action="Edit" asp-route-id="@Model?.StatusTypeId" class="sidepanel-link">Editar</a> |
+            <a asp-action="Index" class="sidepanel-link">Regresar a la lista</a>
+        </div>
+    </div>
+</div>
