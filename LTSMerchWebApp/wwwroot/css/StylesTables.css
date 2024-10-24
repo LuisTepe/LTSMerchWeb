@@ -1,4 +1,86 @@
 ﻿
+/*Estilo para el dashboard del administrador*/
+
+
+.headerAdmin {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.logoAdmin {
+    font-size: 24px;
+    font-family: 'Cursive', sans-serif;
+}
+
+.containerAdmin {
+    display: flex;
+    height: 100vh;
+    gap: 1.5rem;
+}
+
+.sidebarAdmin {
+    width: 250px;
+    background-color: #333;
+    padding: 20px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    
+}
+
+.profileAdmin {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+    .profileAdmin img {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+    }
+
+    .profileAdmin p {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+.menuAdmin {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    width: 100%;
+}
+
+    .menuAdmin li {
+        margin: 35px 0;
+    }
+
+        .menuAdmin li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+            .menuAdmin li a:hover {
+                background-color: #555;
+                padding-left: 10px;
+                transition: 0.3s;
+            }
+
+.mainContentAdmin {
+    flex-grow: 1;
+    background-color: #000;
+    padding: 20px;
+}
+
+
+
+
 /* Estilo para cualquier elemento con la clase userTable */
 .generalTable {
     width: 100%;

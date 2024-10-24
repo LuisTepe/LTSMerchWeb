@@ -1,0 +1,28 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "AdminDashboard";
+}
+
+<div class="containerAdmin">
+    <nav class="sidebarAdmin">
+        <div class="profileAdmin">
+            <img src="https://via.placeholder.com/50" alt="Profile Icon">
+            <p>Administrador</p>
+        </div>
+        <ul class="menuAdmin">
+            <li><a asp-controller="" asp-action="Index" >Dashboard</a></li>
+            <li><a asp-controller="Products" asp-action="Index" >Productos</a></li>
+            <li><a asp-controller="Sizes" asp-action="Index" >Tallas</a></li>
+            <li><a asp-controller="Orders" asp-action="Index" >Pedidos</a></li>
+            <li><a asp-controller="Users" asp-action="Index" >Usuarios</a></li>
+            <li><a asp-controller="" asp-action="Index" >Categorías</a></li>
+            <li><a asp-controller="Products" asp-action="Index" >Salir</a></li>
+        </ul>
+    </nav>
+
+    <main class="mainContentAdmin">
+        <!-- Contenido principal aquí -->
+    </main>
+</div>
