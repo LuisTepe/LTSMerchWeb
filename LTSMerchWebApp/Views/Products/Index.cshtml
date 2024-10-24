@@ -1,35 +1,106 @@
 ﻿@model IEnumerable<LTSMerchWebApp.Models.Product>
 
-<style>
-    .product-title {
-        font-size: 1.2rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        margin-top: 10px;
-    }
-
-    .price {
-        font-size: 1.1rem;
-        color: #555;
-    }
-
-    .img-fluid {
-        max-width: 80%;
-        height: auto;
-    }
-</style>
+<head>
+    <!-- Otros enlaces y scripts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="~/css/ProductsIndex.css"> 
+    <link rel="stylesheet" href="~/css/SidebarModalAdd.css">
+</head>
 
 <div class="container mt-5">
-    <div class="row">
-        @foreach (var product in Model)
-        {
-        <div class="col-md-4 text-center mb-4">
-            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
-                <img src="~/img/@product.ImageUrl" alt="@product.Name" class="img-fluid">
-            </a>
-            <h5 class="product-title mt-3">@product.Name</h5>
-            <p class="price">$@product.Price.ToString("F2")</p>
+    <h2 class="product-title">PRODUCTOS</h2>
+    <div class="table-wrapper">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Imagen del producto</th>
+                        <th>Nombre del producto</th>
+                        <th>Descripción del producto</th>
+                        <th>Categoría</th>
+                        <th>Color</th>
+                        <th>Talla</th>
+                        <th>Precio unitario</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr data-product-id="@product.ProductId">
+                            <td>@product.ProductId</td>
+                            <td>
+                                <img src="~/img/@product.ImageUrl" alt="@product.Name" class="img-fluid">
+                            </td>
+                            <td>@product.Name</td>
+                            <td>@product.Description</td>
+                            <td></td>
+                            <td>
+                                <!-- Mostrar el Color -->
+                                @foreach (var option in product.ProductOptions)
+                                {
+                                    @option.Color?.ColorName <br /> <!-- Usamos "?" para evitar errores si es null -->
+                                }
+                            </td>
+                            <td>
+                                <!-- Mostrar la Talla -->
+                                @foreach (var option in product.ProductOptions)
+                                {
+                                    @option.Size?.SizeName <br /> <!-- Usamos "?" para evitar errores si es null -->
+                                }
+                            </td>
+                            <td>@product.Price.ToString("F2")</td>
+                            <td></td>
+                            <td class="action-icons">
+                                <a href="javascript:void(0);" onclick="openEditSidebar(@product.ProductId)">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a href="@Url.Action("Delete", "Products", new { id = product.ProductId })">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
         </div>
-        }
+    </div>
+
+    <!-- Botón para abrir el sidebar -->
+    <div class="button-container">
+        <button type="button" class="add-product-btn" onclick="openSidebar()">
+            AGREGAR PRODUCTO
+        </button>
     </div>
 </div>
+
+<!-- Incluir el sidebar de agregar producto -->
+@Html.Partial("_AddProductSidebar", new LTSMerchWebApp.Models.Product())
+@Html.Partial("_EditProductSidebar", new LTSMerchWebApp.Models.Product())
+
+
+
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function openSidebar() {
+            $('#addProductForm')[0].reset();
+            document.getElementById("file-upload-name").textContent = 'No hay archivo seleccionado';
+
+            document.getElementById("addProductSidebar").classList.add("sidebar-open");
+        }
+
+        function closeSidebar() {
+            document.getElementById("addProductSidebar").classList.remove("sidebar-open");
+        }
+
+
+
+
+    </script>
+}
