@@ -31,8 +31,9 @@
 
             <input type="hidden" name="ProductId" />
             <div class="form-group">
-                <label for="productName">Nombre del producto</label>
-                <input type="text" name="Name" class="form-control" id="productName" placeholder="Ingresar nombre del producto" asp-for="Name" maxlength="100" required>
+                <h5 id="productNameDisplay"></h5>
+                <label for="productName"></label>
+                <input type="hidden" name="Name" class="form-control" id="productName" placeholder="Ingresar nombre del producto" asp-for="Name" maxlength="100" required>
             </div>
             <div class="form-group">
                 <label for="productPrice">Precio unitario</label>
@@ -67,6 +68,10 @@
                 <select class="form-control"  >
                     <option value="">Seleccione el estado</option>
                 </select>
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" name="ImageUrl" id="imageUrl" />
             </div>
             
 
@@ -126,11 +131,13 @@
 
                 // Rellenar el formulario con los datos del producto
                 $('#editProductForm input[name="ProductId"]').val(product.productId);
+                $('#productNameDisplay').text(product.name);
                 $('#editProductForm input[name="Name"]').val(product.name);
                 $('#editProductForm input[name="Price"]').val(product.price);
                 $('#editProductForm textarea[name="Description"]').val(product.description);
                 $('#editProductForm select[name="ColorId"]').val(product.colorId);
                 $('#editProductForm select[name="SizeId"]').val(product.sizeId);
+                $('#imageUrl').val(product.imageUrl);  // Asignar el valor de la imagen actual
 
                 $('#editProductSidebar').addClass('sidebar-open'); // Abrir el sidebar
             },
@@ -163,7 +170,7 @@
                     let updatedRow = `
                         <tr data-product-id="${response.product.productId}">
                             <td>${response.product.productId}</td>
-                            <td><img src="/img/${response.product.imageUrl}" alt="${response.product.name}" class="img-fluid"></td>
+                                <td><img src="/img/${response.product.imageUrl}" alt="${response.product.Name}" class="img-fluid"></td>
                             <td>${response.product.name}</td>
                             <td>${response.product.description}</td>
                             <td></td>
