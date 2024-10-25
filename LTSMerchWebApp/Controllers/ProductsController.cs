@@ -241,6 +241,7 @@ namespace LTSMerchWebApp.Controllers
                         product.Name,
                         product.Price,
                         product.Description,
+                        imageUrl = product.ImageUrl ?? existingProduct.ImageUrl,
                         color = _context.Colors.FirstOrDefault(c => c.ColorId == ColorId)?.ColorName,  // Obtener el nombre del color
                         size = _context.Sizes.FirstOrDefault(s => s.SizeId == SizeId)?.SizeName        // Obtener el nombre de la talla
                     }

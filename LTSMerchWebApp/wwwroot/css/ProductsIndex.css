@@ -27,6 +27,7 @@
     margin-bottom: 0;
     color: #212529;
     border-collapse: collapse; /* Asegura que los bordes de las celdas no tengan espacio adicional */
+    table-layout: auto;
 }
 
     .table th, .table td {
@@ -46,7 +47,7 @@
     }
 
     .table img {
-        min-width: 50%;
+        max-width: 100%;
         height: auto;
         border-radius: 5px;
         background-color: #c4bcbe;
