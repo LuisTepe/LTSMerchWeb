@@ -1,4 +1,73 @@
 ﻿
+/*Estilo para el dashboard del administrador*/
+
+.containerAdmin {
+    display: flex;
+    height: 100%;
+    gap: 1.5rem;
+    margin-top: 30px;
+}
+
+.sidebarAdmin {
+    width: 250px;
+    background-color: #333;
+    padding: 20px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+}
+
+.profileAdmin {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+    .profileAdmin img {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+    }
+
+    .profileAdmin p {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+.menuAdmin {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+    .menuAdmin li {
+        margin: 20px 0;
+    }
+
+        .menuAdmin li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+            .menuAdmin li a:hover {
+                background-color: #555;
+                padding-left: 10px;
+                transition: 0.3s;
+            }
+
+.mainContentAdmin {
+    flex-grow: 1;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+
+
+
 /* Estilo para cualquier elemento con la clase userTable */
 .generalTable {
     width: 100%;
@@ -48,6 +117,23 @@
     cursor: pointer;
 }
 
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem; /* Optional: Add some space below the button */
+}
+
+
+.create-link {
+    background-color: black;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    justify-content: flex-end;
+}
 
 /* SIDEPANEL */
 .side-panel {
@@ -134,4 +220,36 @@
 
     .sidepanel-submit-button:hover {
         background-color: #333;
+    }
+
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+
+.search-button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* Espacio entre botón e input */
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 10px;
+    width: 150px;
+}
+
+    .search-input::placeholder {
+        color: #888;
     }

@@ -2,6 +2,7 @@ using LTSMerchWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace LTSMerchWebApp.Controllers
 {
@@ -22,12 +23,12 @@ namespace LTSMerchWebApp.Controllers
         {
             return View();
         }
-        
+
         public IActionResult Login()
         {
             return View();
         }
-        
+
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
@@ -39,7 +40,7 @@ namespace LTSMerchWebApp.Controllers
                 {
                     // Verifica el hash de la contraseña
                     var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
-                
+
                     if (result == PasswordVerificationResult.Success)
                     {
                         // Lógica de autenticación
@@ -53,6 +54,41 @@ namespace LTSMerchWebApp.Controllers
 
             return View(model);
         }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        /*[HttpPost]
+        public IActionResult Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingUser = _context.Users.FirstOrDefault(u => u.Email == model.Email);
+
+                if (existingUser == null)
+                {
+                    var user = new User
+                    {
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Email = model.Email,
+                        PasswordHash = _passwordHasher.HashPassword(null, model.Password)
+                    };
+
+                    _context.Users.Add(user);
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Thanks");
+                }
+
+                ModelState.AddModelError("", "Ya existe una cuenta con ese correo electrónico.");
+            }
+
+            return View(model);
+        }*/
+
         public IActionResult Thanks()
         {
             return View();
