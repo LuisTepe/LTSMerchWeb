@@ -94,9 +94,9 @@ namespace LTSMerchWebApp.Controllers
         // POST: ProductOptions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductOptionId,ProductId,SizeId,ColorId,Stock")] ProductOption productOption)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Description,Price,Stock,ImageUrl,CreatedAt")] Product product)
         {
-            if (id != productOption.ProductOptionId)
+            if (id != product.ProductId)
             {
                 return NotFound();
             }
@@ -105,12 +105,12 @@ namespace LTSMerchWebApp.Controllers
             {
                 try
                 {
-                    _context.Update(productOption);
+                    _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductOptionExists(productOption.ProductOptionId))
+                    if (!ProductExists(product.ProductId))
                     {
                         return NotFound();
                     }
@@ -121,10 +121,7 @@ namespace LTSMerchWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ColorId"] = new SelectList(_context.Colors, "ColorId", "ColorId", productOption.ColorId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productOption.ProductId);
-            ViewData["SizeId"] = new SelectList(_context.Sizes, "SizeId", "SizeId", productOption.SizeId);
-            return PartialView("_EditPartial", productOption);
+            return View(product);
         }
 
         // GET: ProductOptions/Delete/5
@@ -166,6 +163,11 @@ namespace LTSMerchWebApp.Controllers
         private bool ProductOptionExists(int id)
         {
             return _context.ProductOptions.Any(e => e.ProductOptionId == id);
+        }
+
+        private bool ProductExists(int id)
+        {
+            return _context.Products.Any(e => e.ProductId == id);
         }
     }
 }

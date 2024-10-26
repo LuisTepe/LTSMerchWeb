@@ -8,17 +8,22 @@
 <div class="containerAdmin">
     <nav class="sidebarAdmin">
         <div class="profileAdmin">
-            <img src="https://via.placeholder.com/50" alt="Profile Icon">
+            <img src="~/img/userAdmin.png" alt="Profile Icon">
             <p>Administrador</p>
         </div>
         <ul class="menuAdmin">
             <li><a asp-controller="" asp-action="Index" >Dashboard</a></li>
-            <li><a asp-controller="Products" asp-action="Index" >Productos</a></li>
-            <li><a asp-controller="Sizes" asp-action="Index" >Tallas</a></li>
-            <li><a asp-controller="Orders" asp-action="Index" >Pedidos</a></li>
-            <li><a asp-controller="Users" asp-action="Index" >Usuarios</a></li>
-            <li><a asp-controller="" asp-action="Index" >Categorías</a></li>
-            <li><a asp-controller="Products" asp-action="Index" >Salir</a></li>
+            <li><a asp-controller="Products" asp-action="Index" k">Producto</a></li>
+            <li><a asp-controller="Users" asp-action="Index" k">users</a></li>
+            <li><a asp-controller="Orders" asp-action="Index" k">Orders</a></li>
+            <li><a asp-controller="Sizes" asp-action="Index" k">Sizes</a></li>
+            <li><a asp-controller="RoleTypes" asp-action="Index" k">RoleTypes</a></li>
+            <li><a asp-controller="OrderStatusTypes" asp-action="Index" k">OrderStatusTypes</a></li>
+            <li><a asp-controller="ProductOptions" asp-action="Index" k">ProductOptions</a></li>
+            <li><a asp-controller="Colors" asp-action="Index" k">Colors</a></li>
+            <li><a asp-controller="OrderDetails" asp-action="Index" k">OrderDetails</a></li>
+			<li><a asp-controller="Carts" asp-action="Index" k">Carts</a></li>
+			<li><a asp-controller="Products" asp-action="Index">Salir</a></li>
         </ul>
     </nav>
 
