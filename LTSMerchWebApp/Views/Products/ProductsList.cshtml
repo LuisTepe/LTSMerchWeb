@@ -1,0 +1,35 @@
+﻿@model IEnumerable<LTSMerchWebApp.Models.Product>
+
+<style>
+    .product-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-top: 10px;
+    }
+
+    .price {
+        font-size: 1.1rem;
+        color: #555;
+    }
+
+    .img-fluid {
+        max-width: 80%;
+        height: auto;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        @foreach (var product in Model)
+        {
+        <div class="col-md-4 text-center mb-4">
+                <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
+                <img src="~/img/@product.ImageUrl" alt="@product.Name" class="img-fluid">
+            </a>
+            <h5 class="product-title mt-3">@product.Name</h5>
+            <p class="price">$@product.Price.ToString("F2")</p>
+        </div>
+        }
+    </div>
+</div>

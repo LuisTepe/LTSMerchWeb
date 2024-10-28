@@ -20,6 +20,8 @@ namespace LTSMerchWebApp.Controllers
             // Llenar el ViewBag con los datos de colores y tallas
             ViewBag.Colors = new SelectList(_context.Colors.ToList(), "ColorId", "ColorName");
             ViewBag.Sizes = new SelectList(_context.Sizes.ToList(), "SizeId", "SizeName");
+            ViewBag.Categories = new SelectList(_context.ProductCategories.ToList(), "category_id", "description");
+            ViewBag.States = new SelectList(_context.ProductStates.ToList(), "state_id", "is_active");
 
             // Cargar productos y sus opciones
             var products = _context.Products
@@ -27,32 +29,130 @@ namespace LTSMerchWebApp.Controllers
                 .ThenInclude(po => po.Color)
                 .Include(p => p.ProductOptions)
                 .ThenInclude(po => po.Size)
+                .Include(p => p.ProductOptions)
+                .ThenInclude(po => po.Category)
+                .Include(p => p.ProductOptions)
+                .ThenInclude(po => po.State)
                 .ToList();
 
             return View(products);
         }
 
-        // GET: Products/Details/5
-        public IActionResult Details()
+        public async Task<IActionResult> ProductsList()
         {
-            /*
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var products = await _context.Products.ToListAsync();
+            return View(products);
+        }
 
+        // GET: Products/Details/5
+        public async Task<IActionResult> Details(int id)
+        {
             var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+            .Include(p => p.ProductOptions)
+                .ThenInclude(po => po.Size)
+            .Include(p => p.ProductOptions)
+                .ThenInclude(po => po.Color)
+            .FirstOrDefaultAsync(p => p.ProductId == id);
+
             if (product == null)
             {
                 return NotFound();
             }
-            */
-            return View();
+
+            ViewBag.IsUserLoggedIn = HttpContext.Session.GetInt32("UserId") != null;
+
+            return View(product);
         }
+
+        [HttpPost]
+        public IActionResult AddToCart(int size, int color, int quantity)
+        {
+            // Buscar la opción de producto según la talla y el color seleccionados
+            var productOption = _context.ProductOptions
+                .FirstOrDefault(po => po.SizeId == size && po.ColorId == color);
+
+            if (productOption == null)
+            {
+                // Manejar el caso en que la combinación de talla y color no esté disponible
+                return NotFound("Esta combinación de talla y color no está disponible.");
+            }
+
+            // Obtener o crear el carrito del usuario
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var cart = _context.Carts.FirstOrDefault(c => c.UserId == userId);
+
+            if (cart == null)
+            {
+                cart = new Cart { UserId = userId };
+                _context.Carts.Add(cart);
+                _context.SaveChanges();
+            }
+
+            // Agregar el item al carrito
+            var cartItem = new CartItem
+            {
+                CartId = cart.CartId,
+                ProductOptionId = productOption.ProductOptionId,
+                Quantity = quantity
+            };
+            _context.CartItems.Add(cartItem);
+            _context.SaveChanges();
+
+            return RedirectToAction("ShoppingCart", "Products");
+        }
+
         public IActionResult ShoppingCart()
         {
-            return View();
+            // Obtener el ID del usuario de la sesión
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            // Verificar si el usuario no está autenticado
+            if (!userId.HasValue)
+            {
+                // Retornar una vista que indique que el carrito está vacío o redirigir a la página de inicio
+                ViewBag.Message = "Debes iniciar sesión para ver tu carrito de compras.";
+                return View(new Cart()); // Retorna un carrito vacío
+            }
+
+            // Obtener el carrito del usuario
+            var cart = _context.Carts
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.ProductOption)
+                        .ThenInclude(po => po.Product)
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.ProductOption)
+                        .ThenInclude(po => po.Size) // Include Size
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.ProductOption)
+                        .ThenInclude(po => po.Color) // Include Color
+                .FirstOrDefault(c => c.UserId == userId);
+
+            // Pasar el carrito a la vista
+            return View(cart ?? new Cart()); // Si no se encuentra el carrito, retorna uno vacío
+        }
+
+        [HttpPost]
+        public IActionResult UpdateCartItem(int cartItemId, int quantity)
+        {
+            var cartItem = _context.CartItems.Find(cartItemId);
+            if (cartItem != null)
+            {
+                cartItem.Quantity = quantity;
+                _context.SaveChanges();
+            }
+            return RedirectToAction("ShoppingCart");
+        }
+
+        [HttpPost]
+        public IActionResult RemoveCartItem(int cartItemId)
+        {
+            var cartItem = _context.CartItems.Find(cartItemId);
+            if (cartItem != null)
+            {
+                _context.CartItems.Remove(cartItem);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("ShoppingCart");
         }
 
         public IActionResult CheckOutPayment()
@@ -60,14 +160,86 @@ namespace LTSMerchWebApp.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult CheckOutShipping()
         {
-            return View();
+            // Obtén el UserId de la sesión
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            // Obtén el carrito correspondiente al usuario
+            var cart = _context.Carts
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.ProductOption)
+                        .ThenInclude(po => po.Product)
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.ProductOption)
+                        .ThenInclude(po => po.Size) // Include Size
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.ProductOption)
+                        .ThenInclude(po => po.Color) // Include Color
+                .FirstOrDefault(c => c.UserId == userId);
+
+
+            // Crea el modelo de envío
+            var order = new Order
+            {
+                UserId = userId,
+                ShippingAddress = "Hmo, xx, xx, xx",
+            };
+
+            var viewModel = new ShippingViewModel
+            {
+                Order = order,
+                Cart = cart
+            };
+
+            return View(viewModel);
         }
 
-        public IActionResult Shipping()
+        // Acción para procesar el formulario de CheckOutShipping
+        [HttpPost]
+        public IActionResult CheckOutShipping(string ShippingAddress, int ShippingMethod)
         {
-            return View();
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            // Obtén el pedido existente
+            var order = new Order
+            {
+                UserId = userId,
+                ShippingAddress = ShippingAddress, // Asigna la nueva dirección
+                CreatedAt = DateTime.Now,
+                Total = CalculateOrderTotal(userId, ShippingMethod),
+                StatusTypeId = 1 // Asumiendo que "1" es el estatus inicial del pedido
+            };
+
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+
+            return RedirectToAction("CheckOutPayment", "Products");
+        }
+
+
+        // Método auxiliar para calcular el total del pedido con envío
+        private decimal CalculateOrderTotal(int? userId, int shippingMethod)
+        {
+            var cartItems = _context.CartItems.Where(c => c.Cart.UserId == userId);
+            var subtotal = cartItems.Sum(item => item.Quantity * item.ProductOption.Product.Price);
+
+            decimal shippingCost = shippingMethod switch
+            {
+                1 => 50.00m,
+                2 => 70.00m,
+                3 => 100.00m,
+                _ => 0m
+            };
+
+            return subtotal + shippingCost;
+        }
+        public IActionResult RenderShoppingCart()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var cartItems = _context.CartItems.Where(c => c.Cart.UserId == userId).ToList();
+            return PartialView("_ShoppingCartPartial", cartItems);
         }
 
         public IActionResult Create()
@@ -259,8 +431,63 @@ namespace LTSMerchWebApp.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ProcessPayment(IFormFile comprobante)
+        {
+            if (comprobante != null && comprobante.Length > 0)
+            {
+                // Crea el directorio si no existe
+                var uploadDir = Path.Combine("wwwroot", "uploads");
+                if (!Directory.Exists(uploadDir))
+                {
+                    Directory.CreateDirectory(uploadDir);
+                }
 
+                // Genera un nombre de archivo único para evitar sobrescritura
+                var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(comprobante.FileName)}";
+                var filePath = Path.Combine(uploadDir, fileName);
 
+                // Guarda el archivo en el servidor
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await comprobante.CopyToAsync(stream);
+                }
+
+                // Obtén el UserId de la sesión
+                var userId = HttpContext.Session.GetInt32("UserId");
+
+                var order = _context.Orders.FirstOrDefault(x => x.UserId == userId && x.StatusTypeId == 1);
+
+                // Valida que userId no sea nulo
+                if (userId == null)
+                {
+                    ViewBag.Error = "No se pudo obtener el ID de usuario de la sesión.";
+                    return View("productPayment");
+                }
+
+                // Crear el registro de pago
+                var paymentRecord = new Payment
+                {
+                    UserId = userId.Value,
+                    OrderId = order.OrderId,
+                    VoucherPath = filePath,
+                    PaymentMethodId = 1,
+                    Amount = order.Total,
+                    PaymentStatusTypeId = 2,
+                };
+
+                // Guarda el registro en la base de datos
+                _context.Payments.Add(paymentRecord);
+                await _context.SaveChangesAsync();
+
+                // Redirige o muestra mensaje de confirmación
+                return RedirectToAction("Thanks", "Home");
+            }
+
+            // Manejo de error si no se sube un archivo
+            ViewBag.Error = "Por favor sube un comprobante de pago.";
+            return View("CheckOutPayment");
+        }
 
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)

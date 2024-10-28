@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model LTSMerchWebApp.Models.ShippingViewModel
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -18,13 +20,15 @@
                 <table>
                     <tr>
                         <td>Contacto</td>
-                        <td><span>ejemplo@ejemplo.com</span></td>
+                        <td><span>@Model.Order.User?.Email</span></td>
                         <td><a href="#">Cambiar</a></td>
                     </tr>
                     <tr>
                         <td>Enviar a</td>
-                        <td><span>Calle XX, CP, Hmo Son, MX</span></td>
-                        <td><a href="#">Cambiar</a></td>
+                        <td><span>@Model.Order.ShippingAddress</span></td>
+                        <td>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#changeAddressModal">Cambiar</a>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -32,70 +36,57 @@
                 <h3>Método de envío</h3>
                 <table>
                     <tr>
-                        <td><input type="radio" name="shipping" value="1"></td>
+                        <td><input type="radio" name="ShippingMethod" value="1"></td>
                         <td>Paquetería 1</td>
-                        <td class="price">$XX.XX</td>
+                        <td class="price">$50.00</td>
                     </tr>
                     <tr>
-                        <td><input type="radio" name="shipping" value="2"></td>
+                        <td><input type="radio" name="ShippingMethod" value="2"></td>
                         <td>Paquetería 2</td>
-                        <td class="price">$XX.XX</td>
+                        <td class="price">$70.00</td>
                     </tr>
                     <tr>
-                        <td><input type="radio" name="shipping" value="3"></td>
+                        <td><input type="radio" name="ShippingMethod" value="3"></td>
                         <td>Paquetería 3</td>
-                        <td class="price">$XX.XX</td>
+                        <td class="price">$100.00</td>
                     </tr>
                 </table>
             </div>
             <hr class="divider">
             <div class="action-container">
-                <a asp-area="" asp-controller="Products" asp-action="ShoppingCart" class="back-link"> Regresar a información</a>
-                <form action="@Url.Action("CheckOutPayment", "Products")" method="get">
+                <a asp-area="" asp-controller="Products" asp-action="ShoppingCart" class="back-link">Regresar a información</a>
+                <form asp-action="CheckOutShipping" method="post">
                     <button type="submit" class="btn-next">Siguiente</button>
                 </form>
             </div>
             <hr class="divider">
         </div>
         <div class="right-column">
-            <div>
-                <div class="cart-items">
-                    <div class="cart-item">
-                        <div class="image-container">
-                            <img class="image-cart" src="~/img/tshirt.png" alt="tshirt">
-                            <span class="quantity-bubble">1</span>
-                        </div>
-                        <p>Title T-SHIRT M</p>
-                        <span>$XX.XX</span>
-                    </div>
-                    <div class="cart-item">
-                        <div class="image-container">
-                            <img class="image-cart" src="~/img/cap.png" alt="cap">
-                            <span class="quantity-bubble">2</span>
-                        </div>
-                        <p>Title CAP</p>
-                        <span>$XX.XX</span>
-                    </div>
-                    <div class="cart-item">
-                        <div class="image-container">
-                            <img class="image-cart" src="~/img/hoodie.png" alt="hoodie">
-                            <span class="quantity-bubble">1</span>
-                        </div>
-                        <p>Title HOODIE L</p>
-                        <span>$XX.XX</span>
-                    </div>
+            @Html.Partial("_ShoppingCartPartial", Model.Cart)
+        </div>
+    </div>
+
+    <!-- Modal para cambiar dirección de envío -->
+    <div class="modal fade" id="changeAddressModal" tabindex="-1" aria-labelledby="changeAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changeAddressModalLabel">Cambiar Dirección de Envío</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="discount-code">
-                    <input type="text" placeholder="Ingresar código de descuento">
-                    <button>Aplicar</button>
-                </div>
-                <div class="summary">
-                    <p>Subtotal <span>$XX.XX</span></p>
-                    <p>Envío <span>$XX.XX</span></p>
-                    <p class="total">TOTAL <span><span class="currency">MXN</span> $XX.XX</span></p>
+                <div class="modal-body">
+                    <form id="changeAddressForm" asp-action="CheckOutShipping" method="post">
+                        <div class="mb-3">
+                            <label for="ShippingAddress" class="form-label">Nueva Dirección de Envío</label>
+                            <input type="text" class="form-control" id="ShippingAddress" name="ShippingAddress" value="@Model.Order.ShippingAddress" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar Dirección</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

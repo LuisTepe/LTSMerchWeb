@@ -1,0 +1,98 @@
+﻿@model IEnumerable<LTSMerchWebApp.Models.ProductCategory>
+
+@{
+    ViewData["Title"] = "Product Categories";
+}
+<a asp-area="" asp-controller="Admin" asp-action="Index" class="btn btn-link">Admin</a>
+<h1>Product Categories</h1>
+
+<table class="generalTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a href="javascript:void(0);" class="edit-link" data-categoryid="@item.CategoryId">Edit</a> |
+                    <a href="javascript:void(0);" class="details-link" data-categoryid="@item.CategoryId">Details</a> |
+                    <a href="javascript:void(0);" class="delete-link" data-categoryid="@item.CategoryId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="button-container">
+    <button href="javascript:void(0);" class="create-link">
+        AGREGAR
+    </button>
+</div>
+
+<!-- Side Panels -->
+<div id="side-panel-create" class="side-panel">
+    <button class="close-panel btn btn-secondary">Close</button>
+    <div id="create-form-container"></div>
+</div>
+<div id="side-panel-edit" class="side-panel">
+    <button class="close-panel btn btn-secondary">Close</button>
+    <div id="edit-form-container"></div>
+</div>
+<div id="side-panel-details" class="side-panel">
+    <button class="close-panel btn btn-secondary">Close</button>
+    <div id="details-container"></div>
+</div>
+<div id="side-panel-delete" class="side-panel">
+    <button class="close-panel btn btn-secondary">Close</button>
+    <div id="delete-container"></div>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            function loadSidePanel(url, containerId, panelId) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $(containerId).html(data);
+                        $(panelId).show();
+                    }
+                });
+            }
+
+            $('.create-link').click(function () {
+                loadSidePanel('/ProductCategories/Create', '#create-form-container', '#side-panel-create');
+            });
+
+            $('.edit-link').click(function () {
+                var categoryId = $(this).data('categoryid');
+                loadSidePanel('/ProductCategories/Edit/' + categoryId, '#edit-form-container', '#side-panel-edit');
+            });
+
+            $('.details-link').click(function () {
+                var categoryId = $(this).data('categoryid');
+                loadSidePanel('/ProductCategories/Details/' + categoryId, '#details-container', '#side-panel-details');
+            });
+
+            $('.delete-link').click(function () {
+                var categoryId = $(this).data('categoryid');
+                loadSidePanel('/ProductCategories/Delete/' + categoryId, '#delete-container', '#side-panel-delete');
+            });
+
+            $('.close-panel').click(function () {
+                $(this).closest('.side-panel').hide();
+                $(this).siblings('div').html('');
+            });
+        });
+    </script>
+}
