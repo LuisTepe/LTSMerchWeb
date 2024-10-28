@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
 namespace LTSMerchWebApp.Models;
 
 public partial class Product

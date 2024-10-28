@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 namespace LTSMerchWebApp.Models;
 
-public partial class Color
+public partial class ProductState
 {
-    public int ColorId { get; set; }
+    public int StateId { get; set; }
 
-    public string ColorName { get; set; } = null!;
-
-    public string? ColorHexCode { get; set; }
+    public bool? IsActive { get; set; }
 
     public virtual ICollection<ProductOption> ProductOptions { get; set; } = new List<ProductOption>();
 }

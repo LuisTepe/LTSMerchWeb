@@ -1,33 +1,69 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     ViewData["Title"] = "AdminDashboard";
 }
 
-<div class="containerAdmin">
-    <nav class="sidebarAdmin">
-        <div class="profileAdmin">
-            <img src="~/img/userAdmin.png" alt="Profile Icon">
-            <p>Administrador</p>
-        </div>
-        <ul class="menuAdmin">
-            <li><a asp-controller="" asp-action="Index" >Dashboard</a></li>
-            <li><a asp-controller="Products" asp-action="Index" k">Producto</a></li>
-            <li><a asp-controller="Users" asp-action="Index" k">users</a></li>
-            <li><a asp-controller="Orders" asp-action="Index" k">Orders</a></li>
-            <li><a asp-controller="Sizes" asp-action="Index" k">Sizes</a></li>
-            <li><a asp-controller="RoleTypes" asp-action="Index" k">RoleTypes</a></li>
-            <li><a asp-controller="OrderStatusTypes" asp-action="Index" k">OrderStatusTypes</a></li>
-            <li><a asp-controller="ProductOptions" asp-action="Index" k">ProductOptions</a></li>
-            <li><a asp-controller="Colors" asp-action="Index" k">Colors</a></li>
-            <li><a asp-controller="OrderDetails" asp-action="Index" k">OrderDetails</a></li>
-			<li><a asp-controller="Carts" asp-action="Index" k">Carts</a></li>
-			<li><a asp-controller="Products" asp-action="Index">Salir</a></li>
-        </ul>
-    </nav>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebarAdmin p-3">
+            <div class="text-center profileAdmin">
+                <img src="~/img/userAdmin.png" alt="Profile Icon" class="img-fluid rounded-circle mb-3">
+                <p class="text-white">Administrador</p>
+            </div>
+            <ul class="nav flex-column menuAdmin">
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="" asp-action="Index">
+                        <i class="bi bi-house-door-fill me-2"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Products" asp-action="Index">
+                        <i class="bi bi-box-fill me-2"></i>Productos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Sizes" asp-action="Index">
+                        <i class="bi bi-rulers me-2"></i>Tallas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Orders" asp-action="Index">
+                        <i class="bi bi-boxes me-2"></i>Pedidos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Users" asp-action="Index">
+                        <i class="bi bi-people-fill me-2"></i>Usuarios
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="ProductCategories" asp-action="Index">
+                        <i class="bi bi-grid-1x2-fill me-2"></i>Categorías
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Home" asp-action="Logout">
+                        <i class="bi bi-box-arrow-right me-2"></i>Salir
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
-    <main class="mainContentAdmin">
-        <!-- Contenido principal aquí -->
-    </main>
+        <!-- Main Content -->
+        <main class="col-md-9 col-lg-10 ms-sm-auto px-md-4 mainContentAdmin">
+            <!-- Contenido principal aquí -->
+        </main>
+    </div>
 </div>
+<!--
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".menuAdmin a").click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            $(".mainContentAdmin").load(url);
+        });
+    });
+</script>
+-->

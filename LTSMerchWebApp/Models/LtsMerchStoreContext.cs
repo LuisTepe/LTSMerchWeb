@@ -42,7 +42,11 @@ public partial class LtsMerchStoreContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+
     public virtual DbSet<ProductOption> ProductOptions { get; set; }
+
+    public virtual DbSet<ProductState> ProductStates { get; set; }
 
     public virtual DbSet<RoleType> RoleTypes { get; set; }
 
@@ -52,7 +56,7 @@ public partial class LtsMerchStoreContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;database=lts_merch_store;user=atepezano;password=atepezano1234", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
+        => optionsBuilder.UseMySql("server=localhost;database=lts_merch_store;user=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -125,6 +129,9 @@ public partial class LtsMerchStoreContext : DbContext
             entity.Property(e => e.ColorId)
                 .HasColumnType("int(11)")
                 .HasColumnName("color_id");
+            entity.Property(e => e.ColorHexCode)
+                .HasMaxLength(7)
+                .HasColumnName("color_hex_code");
             entity.Property(e => e.ColorName)
                 .HasMaxLength(50)
                 .HasColumnName("color_name");
@@ -307,6 +314,8 @@ public partial class LtsMerchStoreContext : DbContext
 
             entity.HasIndex(e => e.PaymentStatusTypeId, "payment_status_type_id");
 
+            entity.HasIndex(e => e.UserId, "payments_ibfk_4");
+
             entity.Property(e => e.PaymentId)
                 .HasColumnType("int(11)")
                 .HasColumnName("payment_id");
@@ -326,6 +335,12 @@ public partial class LtsMerchStoreContext : DbContext
             entity.Property(e => e.PaymentStatusTypeId)
                 .HasColumnType("int(11)")
                 .HasColumnName("payment_status_type_id");
+            entity.Property(e => e.UserId)
+                .HasColumnType("int(11)")
+                .HasColumnName("user_id");
+            entity.Property(e => e.VoucherPath)
+                .HasMaxLength(255)
+                .HasColumnName("voucher_path");
 
             entity.HasOne(d => d.Order).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.OrderId)
@@ -338,6 +353,10 @@ public partial class LtsMerchStoreContext : DbContext
             entity.HasOne(d => d.PaymentStatusType).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.PaymentStatusTypeId)
                 .HasConstraintName("payments_ibfk_3");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("payments_ibfk_4");
         });
 
         modelBuilder.Entity<PaymentMethod>(entity =>
@@ -398,6 +417,20 @@ public partial class LtsMerchStoreContext : DbContext
                 .HasColumnName("stock");
         });
 
+        modelBuilder.Entity<ProductCategory>(entity =>
+        {
+            entity.HasKey(e => e.CategoryId).HasName("PRIMARY");
+
+            entity.ToTable("product_categories");
+
+            entity.Property(e => e.CategoryId)
+                .HasColumnType("int(11)")
+                .HasColumnName("category_id");
+            entity.Property(e => e.Description)
+                .HasMaxLength(255)
+                .HasColumnName("description");
+        });
+
         modelBuilder.Entity<ProductOption>(entity =>
         {
             entity.HasKey(e => e.ProductOptionId).HasName("PRIMARY");
@@ -408,11 +441,18 @@ public partial class LtsMerchStoreContext : DbContext
 
             entity.HasIndex(e => e.ProductId, "product_id");
 
+            entity.HasIndex(e => e.StateId, "product_options_ibfk_4");
+
+            entity.HasIndex(e => e.CategoryId, "product_options_ibfk_5");
+
             entity.HasIndex(e => e.SizeId, "size_id");
 
             entity.Property(e => e.ProductOptionId)
                 .HasColumnType("int(11)")
                 .HasColumnName("product_option_id");
+            entity.Property(e => e.CategoryId)
+                .HasColumnType("int(11)")
+                .HasColumnName("category_id");
             entity.Property(e => e.ColorId)
                 .HasColumnType("int(11)")
                 .HasColumnName("color_id");
@@ -422,9 +462,16 @@ public partial class LtsMerchStoreContext : DbContext
             entity.Property(e => e.SizeId)
                 .HasColumnType("int(11)")
                 .HasColumnName("size_id");
+            entity.Property(e => e.StateId)
+                .HasColumnType("int(11)")
+                .HasColumnName("state_id");
             entity.Property(e => e.Stock)
                 .HasColumnType("int(11)")
                 .HasColumnName("stock");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.ProductOptions)
+                .HasForeignKey(d => d.CategoryId)
+                .HasConstraintName("product_options_ibfk_5");
 
             entity.HasOne(d => d.Color).WithMany(p => p.ProductOptions)
                 .HasForeignKey(d => d.ColorId)
@@ -437,6 +484,25 @@ public partial class LtsMerchStoreContext : DbContext
             entity.HasOne(d => d.Size).WithMany(p => p.ProductOptions)
                 .HasForeignKey(d => d.SizeId)
                 .HasConstraintName("product_options_ibfk_2");
+
+            entity.HasOne(d => d.State).WithMany(p => p.ProductOptions)
+                .HasForeignKey(d => d.StateId)
+                .HasConstraintName("product_options_ibfk_4");
+        });
+
+        modelBuilder.Entity<ProductState>(entity =>
+        {
+            entity.HasKey(e => e.StateId).HasName("PRIMARY");
+
+            entity.ToTable("product_states");
+
+            entity.Property(e => e.StateId)
+                .HasColumnType("int(11)")
+                .HasColumnName("state_id");
+            entity.Property(e => e.IsActive)
+                .IsRequired()
+                .HasDefaultValueSql("'1'")
+                .HasColumnName("is_active");
         });
 
         modelBuilder.Entity<RoleType>(entity =>
