@@ -21,6 +21,7 @@ namespace LTSMerchWebApp.Controllers
         // GET: ProductOptions
         public async Task<IActionResult> Index()
         {
+            ViewData["HideHeaderFooter"] = true;
             var ltsMerchStoreContext = _context.ProductOptions.Include(p => p.Color).Include(p => p.Product).Include(p => p.Size);
             return View(await ltsMerchStoreContext.ToListAsync());
         }

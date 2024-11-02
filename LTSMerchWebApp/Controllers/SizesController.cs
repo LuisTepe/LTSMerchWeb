@@ -21,6 +21,7 @@ namespace LTSMerchWebApp.Controllers
         // GET: Sizes
         public async Task<IActionResult> Index()
         {
+            ViewData["HideHeaderFooter"] = true;
             return View(await _context.Sizes.ToListAsync());
         }
 
