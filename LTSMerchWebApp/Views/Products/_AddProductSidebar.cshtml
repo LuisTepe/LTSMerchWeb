@@ -1,0 +1,213 @@
+﻿@model LTSMerchWebApp.Models.Product
+<!-- Modal de confirmación de producto agregado -->
+<div id="productAddedModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5>AGREGAR</h5>
+        </div>
+
+        <div class="modal-body">
+            <i class="fa-solid fa-circle-check icon-large" style="color: #000000;"></i>
+            <div class="modal-text">
+            <h2>Producto agregado</h2>
+            <p>Producto agregado correctamente</p>
+            </div>
+            <div class="sidebar-footer">
+            <button onclick="closeModal()">ACEPTAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Sidebar de Agregar Producto -->
+<div id="addProductSidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h5>AGREGAR</h5>
+        <button type="button" class="close-btn" onclick="closeSidebar()">×</button>
+    </div>
+    <div class="sidebar-content">
+        <form id="addProductForm" asp-action="Create" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="productName">Nombre del producto</label>
+                <input type="text" class="form-control" id="productName" placeholder="Ingresar nombre del producto" asp-for="Name" maxlength="100" required>
+            </div>
+            <div class="form-group">
+                <label for="productPrice">Precio unitario</label>
+                <input type="number" min="0.01" max="999999.99" step="0.01" class="form-control" id="productPrice" placeholder="Ingresar precio del producto" asp-for="Price" required>
+            </div>
+            <div class="form-group">
+                <label for="productDescription">Descripción</label>
+                <textarea class="form-control" id="productDescription" rows="3" placeholder="Ingresar descripción del producto" asp-for="Description" maxlength="300"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="productCategory">Categoría</label>
+                <select class="form-control" id="productCategory">
+                    <option value="">Seleccione una de las categorías</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="productColor">Color</label>
+                <select class="form-control" name="ColorId" asp-items="ViewBag.Colors" required>
+                    <option value="">Seleccione el color</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productSize">Talla</label>
+                <select class="form-control" name="SizeId" asp-items="ViewBag.Sizes" required>
+                    <option value="">Seleccione la talla</option>
+                </select>
+            </div>
+            <div class="form-group file-upload-wrapper">
+                <label for="file-upload-input">Imagen</label>
+                <div class="file-upload-controls">
+                    <label class="file-upload-btn" for="file-upload-input">Subir imagen</label>
+                    <input id="file-upload-input" type="file" class="form-control-file" asp-for="ImageUrl"
+                           accept=".jpg, .jpeg, .png"
+                           onchange="validateImage(this)" required>
+                    <span id="file-upload-name" class="file-upload-name">No hay archivo seleccionado</span>
+                </div>
+                <small class="form-text text-muted">* La imagen debe tener 300x300px como mínimo de resolución y estar en formato .jpg o .png.</small>
+            </div>
+
+
+
+            <div class="sidebar-footer">
+                <button id="addProductBtn" type="submit" class="btn btn-primary">Agregar Producto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Función para validar la imagen
+    function validateImage(input) {
+        const file = input.files[0];
+        const fileName = file.name;
+        const fileExt = fileName.split('.').pop().toLowerCase();
+        const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+        // Validar extensión de archivo
+        if (!allowedExtensions.includes(fileExt)) {
+            input.value = ''; // Limpiar el input si el archivo no es válido
+            document.getElementById('file-upload-name').textContent = 'No hay archivo seleccionado';
+            checkFormValidity(); // Verificar validez del formulario
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = new Image();
+            img.onload = function () {
+                // Validar tamaño de la imagen
+                if (img.width < 300 || img.height < 300) {
+                    input.value = ''; // Limpiar el input si la imagen no es válida
+                    document.getElementById('file-upload-name').textContent = 'No hay archivo seleccionado';
+                } else {
+                    document.getElementById('file-upload-name').textContent = fileName;
+                }
+                checkFormValidity(); // Verificar validez del formulario
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Función para habilitar o deshabilitar el botón de envío
+    function checkAddFormValidity() {
+        const form = document.getElementById('addProductForm');
+        const submitBtn = document.getElementById('addProductBtn');
+
+        if (form.checkValidity()) {
+            submitBtn.disabled = false; // Habilitar el botón si el formulario es válido
+        } else {
+            submitBtn.disabled = true;  // Deshabilitar el botón si falta algo
+        }
+    }
+
+    // Inicialización: habilitar/deshabilitar el botón al cargar la página
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('addProductForm');
+        form.addEventListener('input', checkAddFormValidity); // Verificar el formulario al cambiar cualquier input
+        checkAddFormValidity(); // Verificar la validez inicial del formulario
+    });
+
+    function openModal() {
+        $('#productAddedModal').fadeIn(); // Utilizamos jQuery para mostrar el modal con efecto de fade
+    }
+
+    // Función para cerrar el modal de confirmación
+    function closeModal() {
+        $('#productAddedModal').fadeOut(); // Utilizamos jQuery para ocultar el modal con efecto de fade
+    }
+
+    // Manejar el envío del formulario de agregar producto
+    $('#addProductForm').on('submit', function (event) {
+    event.preventDefault(); // Prevenir la recarga de la página
+
+    var formData = new FormData(this); // Obtener todos los datos del formulario, incluyendo archivos
+
+    $.ajax({
+        url: '/Products/Create', // Asegúrate de que la URL sea la correcta para tu ruta
+        type: 'POST',
+        data: formData,
+        contentType: false, // Necesario para enviar archivos
+        processData: false, // Evita que jQuery procese los datos (esto es necesario para FormData)
+        success: function (response) {
+            // Si la respuesta es exitosa, cerramos el sidebar, mostramos el modal y añadimos el producto a la tabla
+            closeSidebar();
+            openModal();
+
+            // Aquí agregamos la nueva fila a la tabla con los datos del producto
+            let newRow = `
+                <tr>
+                    <td>${response.productId}</td>
+                    <td><img src="/img/${response.imageUrl}" alt="${response.name}" class="img-fluid"></td>
+                    <td>${response.name}</td>
+                    <td>${response.description}</td>
+                    <td></td>
+                    <td>${response.color}</td>
+                    <td>${response.size}</td>
+                    <td>${response.price}</td>
+                    <td></td>
+                    <td class="action-icons">
+                       <a href="javascript:void(0);" onclick="openEditSidebar(${response.productId})">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a href="/Products/Delete/${response.productId}">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            `;
+
+            // Agregar la nueva fila a la tabla
+            $('table tbody').append(newRow);
+        },
+        error: function (xhr, status, error) {
+            console.log('Error al agregar el producto: ', error);
+        }
+    });
+});
+
+
+        // Función para cerrar el sidebar
+        function closeSidebar() {
+            $('#addProductSidebar').removeClass('sidebar-open'); // Utilizamos jQuery para eliminar la clase que abre el sidebar
+        }
+
+        // Cerrar el modal cuando se hace clic en el botón de "Aceptar"
+        $('#confirmBtn').on('click', function () {
+            closeModal();
+        });
+</script>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

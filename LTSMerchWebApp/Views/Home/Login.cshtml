@@ -10,44 +10,133 @@
 </head>
 <body>
 
-<div class="container-gen">
-    <div class="container-is">
-        <section class="titulo1">
-            <h1>INICIAR SESIÓN</h1>
-        </section>
-
-        <form method="post" asp-action="Login">
-            <section class="correo1">
-                <h2>CORREO ELECTRÓNICO</h2>
-                <input asp-for="Email" type="email" placeholder="Correo Electrónico" class="textbox">
-                <span asp-validation-for="Email" class="text-danger"></span>
+    <div class="container-gen">
+        <div class="container-is">
+            <section class="titulo1">
+                <h1>INICIAR SESIÓN</h1>
             </section>
 
-            <section class="password1">
-                <h2>CONTRASEÑA</h2>
-                <input asp-for="Password" type="password" placeholder="Contraseña" class="textbox">
-                <span asp-validation-for="Password" class="text-danger"></span>
-                <a href="#" class="back">¿Olvidaste tu contraseña?</a>
+            <form method="post" asp-action="Login">
+                <section class="correo1">
+                    <h2>CORREO ELECTRÓNICO</h2>
+                    <input asp-for="Email" type="email" placeholder="Correo Electrónico" class="textbox">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </section>
+
+                <section class="password1">
+                    <h2>CONTRASEÑA</h2>
+                    <input asp-for="Password" type="password" placeholder="Contraseña" class="textbox">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <a href="#" class="back">¿Olvidaste tu contraseña?</a>
+                </section>
+
+                <section class="ingresar">
+                    <button class="button1" type="submit" name="action" value="Login">INGRESAR</button>
+                    <a href="#" class="back">> Regresar a la tienda</a>
+                </section>
+            </form>
+        </div>
+
+        <div class="vertical-line"><img src="~/img/linea.jpeg" alt="linea" width="13"></div>
+
+        <!-- Registro de usuario -->
+        <div class="container-cc">
+            <section class="titulo2">
+                <h1>CREAR UNA CUENTA</h1>
             </section>
 
-            <section class="ingresar">
-                <button class="button1" type="submit">INGRESAR</button>
-                <a href="#" class="back">> Regresar a la tienda</a>
-            </section>
-        </form>
+            <!-- Formulario de registro -->
+            <form method="post" asp-action="Login">
+                <section class="nombre">
+                    <h2>NOMBRES</h2>
+                    <input asp-for="FirstName" type="text" placeholder="Nombre" class="textbox">
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </section>
+
+                <section class="apellido">
+                    <h2>APELLIDOS</h2>
+                    <input asp-for="LastName" type="text" placeholder="Apellido" class="textbox">
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </section>
+
+                <section class="correo2">
+                    <h2>CORREO ELECTRÓNICO</h2>
+                    <input asp-for="Email" type="email" placeholder="Correo Electrónico" class="textbox">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </section>
+
+                <section class="password2">
+                    <h2>CONTRASEÑA</h2>
+                    <input asp-for="Password" type="password" placeholder="Contraseña" class="textbox">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <ul class="password-requirements">
+                        <li>La contraseña debe tener un mínimo de 8 caracteres</li>
+                        <li>La contraseña debe contener un número</li>
+                        <li>La contraseña debe contener letras mayúsculas y minúsculas</li>
+                    </ul>
+                </section>
+
+                <section class="registrarse">
+                    <button class="button2" type="submit" name="action" value="Register">REGISTRARSE</button>
+                </section>
+            </form>
+        </div>
     </div>
 
-    <div class="vertical-line"><img src="~/img/linea.jpeg" alt="linea" width="13"></div>
 
-    <!-- Registro de usuario -->
-    <div class="container-cc">
-        <section class="titulo2">
-            <h1>CREAR UNA CUENTA</h1>
-        </section>
-
-        <!-- Formulario de registro -->
+    <!-- Modal de Éxito -->
+    <div id="successModal" class="modal fade custom-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content custom-modal-content">
+                <div class="custom-modal-header">
+                    <img src="~/img/logo.png" alt="Logo" class="custom-modal-logo">
+                    <button type="button" class="custom-close-btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="custom-modal-body text-center">
+                    <h3 class="custom-modal-title">USUARIO REGISTRADO</h3>
+                    <p>Se te enviará un correo electrónico a la dirección proporcionada para la verificación del registro.</p>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <!-- Modal de Error -->
+    <div id="errorModal" class="modal fade custom-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content custom-modal-content">
+                <div class="custom-modal-header">
+                    <img src="~/img/logo.png" alt="Logo" class="custom-modal-logo">
+                    <button type="button" class="custom-close-btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="custom-modal-body text-center">
+                    <h3 class="custom-modal-title">Oh no</h3>
+                    <p>No se ha podido completar la solicitud, verifica tus datos e intentalo de nuevo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Mostrar el modal de éxito si hay un mensaje en TempData["SuccessMessage"]
+            var successMessage = '@TempData["SuccessMessage"]';
+            if (successMessage) {
+                $('#successMessage').text(successMessage);
+                $('#successModal').modal('show');
+            }
+
+            // Mostrar el modal de error si hay un mensaje en TempData["ErrorMessage"]
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage) {
+                $('#errorMessage').text(errorMessage);
+                $('#errorModal').modal('show');
+            }
+        });
+    </script>
 
 </body>
 </html>

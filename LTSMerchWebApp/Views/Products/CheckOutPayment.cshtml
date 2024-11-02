@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Merch T-Shirt</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/7/8Dk98/5ebG8nkkM5PSj6nxFjK4in8u6P/mZx" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/checkOutPaymentStyle.css">
 </head>
 
@@ -14,9 +12,6 @@
 
     <div class="container">
         <div class="containerLeft">
-
-            <img src="~/img/firma.png" class="firma" alt="firma" width="130">
-
             <h2>Datos</h2>
             <div class="datos-container">
                 <div class="fila">
@@ -36,74 +31,17 @@
                 </div>
             </div>
 
-            <h2>Pago</h2>
             <div class="pago-container">
+                <h2>Comprobante de Pago</h2>
                 <div class="opcion-pago">
-                    <span>
-                        <input type="radio" id="debito-credito" name="metodo-pago" checked>
-                        <label for="debito-credito">Tarjeta de débito / crédito</label>
-                    </span>
-                    <div class="tarjetas">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg"
-                             alt="Mastercard">
-                        <span>+3</span>
+                    <!-- Input para subir el comprobante -->
+                    <div class="comprobante-container">
+                        <label for="comprobante">Sube tu comprobante de pago:</label>
+                        <input type="file" id="comprobante" name="comprobante" accept="image/*">
                     </div>
                 </div>
-
-                <div class="input-container">
-                    <input class="input-group" type="text" placeholder="Nombre de la persona en la tarjeta">
-                    <input type="text" placeholder="Número de tarjeta">
-                </div>
-
-                <div class="input-inline">
-                    <input type="text" placeholder="Fecha de expiración (MM/AA)">
-                    <input type="text" placeholder="CCV">
-                </div>
-                <p></p>
-
             </div>
 
-            <h2>Dirección de facturación</h2>
-            <div class="direccion-container">
-
-
-                <div class="opcion-direccion">
-                    <label>
-                        <input type="radio" name="direccion" checked>
-                        Usar misma dirección de envío
-                    </label>
-                    <label>
-                        <input type="radio" name="direccion">
-                        Usar diferente dirección para facturación
-                    </label>
-                </div>
-
-                <div class="input-container">
-                    <select>
-                        <option value="">País / Región</option>
-                        <option value="mx">México</option>
-                        <option value="us">Estados Unidos</option>
-                        <!-- Añadir más opciones según sea necesario -->
-                    </select>
-                </div>
-
-                <div class="input-inline">
-                    <input type="text" placeholder="Nombres">
-                    <input type="text" placeholder="Apellidos">
-                </div>
-
-                <div class="input-container">
-                    <input type="text" placeholder="Dirección">
-                </div>
-
-                <div class="input-inline">
-                    <input type="text" placeholder="Ciudad">
-                    <input type="text" placeholder="Estado">
-                    <input type="text" placeholder="Código Postal">
-                </div>
-
-            </div>
 
             <div class="footer-container">
                 <!-- Sección de "Recuérdame" -->
@@ -114,11 +52,10 @@
 
                 <!-- Sección de Pago -->
                 <div class="compra-container">
-                    <a href="#">> Regresar a envíos</a>
-                    <form action="@Url.Action("Thanks", "Home")" method="get">
-                        <button type="submit" class="btn-pagar">PAGAR</button>
+                    <form action="@Url.Action("Thanks", "Home")" method="post" enctype="multipart/form-data">
+                        <button type="submit" name="submit" class="btn-pagar">PAGAR</button>
                     </form>
-                </div>
+                </div>  
 
                 <!-- Footer con enlaces de ayuda -->
                 <div class="footer">
@@ -132,77 +69,9 @@
 
         </div>
         <div class="containerRight">
-            <div class="cart-header">
-                <div>
-                    <h1>Tu carrito</h1>
-                    <p>Número de items: 3</p>
-                </div>
-                <div class="close-button">&times;</div>
-            </div>
-
-            <div class="containerRightCarrito">
-                <div class="product-item">
-                    <div class="product-details">
-                        <img src="~/images/tshirt.png" alt="T-SHIRT">
-                        <div class="product-info">
-                            <h5>title t-shirt m</h5>
-                        </div>
-                    </div>
-                    <div class="product-price">
-                        <h5>$XX.XX</h5>
-                    </div>
-                </div>
-
-                <div class="product-item">
-                    <div class="product-details">
-                        <img src="~/images/cap.png" alt="CAP">
-                        <div class="product-info">
-                            <h5>title cap</h5>
-                        </div>
-                    </div>
-                    <div class="product-price">
-                        <h5>$XX.XX</h5>
-                    </div>
-                </div>
-
-                <div class="product-item">
-                    <div class="product-details">
-                        <img src="~/images/hoodie.png" alt="HOODIE">
-                        <div class="product-info">
-                            <h5>title hoodie l</h5>
-                        </div>
-                    </div>
-                    <div class="product-price">
-                        <h5>$XX.XX</h5>
-                    </div>
-                </div>
-
-                <div class="discount-code">
-                    <input type="text" placeholder="Ingresar código de descuento">
-                    <button>Aplicar</button>
-                </div>
-
-                <div class="price-summary">
-                    <div class="prices">
-                        <p>Subtotal</p>
-                        <h5>$XX.XX</h5>
-                    </div>
-                    <div class="prices">
-                        <p>Envío</p>
-                        <h5>$XX.XX</h5>
-                    </div>
-                    <div class="prices">
-                        <p>Total</p>
-                        <h5>MXN $XX.XX</h5>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-2D9+G0E5IW/65CwVq8xL0VpH6xU6F8PjdJbeUVTkMJlhLpxA6z2kdg1CLFmcxluy"
-            crossorigin="anonymous"></script>
 
 </body>
 

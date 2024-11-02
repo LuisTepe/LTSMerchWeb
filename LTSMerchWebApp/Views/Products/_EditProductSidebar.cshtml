@@ -1,0 +1,211 @@
+﻿@model LTSMerchWebApp.Models.Product
+<!-- Modal de confirmación de producto agregado -->
+<div id="productEditModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5>Editar</h5>
+        </div>
+
+        <div class="modal-body">
+            <i class="fa-solid fa-circle-check icon-large" style="color: #000000;"></i>
+            <div class="modal-text">
+                <h2>Producto editado</h2>
+                <p>Producto editado correctamente</p>
+            </div>
+            <div class="sidebar-footer">
+                <button onclick="closeEditModal()">ACEPTAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Sidebar de Agregar Producto -->
+<div id="editProductSidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h5>EDITAR</h5>
+        <button type="button" class="close-btn" onclick="closeEditSidebar()">×</button>
+    </div>
+    <div class="sidebar-content">
+        <form id="editProductForm" asp-action="Edit" enctype="multipart/form-data">
+
+            <input type="hidden" name="ProductId" />
+            <div class="form-group">
+                <h5 id="productNameDisplay"></h5>
+                <label for="productName"></label>
+                <input type="hidden" name="Name" class="form-control" id="productName" placeholder="Ingresar nombre del producto" asp-for="Name" maxlength="100" required>
+            </div>
+            <div class="form-group">
+                <label for="productPrice">Precio unitario</label>
+                <input type="number" name="Price" min="0.01" max="999999.99" step="0.01" class="form-control" id="productPrice" placeholder="Ingresar precio del producto" asp-for="Price " required>
+            </div>
+            <div class="form-group">
+                <label for="productDescription">Descripción</label>
+                <textarea class="form-control" name="Description" id="productDescription" rows="3" placeholder="Ingresar descripción del producto" asp-for="Description" maxlength="300"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="productCategory">Categoría</label>
+                <select class="form-control" id="productCategory">
+                    <option value="">Seleccione una de las categorías</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="productColor">Color</label>
+                <select class="form-control" name="ColorId" asp-items="ViewBag.Colors" required>
+                    <option value="">Seleccione el color</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productSize">Talla</label>
+                <select class="form-control" name="SizeId" asp-items="ViewBag.Sizes" required>
+                    <option value="">Seleccione la talla</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productState">Estado</label>
+                <select class="form-control"  >
+                    <option value="">Seleccione el estado</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" name="ImageUrl" id="imageUrl" />
+            </div>
+            
+
+
+            <div class="sidebar-footer">
+                <button id="editProductBtn" type="submit" class="btn btn-primary">Editar Producto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Función para validar la imagen
+    
+
+    // Función para habilitar o deshabilitar el botón de envío
+    function checkEditFormValidity() {
+        const form = document.getElementById('editProductForm');
+        const submitBtn = document.getElementById('editProductBtn');
+
+        if (form.checkValidity()) {
+            submitBtn.disabled = false; // Habilitar el botón si el formulario es válido
+        } else {
+            submitBtn.disabled = true;  // Deshabilitar el botón si falta algo
+        }
+    }
+
+    // Inicialización: habilitar/deshabilitar el botón al cargar la página
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('editProductForm');
+        form.addEventListener('input', checkEditFormValidity); // Verificar el formulario al cambiar cualquier input
+        checkEditFormValidity(); // Verificar la validez inicial del formulario
+    });
+    function openEditModal() {
+        $('#productEditModal').fadeIn(); // Mostrar el modal con un efecto fade
+    }
+
+    // Función para cerrar el modal de confirmación
+    function closeEditModal() {
+        $('#productEditModal').fadeOut(); // Ocultar el modal con un efecto fade
+    }
+
+    // Función para cerrar el sidebar de edición
+    function closeEditSidebar() {
+        $('#editProductSidebar').removeClass('sidebar-open'); // Cerrar el sidebar
+    }
+
+    // Función para abrir el sidebar de edición y cargar los datos del producto
+    function openEditSidebar(productId) {
+        $.ajax({
+            url: '/Products/Edit/' + productId,
+            method: 'GET',
+            success: function (product) {
+                console.log(product); // Esto te mostrará los datos que vienen del servidor
+
+                // Rellenar el formulario con los datos del producto
+                $('#editProductForm input[name="ProductId"]').val(product.productId);
+                $('#productNameDisplay').text(product.name);
+                $('#editProductForm input[name="Name"]').val(product.name);
+                $('#editProductForm input[name="Price"]').val(product.price);
+                $('#editProductForm textarea[name="Description"]').val(product.description);
+                $('#editProductForm select[name="ColorId"]').val(product.colorId);
+                $('#editProductForm select[name="SizeId"]').val(product.sizeId);
+                $('#imageUrl').val(product.imageUrl);  // Asignar el valor de la imagen actual
+
+                $('#editProductSidebar').addClass('sidebar-open'); // Abrir el sidebar
+            },
+            error: function (error) {
+                console.log('Error al cargar el producto:', error);
+            }
+        });
+    }
+
+    // Manejar el envío del formulario de editar producto
+    $('#editProductForm').on('submit', function (event) {
+        event.preventDefault(); // Prevenir la recarga de la página
+
+        var formData = new FormData(this); // Obtener todos los datos del formulario, incluidos archivos
+        var productId = $('#editProductForm input[name="ProductId"]').val(); // Obtener el ID del producto
+
+        $.ajax({
+            url: '/Products/Edit/' + productId,  // Asegúrate de que esta URL sea correcta
+            type: 'POST',
+            data: formData,
+            contentType: false, // Necesario para enviar archivos
+            processData: false, // Evita que jQuery procese los datos (esto es necesario para FormData)
+            success: function (response) {
+                if (response.success) {
+                    // Cerrar el sidebar y mostrar el modal de confirmación
+                    closeEditSidebar();
+                    openEditModal();
+
+                    // Actualizar la fila existente en la tabla con los nuevos datos
+                    let updatedRow = `
+                        <tr data-product-id="${response.product.productId}">
+                            <td>${response.product.productId}</td>
+                                <td><img src="/img/${response.product.imageUrl}" alt="${response.product.Name}" class="img-fluid"></td>
+                            <td>${response.product.name}</td>
+                            <td>${response.product.description}</td>
+                            <td></td>
+                            <td>${response.product.color}</td>
+                            <td>${response.product.size}</td>
+                            <td>${response.product.price}</td>
+                            <td></td>
+                            <td class="action-icons">
+                                <a href="javascript:void(0);" onclick="openEditSidebar(${response.product.productId})">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a href="/Products/Delete/${response.product.productId}">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+
+                    // Reemplazar la fila existente en la tabla
+                    $('tr[data-product-id="' + productId + '"]').replaceWith(updatedRow);
+                } else {
+                    console.log('Error: ' + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('Error al editar el producto:', error);
+            }
+        });
+    });
+</script>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

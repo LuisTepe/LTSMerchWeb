@@ -1,0 +1,224 @@
+﻿/* Estilo para el modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-top: 0;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background-color: #fff;
+    color: #000;
+    border-bottom: 2px solid #dee2e6;
+    margin-top: 0;
+    margin-bottom: 80px;
+}
+
+    .modal-header h5 {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+    }
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 100%; /* Aumentar el tamaño del modal */
+    max-width: 600px; /* Ancho máximo */
+    min-height: 550px; /* Altura mínima del modal */
+    padding: 40px; /* Más padding para que el contenido tenga espacio */
+    text-align: center;
+    position: relative;
+}
+
+.icon-large {
+    font-size: 60px; /* Cambia el tamaño del icono aquí */
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+.modal-text{
+    margin-bottom: 100px;
+}
+
+
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#confirmBtn {
+    margin-top: 20px;
+}
+
+/* Sidebar deslizante */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #fff;
+    overflow-y: auto; /* Permite el desplazamiento si es necesario */
+    transition: 0.5s;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+/* Encabezado del sidebar */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    color: #000;
+    border-bottom: 2px solid #000;
+}
+
+    .sidebar-header h5 {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+    }
+
+
+
+.close-btn {
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+}
+
+/* Contenido del sidebar */
+.sidebar-content {
+    padding: 15px;
+}
+
+    .sidebar-content .form-group {
+        margin-bottom: 20px;
+    }
+
+    /* Estilo para los campos de entrada */
+    .sidebar-content input,
+    .sidebar-content select,
+    .sidebar-content textarea {
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 1rem;
+        width: 100%;
+        border: 1px solid #d1d1d1;
+        background-color: #f9f9f9;
+        margin-bottom: 12px;
+    }
+
+/* Contenedor del input de imagen */
+.file-upload-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* Contenedor del botón y el nombre del archivo */
+.file-upload-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Botón de subir imagen */
+.file-upload-btn {
+    padding: 10px 15px;
+    font-size: 1rem;
+    background-color: #fff;
+    border: 2px solid #555;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    width: auto;
+}
+
+    .file-upload-btn:hover {
+        background-color: #f0f0f0;
+    }
+
+/* Estilo para el campo que muestra el nombre del archivo */
+.file-upload-name {
+    font-size: 0.9rem;
+    color: #555;
+    margin-left: 20px;
+    flex-grow: 1;
+}
+
+/* Ocultar el input real para subir archivo */
+#file-upload-input {
+    display: none;
+}
+
+/* Estilo para las etiquetas */
+.sidebar-content label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+    display: block;
+}
+
+/* Estilo para el botón "Agregar Producto" */
+.sidebar-footer {
+    padding: 15px;
+    text-align: center;
+}
+
+    .sidebar-footer button {
+        padding: 15px 20px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 15px;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        width: 100%;
+    }
+
+        .sidebar-footer button:hover {
+            background-color: #333;
+        }
+
+        /* Estilo cuando el botón está deshabilitado */
+        .sidebar-footer button:disabled {
+            background-color: #333;
+            color: #777;
+            cursor: not-allowed;
+            border: none;
+        }
+
+/* Estilo para el ancho del sidebar */
+.sidebar-open {
+    width: 400px;
+}

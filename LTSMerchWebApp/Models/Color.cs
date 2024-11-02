@@ -9,5 +9,7 @@ public partial class Color
 
     public string ColorName { get; set; } = null!;
 
+    public string? ColorHexCode { get; set; }
+
     public virtual ICollection<ProductOption> ProductOptions { get; set; } = new List<ProductOption>();
 }

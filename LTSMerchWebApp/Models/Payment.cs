@@ -17,9 +17,15 @@ public partial class Payment
 
     public DateTime CreatedAt { get; set; }
 
+    public int? UserId { get; set; }
+
+    public string? VoucherPath { get; set; }
+
     public virtual Order? Order { get; set; }
 
     public virtual PaymentMethod? PaymentMethod { get; set; }
 
     public virtual PaymentStatusType? PaymentStatusType { get; set; }
+
+    public virtual User? User { get; set; }
 }

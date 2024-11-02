@@ -2,6 +2,8 @@ using LTSMerchWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace LTSMerchWebApp.Controllers
 {
@@ -10,7 +12,7 @@ namespace LTSMerchWebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly LtsMerchStoreContext _context;
         private readonly PasswordHasher<User> _passwordHasher;
-
+        private readonly int _adminId = 1;
         public HomeController(ILogger<HomeController> logger, LtsMerchStoreContext context)
         {
             _logger = logger;
@@ -22,37 +24,71 @@ namespace LTSMerchWebApp.Controllers
         {
             return View();
         }
-        
+
         public IActionResult Login()
         {
             return View();
         }
-        
-        [HttpPost]
-        public IActionResult Login(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
 
-                if (user != null)
+        [HttpPost]
+        public IActionResult Login(LoginViewModel model, string action)
+        {
+            if (action == "Login")
+            {
+                if (ModelState.IsValid)
                 {
-                    // Verifica el hash de la contraseña
-                    var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
-                
-                    if (result == PasswordVerificationResult.Success)
+                    var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
+                    if (user != null &&
+                        _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password) == PasswordVerificationResult.Success)
                     {
-                        // Lógica de autenticación
                         HttpContext.Session.SetString("UserEmail", user.Email);
-                        return RedirectToAction("Index", "Home");
+                        HttpContext.Session.SetInt32("UserId", user.UserId);
+                        HttpContext.Session.SetInt32("RoleTypeId", (int)user.RoleTypeId);
+
+                        TempData["SuccessMessage"] = "Inicio de sesion exitoso.";
+                        if (user.RoleTypeId == _adminId)
+                        {
+                            return RedirectToAction("Index", "Admin");
+                        }
+                        return RedirectToAction("ProductsList", "Products");
                     }
                 }
-
-                ModelState.AddModelError("", "Correo o contraseña incorrectos.");
+                TempData["ErrorMessage"] = "Correo o contrasena incorrectos.";
             }
+            else if (action == "Register")
+            {
+                if (ModelState.IsValid)
+                {
+                    if (_context.Users.Any(u => u.Email == model.Email))
+                    {
+                        TempData["ErrorMessage"] = "Ya existe una cuenta con ese correo electronico.";
+                    }
+                    else
+                    {
+                        var newUser = new User
+                        {
+                            Name = model.FirstName + " " + model.LastName,
+                            Email = model.Email,
+                            PasswordHash = _passwordHasher.HashPassword(null, model.Password),
+                            RoleTypeId = 2
+                        };
+                        _context.Users.Add(newUser);
+                        _context.SaveChanges();
 
+                        TempData["SuccessMessage"] = "Cuenta creada correctamente.";
+                        return RedirectToAction("Login", "Home");
+                    }
+                }
+            }
             return View(model);
         }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("ProductsList", "Products");
+        }
+
         public IActionResult Thanks()
         {
             return View();

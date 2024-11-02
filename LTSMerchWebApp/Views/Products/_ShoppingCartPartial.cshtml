@@ -1,0 +1,24 @@
+﻿@model LTSMerchWebApp.Models.Cart
+
+<div class="cart-items">
+    @foreach (var item in Model.CartItems)
+    {
+        var productOption = item.ProductOption;
+        var product = productOption?.Product;
+        var imageUrl = product?.ImageUrl ?? "default-image.jpg"; // Provide a default image if ImageUrl is null
+        var productName = product?.Name ?? "Unknown Product"; // Provide a default name if Name is null
+        var price = product?.Price ?? 0;
+
+        <div class="cart-item">
+            <div class="image-container">
+                <img class="image-cart" src="~/img/@imageUrl" alt="@productName">
+                <span class="quantity-bubble">@item.Quantity</span>
+            </div>
+            <p>@productName</p>
+            <span>@(item.Quantity * price).ToString("C")</span>
+        </div>
+    }
+</div>
+<div class="summary">
+    <p>Subtotal <span>@Model.CartItems.Sum(item => item.Quantity * (item.ProductOption?.Product?.Price ?? 0))</span></p>
+</div>

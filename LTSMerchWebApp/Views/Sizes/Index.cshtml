@@ -4,6 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
+
 <link href="~/css/StylesSizesIndex.css" rel="stylesheet">
 <link href="~/css/StylesSizesSidebar.css" rel="stylesheet">
 
@@ -13,6 +14,7 @@
 
     <table class="TableQuerys">
         <thead>
+
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.SizeId)
@@ -30,6 +32,7 @@
                     Acciones
                 </th>
             </tr>
+
         </thead>
         <tbody>
             @foreach (var item in Model)

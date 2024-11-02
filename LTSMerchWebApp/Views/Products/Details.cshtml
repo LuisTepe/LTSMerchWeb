@@ -1,21 +1,19 @@
-﻿
-<link rel="stylesheet" href="~/css/stylesProducDetails.css" asp-append-version="true">
+﻿@model Product
 
 <main class="mt-5">
     <section class="product justify-content-center">
         <div class="row">
             <!-- Thumbnails -->
             <div class="col-12 col-md-2 d-flex flex-column align-items-center product-thumbnails mb-3 mb-md-0">
-                <img id="thumbnail-front" src="~/img/camisa-delante.png" alt="Frente de la camiseta" class="img-thumbnail" onclick="changeMainImage('thumbnail-front')">
+                <img id="thumbnail-front" src="~/img/@Model.ImageUrl" alt="Frente de la camiseta" class="img-thumbnail" onclick="changeMainImage('thumbnail-front')">
                 <span>FRENTE</span>
-                <img id="thumbnail-back" src="~/img/camisa-atras.png" alt="Espalda de la camiseta" class="img-thumbnail mt-2" onclick="changeMainImage('thumbnail-back')">
+                <img id="thumbnail-back" src="~/img/@Model.ImageUrl" alt="Espalda de la camiseta" class="img-thumbnail mt-2" onclick="changeMainImage('thumbnail-back')">
                 <span>DETRÁS</span>
             </div>
 
             <!-- Main Product Image -->
             <div class="col-12 col-md-6 product-images text-center mb-3 mb-md-0">
-                <img id="main-product-image" src="~/img/camisa-delante.png" alt="Frente de la camiseta" class="img-fluid main-product-image">
-                <!-- Dots below image (optional) -->
+                <img id="main-product-image" src="~/img/@Model.ImageUrl" alt="Frente de la camiseta" class="img-fluid main-product-image">
                 <div class="dots mt-3">
                     <span class="dot"></span>
                     <span class="dot"></span>
@@ -24,59 +22,165 @@
 
             <!-- Product Info -->
             <div class="col-12 col-md-4 product-info">
-                <h1 class="product-title">LTS Checkout</h1>
-                <p class="price">$XX.XX</p>
+                <h1 class="product-title">@Model.Name</h1>
+                <p class="price">@Model.Price</p>
 
-                <div class="quantity mb-3">
-                    <label for="quantity" class="form-label">CANTIDAD:</label>
-                    <div class="quantity-buttons d-flex align-items-left">
-                        <button class="btn-cantidad">-</button>
-                        <span class="quantity-value mx-2">1</span>
-                        <button class="btn-cantidad">+</button>
-                    </div>
-                </div>
-
+                <!-- Selección de Tallas -->
                 <div class="sizes mb-3">
                     <label>Tallas:</label>
                     <div>
-                        <span class="badge bg-black">XS</span>
-                        <span class="badge bg-black">S</span>
-                        <span class="badge bg-primary">M</span>
-                        <span class="badge bg-black">L</span>
-                        <span class="badge bg-black">XL</span>
-                        <span class="badge bg-black">2XL</span>
+                        @foreach (var option in Model.ProductOptions.Select(po => po.Size).Distinct())
+                        {
+                            <button type="button" class="badge bg-black me-1 size-option" data-size="@option.SizeId" onclick="selectSize(@option.SizeId)">
+                                @option.SizeName
+                            </button>
+                        }
                     </div>
                 </div>
 
+                <!-- Selección de Colores -->
                 <div class="colors mb-3">
                     <label>Colores:</label>
                     <div>
-                        <div class="color black d-inline-block"
-                             style="width: 20px; height: 20px; background-color: black;"></div>
-                        <div class="color white d-inline-block"
-                             style="width: 20px; height: 20px; background-color: white; border: 1px solid #ccc;"></div>
-                        <div class="color grey d-inline-block"
-                             style="width: 20px; height: 20px; background-color: grey;"></div>
-                        <div class="color blue d-inline-block"
-                             style="width: 20px; height: 20px; background-color: blue;"></div>
-                        <div class="color red d-inline-block" style="width: 20px; height: 20px; background-color: red;">
-                        </div>
+                        @foreach (var option in Model.ProductOptions.Select(po => po.Color).Distinct())
+                        {
+                            <button type="button" class="color-option d-inline-block me-1"
+                                    data-color="@option.ColorId"
+                                    style="width: 20px; height: 20px; background-color:@option.ColorHexCode;"
+                                    onclick="selectColor(@option.ColorId)">
+                            </button>
+                        }
                     </div>
                 </div>
 
-                <form action="@Url.Action("ShoppingCart", "Products")" method="get">
-                    <button type="submit" class="btn btn-black btn-lg">AGREGAR</button>
+                <div class="quantity mb-3">
+                    <label for="quantity">Cantidad:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" class="form-control">
+                </div>
+
+                <!-- Botón para agregar al carrito -->
+                <form id="addToCartForm" action="@Url.Action("AddToCart", "Products")" method="post" onsubmit="return setFormValues()">
+                    <input type="hidden" name="size" id="selectedSize" />
+                    <input type="hidden" name="color" id="selectedColor" />
+                    <input type="hidden" name="quantity" id="quantityInput" />
+
+                    <button type="submit" id="addToCartButton" class="btn btn-black btn-lg">AGREGAR</button>
                 </form>
-                <p class="description mt-3">Descripción del artículo.</p>
+
+                <p class="description mt-3">@Model.Description</p>
             </div>
         </div>
     </section>
+
+    <!-- Modal de Solicitud de Inicio de Sesión -->
+    <div id="loginModal" class="modal fade custom-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content custom-modal-content">
+                <!-- Encabezado del modal con logo y botón de cierre -->
+                <div class="custom-modal-header">
+                    <img src="~/img/logo.png" alt="Logo" class="custom-modal-logo">
+                    <button type="button" class="custom-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!-- Cuerpo del modal -->
+                <div class="custom-modal-body text-center">
+                    <h3 class="custom-modal-title">INICIAR SESIÓN REQUERIDO</h3>
+                    <p>Por favor, inicie sesión para agregar productos al carrito.</p>
+                </div>
+                <!-- Pie del modal con botones de acción -->
+                <div class="modal-footer text-center">
+                    <a href="@Url.Action("Login", "Home")" class="btn btn-primary">Iniciar Sesión</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación de Agregado al Carrito -->
+    <div id="cartConfirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Producto agregado al carrito</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>El producto ha sido agregado exitosamente a tu carrito.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    function changeMainImage(thumbnailId) {
-        var thumbnail = document.getElementById(thumbnailId);
-        var mainImage = document.getElementById("main-product-image");
-        mainImage.src = thumbnail.src;
+    var selectedSize = null;
+    var selectedColor = null;
+
+    function selectSize(sizeId) {
+        selectedSize = sizeId;
+        document.getElementById("selectedSize").value = sizeId;
+
+        // Cambiar el estilo del botón seleccionado
+        document.querySelectorAll(".size-option").forEach(button => button.classList.remove("bg-primary"));
+        document.querySelector(`.size-option[data-size="${sizeId}"]`).classList.add("bg-primary");
     }
+
+    function selectColor(colorId) {
+        selectedColor = colorId;
+        document.getElementById("selectedColor").value = colorId;
+
+        // Cambiar el estilo del botón seleccionado
+        document.querySelectorAll(".color-option").forEach(button => button.classList.remove("border"));
+        document.querySelector(`.color-option[data-color="${colorId}"]`).classList.add("border", "border-dark");
+    }
+
+    function setFormValues() {
+        if (!selectedSize || !selectedColor) {
+            alert("Por favor, selecciona una talla y un color.");
+            return false;
+        }
+
+        document.getElementById("quantityInput").value = document.getElementById("quantity").value;
+        return true;
+    }
+    // Obtener el estado de inicio de sesión desde ViewBag
+    var isUserLoggedIn = @((bool)ViewBag.IsUserLoggedIn ? "true" : "false");
+
+    document.querySelector("#addToCartButton").addEventListener("click", function(event) {
+        if (!isUserLoggedIn) {
+        // Evitar el envío del formulario y mostrar el modal de inicio de sesión
+        event.preventDefault();
+    new bootstrap.Modal(document.getElementById('loginModal')).show();
+        } else {
+        // Si el usuario ha iniciado sesión, proceder con el formulario
+        document.getElementById("addToCartForm").submit();
+        }
+    });
+
+    // Función para mostrar el modal de confirmación
+    function showCartConfirmationModal() {
+        // Usa jQuery para mostrar el modal
+        $('#cartConfirmationModal').modal('show');
+
+        // Opcional: ocultar el modal automáticamente después de 2 segundos
+        setTimeout(function () {
+            $('#cartConfirmationModal').modal('hide');
+        }, 2000);
+    }
+
+    // Ejemplo de uso: Al hacer clic en "Agregar al Carrito"
+    document.getElementById("addToCartButton").addEventListener("click", function () {
+        if (isUserLoggedIn) {
+            showCartConfirmationModal();
+        }
+    });
+
 </script>

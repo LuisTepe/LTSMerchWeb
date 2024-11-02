@@ -1,177 +1,82 @@
-﻿<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito de Compras</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;900&display=swap" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #000000;
-            color: #FFFFFF;
-            font-family: 'Inter', sans-serif;
-            text-transform: uppercase;
-        }
-        h1, h5 {
-            font-family: 'Inter', sans-serif;
-            font-weight: 900;
-        }
-        p, span, button {
-            font-family: 'Inter', sans-serif;
-            font-weight: 300;
-        }
-        .cart-header {
-            margin: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .cart-header h1 {
-            font-weight: 900;
-        }
-        .cart-header p {
-            font-size: 0.9rem;
-        }
-        .close-button {
-            font-size: 1.5rem;
-            color: white;
-            cursor: pointer;
-        }
-        .product-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .product-details {
-            display: flex;
-            align-items: center;
-        }
-        .product-details img {
-            width: 100px;
-            margin-right: 20px;
-            border-radius: 10px;
-        }
-        .product-info {
-            margin-right: 20px;
-        }
-        .quantity-control {
-            display: flex;
-            align-items: center;
-        }
-        .quantity-control button {
-            background-color: white;
-            color: black;
-            border: none;
-            width: 25px;
-            height: 25px;
-            margin: 0 5px;
-            font-weight: bold;
-        }
-        .quantity-control span {
-            margin: 0 5px;
-            font-size: 1.2rem;
-        }
-        .subtotal {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            border-top: 1px solid #6c757d;
-            padding-top: 20px;
-        }
-        .checkout-button {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background-color: white;
-            color: black;
-            font-weight: bold;
-            padding: 15px;
-            border: none;
-            margin-top: 10px;
-        }
-    </style>
-</head>
+﻿@model LTSMerchWebApp.Models.Cart
+
+<style>
+    body {
+        background-color: #000000;
+        color: #FFFFFF;
+        font-family: 'Inter', sans-serif;
+        text-transform: uppercase;
+    }
+</style>
 <body>
-    <div class="cart-header">
-        <div>
-            <h1>tu carrito</h1>
-            <p>número de items: 3</p>
-        </div>
-        <div class="close-button">&times;</div>
-    </div>
-
     <div class="container">
-        <div class="product-item">
-            <div class="product-details">
-                <img src="~/images/tshirt.png" alt="T-SHIRT">
-                <div class="product-info">
-                    <h5>title t-shirt m</h5>
-                    <p>entrega estimada: 25 de septiembre de 2024</p>
-                    <div class="quantity-control">
-                        <button>-</button>
-                        <span>1</span>
-                        <button>+</button>
+        <div class="cart-header">
+            <h1>Tu Carrito</h1>
+            <button class="close-button" onclick="window.location.href='/'" style="background: none; border: none; color: #FFF; font-size: 1.5em;">&times;</button>
+        </div>
+
+        @if (Model?.CartItems != null && Model.CartItems.Any())
+        {
+            foreach (var item in Model.CartItems)
+            {
+                if (item?.ProductOption?.Product != null)
+                {
+                    <div class="cart-item">
+                        <img src="~/img/@item.ProductOption.Product.ImageUrl" alt="@item.ProductOption.Product.Name" class="img-fluid" style="max-width: 150px;">
+                        <div class="cart-item-info">
+                            <p class="cart-item-title">@item.ProductOption.Product.Name</p>
+                            <p class="cart-item-price">$@item.ProductOption.Product.Price</p>
+                            <p class="cart-item-details">
+                                @item.Quantity unidad(es) |
+                                @(item.ProductOption.Size != null ? item.ProductOption.Size.SizeName : "Sin talla") |
+                                @(item.ProductOption.Color != null ? item.ProductOption.Color.ColorName : "Sin color")
+                            </p>
+                        </div>
+                        <div class="cart-item-actions">
+                            <!-- Botón de editar cantidad -->
+                            <form method="post" action="@Url.Action("UpdateCartItem")" style="display: inline;">
+                                <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" required style="width: 50px;" />
+                                <button type="submit" class="btn btn-link">
+                                    <img src="~/img/edit.png" alt="Edit">
+                                </button>
+                            </form>
+                            <!-- Botón de eliminar -->
+                            <form method="post" action="@Url.Action("RemoveCartItem")" style="display: inline;">
+                                <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                <button type="submit" class="btn btn-link">
+                                    <img src="~/img/delete.png" alt="Delete">
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="product-price">
-                <h5>$XX.XX</h5>
+                }
+                else
+                {
+                    <p>Item no disponible.</p>
+                }
+            }
+        }
+        else
+        {
+            <p>El carrito está vacío.</p>
+        }
+
+        <div class="cart-summary">
+            <p>Subtotal <span>$@Model.CartItems.Sum(i => i.ProductOption.Product.Price * i.Quantity)</span></p>
+            <!--<p>Gastos de Envío <span>$XX.XX</span></p> -->
+            <div class="cart-total">
+                <span>Total</span>
+                <span>$@Model.CartItems.Sum(i => i.ProductOption.Product.Price * i.Quantity)</span>
             </div>
         </div>
 
-        <div class="product-item">
-            <div class="product-details">
-                <img src="~/images/cap.png" alt="CAP">
-                <div class="product-info">
-                    <h5>title cap</h5>
-                    <p>entrega estimada: 28 de septiembre de 2024</p>
-                    <div class="quantity-control">
-                        <button>-</button>
-                        <span>2</span>
-                        <button>+</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-price">
-                <h5>$XX.XX</h5>
-            </div>
-        </div>
-
-        <div class="product-item">
-            <div class="product-details">
-                <img src="~/images/hoodie.png" alt="HOODIE">
-                <div class="product-info">
-                    <h5>title hoodie l</h5>
-                    <p>entrega estimada: 30 de septiembre de 2024</p>
-                    <div class="quantity-control">
-                        <button>-</button>
-                        <span>1</span>
-                        <button>+</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-price">
-                <h5>$XX.XX</h5>
-            </div>
-        </div>
-
-        <div class="subtotal">
-            <p>subtotal</p>
-            <h5>$XX.XX</h5>
-        </div>
-        <p>envíos e iva al pagar</p>
-        <form action="@Url.Action("CheckOutShipping", "Products")" method="get">
-            <button type="submit" class="checkout-button">PAGAR</button>
-        </form>
-        
+        <button class="btn-checkout"
+                onclick="window.location.href='@Url.Action("CheckOutShipping", "Products")'"
+        @(Model?.CartItems == null || !Model.CartItems.Any() ? "disabled" : "")>
+            Pagar
+        </button>
     </div>
 
-    <!-- Bootstrap JS y Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>

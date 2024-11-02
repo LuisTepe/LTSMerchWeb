@@ -1,0 +1,59 @@
+﻿/* Contenedor del modal personalizado */
+.custom-modal .custom-modal-content {
+    background-color: #fff;
+    border-radius: 0;
+    border: none;
+    max-width: 600px;
+}
+
+/* Encabezado del modal personalizado */
+.custom-modal .custom-modal-header {
+    background-color: #000;
+    color: #fff;
+    padding: 20px;
+    position: relative;
+}
+
+/* Logo del modal personalizado */
+.custom-modal .custom-modal-logo {
+    width: 80px; /* Ajusta el tamaño del logo */
+}
+
+/* Botón de cierre personalizado */
+.custom-modal .custom-close-btn {
+    color: #fff;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+/* Título y cuerpo del modal personalizado */
+.custom-modal .custom-modal-body {
+    padding: 40px;
+}
+
+.custom-modal .custom-modal-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 20px;
+}
+
+.custom-modal .custom-modal-body p {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Línea inferior del cuerpo del modal personalizado */
+.custom-modal .custom-modal-content::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background-color: #333;
+    width: 100%;
+    margin-top: 20px;
+}
