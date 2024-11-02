@@ -1,103 +1,102 @@
 ﻿@model IEnumerable<LTSMerchWebApp.Models.Size>
 
 @{
-    ViewData["Title"] = "Sizes";
+    ViewData["Title"] = "Index";
 }
-<a asp-area="" asp-controller="Admin" asp-action="Index" class="btn btn-link">Admin</a>
-<h1>Sizes</h1>
 
-<table class="generalTable">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SizeName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+
+<link href="~/css/StylesSizesIndex.css" rel="stylesheet">
+<link href="~/css/StylesSizesSidebar.css" rel="stylesheet">
+
+<body>
+
+    <h1>Tallas</h1>
+
+    <table class="TableQuerys">
+        <thead>
+
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SizeName)
-                </td>
-                <td>
-                    <a href="javascript:void(0);" class="edit-link" data-sizeid="@item.SizeId">Edit</a> |
-                    <a href="javascript:void(0);" class="details-link" data-sizeid="@item.SizeId">Details</a> |
-                    <a href="javascript:void(0);" class="delete-link" data-sizeid="@item.SizeId">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.SizeId)
+                </th>
+                <th>
+                    Nombre del producto
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SizeName)
+                </th>
+                <th>
+                    Stock
+                </th>
+                <th>
+                    Acciones
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
-<div class="button-container">
-    <button href="javascript:void(0);" class="create-link">
-        AGREGAR
-    </button>
-</div>
-<!-- Side Panel for Create Form -->
-<div id="side-panel-create" class="side-panel">
-    <button class="close-panel btn btn-secondary">Close</button>
-    <div id="create-form-container"></div>
-</div>
 
-<!-- Side Panel for Edit Form -->
-<div id="side-panel-edit" class="side-panel">
-    <button class="close-panel btn btn-secondary">Close</button>
-    <div id="edit-form-container"></div>
-</div>
-
-<!-- Side Panel for Details -->
-<div id="side-panel-details" class="side-panel">
-    <button class="close-panel btn btn-secondary">Close</button>
-    <div id="details-container"></div>
-</div>
-
-<!-- Side Panel for Delete Confirmation -->
-<div id="side-panel-delete" class="side-panel">
-    <button class="close-panel btn btn-secondary">Close</button>
-    <div id="delete-container"></div>
-</div>
-
-@section Scripts {
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            function loadSidePanel(url, containerId, panelId) {
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function (data) {
-                        $(containerId).html(data);
-                        $(panelId).show();
-                    }
-                });
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SizeId)
+                    </td>
+                    <td>Producto 1</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SizeName)
+                    </td>
+                    <td>
+                        Cantidad Disponible
+                    </td>
+                    <td>
+                        <button onclick="openSidebar('edit', @item.SizeId)">Edit</button>
+                        <button onclick="openSidebar('delete', @item.SizeId)">Delete</button>
+                    </td>
+                </tr>
             }
 
-            $('.create-link').click(function () {
-                loadSidePanel('/Sizes/Create', '#create-form-container', '#side-panel-create');
-            });
+            <tr class="no-border">
+                <td colspan="4"></td>
+                <td style="text-align: center;">
+                    <button class="btnCreate" onclick="openSidebar('create')">Agregar talla</button>
+                </td>
+            </tr>
 
-            $('.edit-link').click(function () {
-                var sizeId = $(this).data('sizeid');
-                loadSidePanel('/Sizes/Edit/' + sizeId, '#edit-form-container', '#side-panel-edit');
-            });
+        </tbody>
+    </table>
 
-            $('.details-link').click(function () {
-                var sizeId = $(this).data('sizeid');
-                loadSidePanel('/Sizes/Details/' + sizeId, '#details-container', '#side-panel-details');
-            });
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <span class="closebtn" onclick="closeSidebar()">&times;</span>
+        <div id="sidebar-content">
+            <!-- Aquí se cargará el contenido de las vistas -->
+        </div>
+    </div>
 
-            $('.delete-link').click(function () {
-                var sizeId = $(this).data('sizeid');
-                loadSidePanel('/Sizes/Delete/' + sizeId, '#delete-container', '#side-panel-delete');
-            });
+    <script>
+        function openSidebar(action, id) {
+            let url = '';
+            if (action === 'create') {
+                url = '@Url.Action("Create", "Sizes")';
+            } else if (action === 'edit') {
+                url = '@Url.Action("Edit", "Sizes")/' + id;
+            } else if (action === 'delete') {
+                url = '@Url.Action("Delete", "Sizes")/' + id;
+            }
 
-            $('.close-panel').click(function () {
-                $(this).closest('.side-panel').hide();
-                $(this).siblings('div').html('');
-            });
-        });
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('sidebar-content').innerHTML = html;
+                    document.getElementById('sidebar').style.width = "300px"; // Asegúrate de que el sidebar se muestre
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+
+        function closeSidebar() {
+            document.getElementById('sidebar').style.width = "0"; // Cerrar el sidebar
+        }
     </script>
-}
+
+</body>
