@@ -21,6 +21,7 @@ namespace LTSMerchWebApp.Controllers
         // GET: OrderStatusTypes
         public async Task<IActionResult> Index()
         {
+            ViewData["HideHeaderFooter"] = true;
             return View(await _context.OrderStatusTypes.ToListAsync());
         }
 

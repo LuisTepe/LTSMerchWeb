@@ -17,6 +17,7 @@ namespace LTSMerchWebApp.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
+            ViewData["HideHeaderFooter"] = true;
             // Llenar el ViewBag con los datos de colores y tallas
             ViewBag.Colors = new SelectList(_context.Colors.ToList(), "ColorId", "ColorName");
             ViewBag.Sizes = new SelectList(_context.Sizes.ToList(), "SizeId", "SizeName");

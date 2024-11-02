@@ -19,6 +19,7 @@ namespace LTSMerchWebApp.Controllers
         // GET: ProductCategories
         public async Task<IActionResult> Index()
         {
+            ViewData["HideHeaderFooter"] = true;
             return View(await _context.ProductCategories.ToListAsync());
         }
 
