@@ -1,0 +1,56 @@
+﻿body {
+    text-transform: uppercase;
+}
+
+h1 {
+    margin-left: 113px;
+    font-weight: bold;
+}
+
+
+.btnCreate {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 12px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 150px; /* O ajusta según sea necesario */
+}
+
+.TableQuerys {
+    width: 100%;
+    border-collapse: collapse; /* Eliminar bordes interiores */
+    margin: 20px 0; /* Margen alrededor de la tabla */
+    border-radius: 10px; /* Redondear esquinas de la tabla */
+    overflow: hidden; /* Asegúrate de que el redondeo se aplique a las celdas internas */
+}
+
+    .TableQuerys th,
+    .TableQuerys td {
+        padding: 12px; /* Espaciado interno */
+        text-align: center; /* Texto centrado */
+    }
+
+    .TableQuerys thead {
+        background-color: black; /* Fondo negro para la cabecera */
+        color: white; /* Texto blanco en la cabecera */
+    }
+
+    .TableQuerys tbody tr {
+        background-color: white; /* Fondo blanco para las filas */
+        color: black; /* Texto negro en las filas */
+    }
+
+        .TableQuerys tbody tr.no-border td {
+            border: none; /* Sin bordes en la última fila */
+        }
+
+        .TableQuerys tbody tr td {
+            border: none; /* Sin bordes interiores en las celdas */
+        }

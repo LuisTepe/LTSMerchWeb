@@ -1,0 +1,227 @@
+﻿/* Sidebar general styles */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #fefefe;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 10px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+    .sidebar .closebtn {
+        font-size: 20px; /* Aumentar el tamaño de la fuente */
+        color: #000;
+        cursor: pointer;
+        margin-left: 20px; /* Añadir margen izquierdo para separación */
+        height: 40px; /* Ajusta la altura para que sea más grande */
+        display: flex; /* Usar flexbox para alinear con el título */
+        align-items: center; /* Centrar verticalmente */
+        position: absolute; /* Mantener en la esquina derecha */
+        right: 20px; /* Mantener el botón en la esquina derecha */
+    }
+
+.sidepanel-header {
+    display: flex;
+    justify-content: center; /* Centrar elementos hijos horizontalmente */
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 5px;
+    position: relative; /* Esto permitirá usar posiciones relativas dentro del header */
+}
+
+    .sidepanel-header h2 {
+        font-size: 20px; /* Aumentar el tamaño del título */
+        margin: 0;
+        font-weight: bold;
+        position: absolute; /* Mantener posición absoluta */
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+.header-line {
+    border: none;
+    border-bottom: 2px solid black;
+    margin-top: 38px; /* Aumentar el margen superior para mover la línea más abajo */
+    margin-bottom: 10px; /* Ajustar el margen inferior para separar de los inputs */
+    width: 100%;
+}
+
+/* Añadir márgenes alrededor de los labels */
+.sidepanel-form-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+/* Añadir márgenes alrededor de los inputs */
+.form-control, .sidepanel-form-control {
+    width: calc(100% - 40px);
+    padding: 8px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Ajuste del botón Crear para estar al final del sidebar */
+.CreateButton {
+    margin-top: 210px;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.sidepanel-submit-button {
+    width: calc(100% - 40px);
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Pantalla de eitar */
+
+
+.edit-sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #fefefe;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 10px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+    .edit-sidebar .closebtn {
+        font-size: 20px; /* Aumentar el tamaño de la fuente */
+        color: #000;
+        cursor: pointer;
+        margin-left: 20px; /* Añadir margen izquierdo para separación */
+        height: 40px; /* Ajusta la altura para que sea más grande */
+        display: flex; /* Usar flexbox para alinear con el título */
+        align-items: center; /* Centrar verticalmente */
+        position: absolute; /* Mantener en la esquina derecha */
+        right: 20px; /* Mantener el botón en la esquina derecha */
+    }
+
+    .edit-sidebar .sidepanel-header {
+        display: flex;
+        justify-content: center; /* Centrar elementos hijos horizontalmente */
+        align-items: center;
+        padding: 0 20px;
+        margin-bottom: 5px;
+        position: relative; /* Esto permitirá usar posiciones relativas dentro del header */
+    }
+
+        .edit-sidebar .sidepanel-header h2 {
+            font-size: 20px; /* Aumentar el tamaño del título */
+            margin: 0;
+            font-weight: bold;
+            position: absolute; /* Mantener posición absoluta */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+    .edit-sidebar .header-line {
+        border: none;
+        border-bottom: 2px solid black;
+        margin-top: 38px; /* Aumentar el margen superior para mover la línea más abajo */
+        margin-bottom: 10px; /* Ajustar el margen inferior para separar de los inputs */
+        width: 100%;
+    }
+
+/* Ajuste de estilos para labels */
+.sidepanel-form-label {
+    font-weight: bold; /* Asegurarse de que los labels estén en negrita */
+    display: block;
+    margin-bottom: 5px;
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: left; /* Alinear texto a la izquierda */
+}
+
+/* Ajuste de estilos para labels de Stock */
+.stockinput label {
+    font-weight: bold; /* Asegurarse de que el label de Stock esté en negrita */
+    display: block;
+    margin-bottom: 5px;
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: left; /* Alinear texto a la izquierda */
+}
+
+/* Ajuste del botón Crear para estar al final del sidebar */
+.EditButton {
+    margin-top: 250px;
+    text-align: center;
+    padding: 20px 0;
+    existente para otros elementos */
+}
+
+/*Pantalla de Eliminar*/
+
+
+/*Nombre de la talla centrado y en negritas*/
+.TallaName{
+    text-align:center;
+    font-weight:bold;
+}
+
+
+/*Estilos de los botones*/
+/* Ajuste de estilos de los botones */
+/* Ajuste de estilos de los botones */
+.ButtonGroup {
+    display: flex; /* Asegura que los botones estén en fila usando flexbox */
+    justify-content: space-between; /* Alinea los botones uniformemente */
+    margin: 20px; /* Añade margen alrededor del grupo de botones */
+    gap: 10px; /* Espacio entre los botones */
+    margin-top: 250px;
+}
+
+/* Ajuste de estilos de los botones */
+.DeleteButton, .CancelarButton {
+    background-color: black; /* Fondo del botón Eliminar */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    text-decoration: none; /* Sin subrayado */
+    height: 50px; /* Altura de los botones */
+    font-size: 16px; /* Tamaño del texto */
+    font-weight: bold; /* Texto en negritas */
+    text-transform: uppercase; /* Texto en mayúsculas */
+    display: flex; /* Usar flexbox para centrar el texto */
+    justify-content: center; /* Centrar el texto horizontalmente */
+    align-items: center; /* Centrar el texto verticalmente */
+    width: 100%; /* Ocupar todo el ancho posible dentro del contenedor */
+    flex: 1; /* Ocupan espacio igual entre ambos */
+}
+
+/* Estilos específicos para el botón Cancelar */
+.CancelarButton {
+    background-color: white; /* Fondo blanco */
+    color: black; /* Texto en negro */
+    border: 1px solid black; /* Borde negro */
+}
