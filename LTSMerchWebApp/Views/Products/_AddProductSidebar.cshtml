@@ -38,25 +38,45 @@
             </div>
             <div class="form-group">
                 <label for="productDescription">Descripción</label>
-                <textarea class="form-control" id="productDescription" rows="3" placeholder="Ingresar descripción del producto" asp-for="Description" maxlength="300"></textarea>
+                <textarea class="form-control" id="productDescription" rows="3" placeholder="Ingresar descripción del producto" asp-for="Description" maxlength="300" required></textarea>
             </div>
             <div class="form-group">
-                <label for="productCategory">Categoría</label>
-                <select class="form-control" id="productCategory">
-                    <option value="">Seleccione una de las categorías</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="productColor">Color</label>
-                <select class="form-control" name="ColorId" asp-items="ViewBag.Colors" required>
-                    <option value="">Seleccione el color</option>
-                </select>
+                <label>Combinaciones de Categoría, Color y Talla</label>
+                <div id="combinationContainer">
+                    <div class="combination-row">
+                        <div class="form-group">
+                            <label for="productCategory">Categoría</label>
+                            <select class="form-control" name="CategoryIds" asp-items="ViewBag.Categories" required>
+                                <option value="">Seleccione una categoría</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productColor">Color</label>
+                            <select class="form-control" name="ColorIds" asp-items="ViewBag.Colors" required>
+                                <option value="">Seleccione un color</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productSize">Talla</label>
+                            <select class="form-control" name="SizeIds" asp-items="ViewBag.Sizes" required>
+                                <option value="">Seleccione una talla</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="addCombination()">Agregar otra combinación</button>
             </div>
 
             <div class="form-group">
-                <label for="productSize">Talla</label>
-                <select class="form-control" name="SizeId" asp-items="ViewBag.Sizes" required>
-                    <option value="">Seleccione la talla</option>
+                <label for="productStock">Stock</label>
+                <input type="number" name="Stock" class="form-control" min="0" max="999999" placeholder="Ingresar el stock" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="productState">Estado</label>
+                <select class="form-control" name="StateId" asp-items="ViewBag.States" required>
+                    <option value="">Seleccione el estado</option>
                 </select>
             </div>
             <div class="form-group file-upload-wrapper">
@@ -82,126 +102,156 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function addCombination() {
+        const combinationContainer = document.getElementById("combinationContainer");
+        const newCombination = combinationContainer.children[0].cloneNode(true);
+        combinationContainer.appendChild(newCombination);
+    }
     // Función para validar la imagen
     function validateImage(input) {
         const file = input.files[0];
-        const fileName = file.name;
-        const fileExt = fileName.split('.').pop().toLowerCase();
+        const fileName = file ? file.name : '';
         const allowedExtensions = ['jpg', 'jpeg', 'png'];
 
-        // Validar extensión de archivo
-        if (!allowedExtensions.includes(fileExt)) {
-            input.value = ''; // Limpiar el input si el archivo no es válido
-            document.getElementById('file-upload-name').textContent = 'No hay archivo seleccionado';
-            checkFormValidity(); // Verificar validez del formulario
-            return;
-        }
+        if (file) {
+            const fileExt = fileName.split('.').pop().toLowerCase();
 
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const img = new Image();
-            img.onload = function () {
-                // Validar tamaño de la imagen
-                if (img.width < 300 || img.height < 300) {
-                    input.value = ''; // Limpiar el input si la imagen no es válida
-                    document.getElementById('file-upload-name').textContent = 'No hay archivo seleccionado';
-                } else {
-                    document.getElementById('file-upload-name').textContent = fileName;
-                }
-                checkFormValidity(); // Verificar validez del formulario
+            // Validar extensión de archivo
+            if (!allowedExtensions.includes(fileExt)) {
+                input.value = ''; 
+                document.getElementById('file-upload-name').textContent = 'Imagen inválida';
+                checkAddFormValidity(); 
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    // Validar tamaño de la imagen
+                    if (img.width < 300 || img.height < 300) {
+                        input.value = ''; 
+                        document.getElementById('file-upload-name').textContent = 'Imagen inválida';
+                    } else {
+                        document.getElementById('file-upload-name').textContent = fileName;
+                    }
+                    checkAddFormValidity(); // Verificar la validez del formulario
+                };
+                img.src = e.target.result;
             };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('file-upload-name').textContent = 'No hay archivo seleccionado';
+            checkAddFormValidity();
+        }
     }
 
     // Función para habilitar o deshabilitar el botón de envío
     function checkAddFormValidity() {
         const form = document.getElementById('addProductForm');
         const submitBtn = document.getElementById('addProductBtn');
+        const imageStatus = document.getElementById('file-upload-name').textContent;
 
-        if (form.checkValidity()) {
-            submitBtn.disabled = false; // Habilitar el botón si el formulario es válido
+        // Habilitar el botón solo si el formulario es válido y la imagen es válida
+        if (form.checkValidity() && imageStatus !== 'Imagen inválida' && imageStatus !== 'No hay archivo seleccionado') {
+            submitBtn.disabled = false;
         } else {
-            submitBtn.disabled = true;  // Deshabilitar el botón si falta algo
+            submitBtn.disabled = true;
         }
     }
 
     // Inicialización: habilitar/deshabilitar el botón al cargar la página
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('addProductForm');
-        form.addEventListener('input', checkAddFormValidity); // Verificar el formulario al cambiar cualquier input
-        checkAddFormValidity(); // Verificar la validez inicial del formulario
+        form.addEventListener('input', checkAddFormValidity); 
+        checkAddFormValidity(); 
     });
 
     function openModal() {
-        $('#productAddedModal').fadeIn(); // Utilizamos jQuery para mostrar el modal con efecto de fade
+        $('#productAddedModal').fadeIn(); 
     }
 
     // Función para cerrar el modal de confirmación
     function closeModal() {
-        $('#productAddedModal').fadeOut(); // Utilizamos jQuery para ocultar el modal con efecto de fade
+        $('#productAddedModal').fadeOut();
+        location.reload();
     }
 
     // Manejar el envío del formulario de agregar producto
     $('#addProductForm').on('submit', function (event) {
-    event.preventDefault(); // Prevenir la recarga de la página
+        event.preventDefault();
 
-    var formData = new FormData(this); // Obtener todos los datos del formulario, incluyendo archivos
+        let formData = new FormData(this);
 
-    $.ajax({
-        url: '/Products/Create', // Asegúrate de que la URL sea la correcta para tu ruta
-        type: 'POST',
-        data: formData,
-        contentType: false, // Necesario para enviar archivos
-        processData: false, // Evita que jQuery procese los datos (esto es necesario para FormData)
-        success: function (response) {
-            // Si la respuesta es exitosa, cerramos el sidebar, mostramos el modal y añadimos el producto a la tabla
-            closeSidebar();
-            openModal();
+        // Recopila combinaciones de categorías, colores y tallas.
+        document.querySelectorAll('#combinationContainer .combination-row').forEach((row, index) => {
+            formData.append(`CategoryIds[${index}]`, row.querySelector('select[name="CategoryIds"]').value);
+            formData.append(`ColorIds[${index}]`, row.querySelector('select[name="ColorIds"]').value);
+            formData.append(`SizeIds[${index}]`, row.querySelector('select[name="SizeIds"]').value);
+        });
 
-            // Aquí agregamos la nueva fila a la tabla con los datos del producto
-            let newRow = `
-                <tr>
-                    <td>${response.productId}</td>
-                    <td><img src="/img/${response.imageUrl}" alt="${response.name}" class="img-fluid"></td>
-                    <td>${response.name}</td>
-                    <td>${response.description}</td>
-                    <td></td>
-                    <td>${response.color}</td>
-                    <td>${response.size}</td>
-                    <td>${response.price}</td>
-                    <td></td>
-                    <td class="action-icons">
-                       <a href="javascript:void(0);" onclick="openEditSidebar(${response.productId})">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <a href="/Products/Delete/${response.productId}">
-                            <i class="fa fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>
-            `;
+        // Procesa el formulario como de costumbre
+        $.ajax({
+            url: '/Products/Create',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                closeSidebar();
+                openModal();
 
-            // Agregar la nueva fila a la tabla
-            $('table tbody').append(newRow);
-        },
-        error: function (xhr, status, error) {
-            console.log('Error al agregar el producto: ', error);
-        }
+                let newRow = `
+                    <tr>
+                        <td>${response.productId}</td>
+                        <td><img src="/img/${response.imageUrl}" alt="${response.name}" class="img-fluid"></td>
+                        <td>${response.name}</td>
+                        <td>${response.description}</td>
+                        <td>${response.category}</td>
+                        <td>${response.color}</td>
+                        <td>${response.size}</td>
+                        <td>${response.stock}</td>
+                        <td>${response.price}</td>
+                        <td>${response.state}</td>
+                        <td class="action-icons">
+                            <a href="javascript:void(0);" onclick="openEditSidebar(${response.productId})">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                                   <a href="javascript:void(0);" onclick="openDeleteSidebar(${response.productId})">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                        </td>
+                    </tr>
+                `;
+                $('table tbody').append(newRow);
+            },
+            error: function (xhr, status, error) {
+                console.log('Error al agregar el producto: ', error);
+            }
+        });
     });
-});
 
 
         // Función para cerrar el sidebar
         function closeSidebar() {
-            $('#addProductSidebar').removeClass('sidebar-open'); // Utilizamos jQuery para eliminar la clase que abre el sidebar
+            $('#addProductSidebar').removeClass('sidebar-open'); 
         }
 
         // Cerrar el modal cuando se hace clic en el botón de "Aceptar"
         $('#confirmBtn').on('click', function () {
             closeModal();
         });
+
+    $(document).ready(function () {
+        // Cambiar el texto de los valores true/false a Activo/Inactivo
+        $('select[name="StateId"] option').each(function () {
+            if ($(this).val() === 'true') {
+                $(this).text('Activo');
+            } else if ($(this).val() === 'false') {
+                $(this).text('Inactivo');
+            }
+        });
+    });
 </script>
 
 
