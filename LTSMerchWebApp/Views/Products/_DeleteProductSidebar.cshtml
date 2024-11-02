@@ -1,0 +1,95 @@
+﻿@model LTSMerchWebApp.Models.Product
+<!-- Modal de confirmación de producto agregado -->
+<div id="productDeletedModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5>ELIMINAR</h5>
+        </div>
+
+        <div class="modal-body">
+            <i class="fa-solid fa-circle-check icon-large" style="color: #000000;"></i>
+            <div class="modal-text">
+                <h2>Producto eliminado</h2>
+                <p>Producto eliminado correctamente</p>
+            </div>
+            <div class="sidebar-footer">
+                <button onclick="closeDeleteModal()">ACEPTAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Sidebar de Agregar Producto -->
+<div id="deleteProductSidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h5>ELIMINAR</h5>
+        <button type="button" class="close-btn" onclick="closeDeletedSidebar()">×</button>
+    </div>
+
+
+    <div class="sidebar-content">
+        <form id="deleteProductForm" asp-action="Deleted" enctype="multipart/form-data">
+            <div class="form-group">
+                <p class="question-text">¿Está seguro de que quiere eliminar este producto?</p>
+                <div class="product-preview">
+                    <img src="@Url.Content("~/img/" + Model.ImageUrl)" alt="Producto" class="product-image">
+                    <p class="product-name">@Model.Name</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <p class="text-continue">Para continuar:</p>
+                <label for="password">Ingrese la contraseña</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Ingresar contraseña" required>
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password', this)">
+                        <i class="fa-regular fa-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirmar contraseña</label>
+                <div class="password-container">
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Ingresar contraseña" required>
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirmPassword', this)">
+                        <i class="fa-regular fa-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="sidebar-footer">
+                <button id="deleteProductBtn" type="submit" class="btn btn-primary">Confirmar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    function closeDeleteModal() {
+        $('#productDeletedModal').fadeOut();
+    }
+
+    function closeDeletedSidebar() {
+        $('#deleteProductSidebar').removeClass('sidebar-open');
+    }
+
+    function togglePasswordVisibility(fieldId, toggleButton) {
+        const field = document.getElementById(fieldId);
+        const icon = toggleButton.querySelector('i');
+
+        if (field.type === "password") {
+            field.type = "text";
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        } else {
+            field.type = "password";
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+    }
+</script>

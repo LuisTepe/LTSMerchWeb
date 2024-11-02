@@ -135,6 +135,67 @@
         margin-bottom: 12px;
     }
 
+
+.question-text {
+    font-size: 18px;
+    
+    text-align: center;
+    font-weight: bold;
+}
+
+.sidebar-content .product-image {
+    max-width: 100%; /* Asegura que la imagen no sea más ancha que su contenedor */
+    max-height: 200px; /* Establece una altura máxima razonable */
+    width: auto; /* Ajusta la anchura automáticamente */
+    height: auto; /* Ajusta la altura automáticamente */
+    display: block; /* Asegura que la imagen sea un bloque, no en línea */
+    margin: 0 auto;
+    background-color: #ffffff; /* Fondo blanco */
+    border: 2px solid #000000; /* Borde negro */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 10px; /* Espacio entre la imagen y el borde */
+    box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
+}
+
+.product-name{
+    font-size: 18px;
+    margin-top: 15px;
+    margin-bottom: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.text-continue {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    .password-container input.form-control {
+        padding-right: 30px; /* Espacio para el ícono */
+    }
+
+    /* Posiciona el ícono dentro del input */
+    .password-container .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+        .password-container .toggle-password i {
+            color: #555;
+        }
+
+
+
 /* Contenedor del input de imagen */
 .file-upload-wrapper {
     display: flex;
@@ -174,6 +235,10 @@
     color: #555;
     margin-left: 20px;
     flex-grow: 1;
+}
+
+#file-upload-edit {
+    display: none;
 }
 
 /* Ocultar el input real para subir archivo */

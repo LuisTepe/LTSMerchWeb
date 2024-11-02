@@ -17,23 +17,34 @@ namespace LTSMerchWebApp.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
+            ViewData["HideHeaderFooter"] = true;
             // Llenar el ViewBag con los datos de colores y tallas
             ViewBag.Colors = new SelectList(_context.Colors.ToList(), "ColorId", "ColorName");
             ViewBag.Sizes = new SelectList(_context.Sizes.ToList(), "SizeId", "SizeName");
-            ViewBag.Categories = new SelectList(_context.ProductCategories.ToList(), "category_id", "description");
-            ViewBag.States = new SelectList(_context.ProductStates.ToList(), "state_id", "is_active");
+            ViewBag.Categories = new SelectList(_context.ProductCategories.ToList(), "CategoryId", "Description");
+            ViewBag.States = new SelectList(_context.ProductStates.ToList(), "StateId", "IsActive");
 
             // Cargar productos y sus opciones
-            var products = _context.Products
+            var products = await _context.Products
                 .Include(p => p.ProductOptions)
-                .ThenInclude(po => po.Color)
+                    .ThenInclude(po => po.Color)
                 .Include(p => p.ProductOptions)
-                .ThenInclude(po => po.Size)
+                    .ThenInclude(po => po.Size)
                 .Include(p => p.ProductOptions)
-                .ThenInclude(po => po.Category)
+                    .ThenInclude(po => po.Category)
                 .Include(p => p.ProductOptions)
-                .ThenInclude(po => po.State)
-                .ToList();
+                    .ThenInclude(po => po.State)
+                .ToListAsync();
+
+            // Verificar si hay productos sin opciones para evitar referencias nulas
+            foreach (var product in products)
+            {
+                foreach (var option in product.ProductOptions)
+                {
+                    option.Category ??= new ProductCategory { Description = "Sin categoría" };
+                    option.State ??= new ProductState { IsActive = false };
+                }
+            }
 
             return View(products);
         }
@@ -253,60 +264,91 @@ namespace LTSMerchWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Name,Description,Price,Stock,CreatedAt")] Product product, IFormFile ImageUrl, int ColorId, int SizeId)
+        public async Task<IActionResult> Create(Product product, List<int> CategoryIds, List<int> ColorIds, List<int> SizeIds, int StateId, IFormFile ImageUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                if (ImageUrl != null && ImageUrl.Length > 0)
-                {
-                    var fileName = Path.GetFileNameWithoutExtension(ImageUrl.FileName);
-                    var extension = Path.GetExtension(ImageUrl.FileName);
-                    var newFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
-
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", newFileName);
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await ImageUrl.CopyToAsync(stream);
-                    }
-
-                    product.ImageUrl = newFileName;
-                }
-
-                // Guardar el producto
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-
-                // Crear entrada en ProductOption
-                var productOption = new ProductOption
-                {
-                    ProductId = product.ProductId,
-                    ColorId = ColorId,
-                    SizeId = SizeId,
-                    Stock = product.Stock
-                };
-
-                _context.ProductOptions.Add(productOption);
-                await _context.SaveChangesAsync();
-
-                // Devuelve el producto creado como JSON
-                return Json(new
-                {
-                    productId = product.ProductId,
-                    name = product.Name,
-                    price = product.Price,
-                    description = product.Description,
-                    imageUrl = product.ImageUrl,
-                  
-                    color = _context.Colors.FirstOrDefault(c => c.ColorId == ColorId)?.ColorName, // Ajusta según tu lógica de Color
-                    size = _context.Sizes.FirstOrDefault(s => s.SizeId == SizeId)?.SizeName, // Ajusta según tu lógica de Talla
-                   
-                });
+                return BadRequest("Modelo inválido");
             }
 
-            ViewBag.Colors = new SelectList(_context.Colors.ToList(), "ColorId", "ColorName");
-            ViewBag.Sizes = new SelectList(_context.Sizes.ToList(), "SizeId", "SizeName");
+            if (ImageUrl != null && ImageUrl.Length > 0)
+            {
+                var fileName = Path.GetFileNameWithoutExtension(ImageUrl.FileName);
+                var extension = Path.GetExtension(ImageUrl.FileName);
+                var newFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", newFileName);
 
-            return View(product);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await ImageUrl.CopyToAsync(stream);
+                }
+
+                product.ImageUrl = newFileName;
+            }
+            
+
+            // Guardar el producto
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+
+            // Crear combinaciones únicas de opciones
+            var addedCombinations = new HashSet<(int categoryId, int colorId, int sizeId)>();
+
+            for (int i = 0; i < CategoryIds.Count; i++)
+            {
+                int categoryId = CategoryIds[i];
+                int colorId = ColorIds[i];
+                int sizeId = SizeIds[i];
+
+                // Verificar si la combinación ya existe
+                if (!addedCombinations.Contains((categoryId, colorId, sizeId)))
+                {
+                    var productOption = new ProductOption
+                    {
+                        ProductId = product.ProductId,
+                        CategoryId = categoryId,
+                        ColorId = colorId,
+                        SizeId = sizeId,
+                        Stock = product.Stock,
+                        StateId = StateId
+
+                    };
+
+                    _context.ProductOptions.Add(productOption);
+                    addedCombinations.Add((categoryId, colorId, sizeId));
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Obtener nombres de categorías, colores y tallas
+            var categoryNames = _context.ProductCategories
+                                .Where(c => CategoryIds.Contains(c.CategoryId))
+                                .Select(c => c.Description).ToList();
+
+            var colorNames = _context.Colors
+                                .Where(c => ColorIds.Contains(c.ColorId))
+                                .Select(c => c.ColorName).ToList();
+
+            var sizeNames = _context.Sizes
+                                .Where(s => SizeIds.Contains(s.SizeId))
+                                .Select(s => s.SizeName).ToList();
+
+            // Devolver los datos en formato JSON para actualizar la interfaz sin recargar la página
+            return Json(new
+            {
+                success = true,
+                productId = product.ProductId,
+                name = product.Name,
+                price = product.Price,
+                stock = product.Stock,
+                description = product.Description,
+                imageUrl = product.ImageUrl,
+                state = StateId == 1 ? "Activo" : "Inactivo",
+                categories = categoryNames,
+                colors = colorNames,
+                sizes = sizeNames
+            });
         }
 
 
@@ -317,7 +359,6 @@ namespace LTSMerchWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            // Cargar el producto a editar
             var product = await _context.Products
                 .Include(p => p.ProductOptions)
                 .FirstOrDefaultAsync(p => p.ProductId == id);
@@ -330,23 +371,40 @@ namespace LTSMerchWebApp.Controllers
             // Cargar los datos necesarios para las listas desplegables
             ViewBag.Colors = new SelectList(_context.Colors.ToList(), "ColorId", "ColorName");
             ViewBag.Sizes = new SelectList(_context.Sizes.ToList(), "SizeId", "SizeName");
+            ViewBag.Categories = new SelectList(_context.ProductCategories.ToList(), "CategoryId", "Description");
+            ViewBag.States = new SelectList(_context.ProductStates.ToList(), "StateId", "IsActive");
+            var stateId = product.ProductOptions.FirstOrDefault()?.StateId;
+
+            // Obtener el StateId del primer ProductOption si existe
+            var productOption = product.ProductOptions.FirstOrDefault();
             
 
-            // Devuelve los datos del producto como JSON (para que lo reciba el frontend)
+            // Preparar combinaciones de opciones para enviarlas a la vista
+            var productOptions = product.ProductOptions.Select(po => new
+            {
+                colorId = po.ColorId,
+                sizeId = po.SizeId,
+                categoryId = po.CategoryId,
+                stock = po.Stock,
+                stateId = po.StateId
+            }).ToList();
+
             return Json(new
             {
                 productId = product.ProductId,
                 name = product.Name,
                 description = product.Description,
                 price = product.Price,
-                
-                
-                
-                colorId = product.ProductOptions.FirstOrDefault()?.ColorId,
-                sizeId = product.ProductOptions.FirstOrDefault()?.SizeId,
-                
+                stock = product.Stock, // Stock de Product
+                stateId = stateId,
+                imageUrl = product.ImageUrl,
+                productOptions // Todas las combinaciones de ProductOption
             });
         }
+
+
+
+
 
 
         // POST: Products/Edit/5
@@ -354,82 +412,116 @@ namespace LTSMerchWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Price,Description")] Product product, int ColorId, int SizeId)
+        public async Task<IActionResult> Edit(int id, Product product, List<int> CategoryIds, List<int> ColorIds, List<int> SizeIds, int StateId, IFormFile? ImageUrl)
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { success = false, message = "Invalid model state", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToArray() });
+                return BadRequest("Modelo inválido");
             }
 
-            try
+            var existingProduct = await _context.Products
+                .Include(p => p.ProductOptions)
+                .FirstOrDefaultAsync(p => p.ProductId == id);
+
+            if (existingProduct == null)
             {
-                // Obtener el producto existente de la base de datos con ProductOptions
-                var existingProduct = await _context.Products
-                    .Include(p => p.ProductOptions)
-                    .FirstOrDefaultAsync(p => p.ProductId == id);
+                return NotFound("Producto no encontrado");
+            }
 
-                if (existingProduct == null)
+            // Actualizar detalles del producto
+            existingProduct.Name = product.Name;
+            existingProduct.Price = product.Price;
+            existingProduct.Description = product.Description;
+            existingProduct.Stock = product.Stock;
+
+            // Procesar imagen
+            if (ImageUrl != null && ImageUrl.Length > 0)
+            {
+                var fileName = Path.GetFileNameWithoutExtension(ImageUrl.FileName);
+                var extension = Path.GetExtension(ImageUrl.FileName);
+                var newFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", newFileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    return Json(new { success = false, message = "Product not found" });
+                    await ImageUrl.CopyToAsync(stream);
                 }
 
-                // Mantener el valor original de CreatedAt
-                product.CreatedAt = existingProduct.CreatedAt;
+                existingProduct.ImageUrl = newFileName;
+            }
 
-                // Actualizar los campos del producto
-                existingProduct.Name = product.Name;
-                existingProduct.Description = product.Description;
-                existingProduct.Price = product.Price;
+            // Limpiar combinaciones previas y evitar duplicados en nuevas combinaciones
+            _context.ProductOptions.RemoveRange(existingProduct.ProductOptions);
 
-                // Actualizar los valores de ProductOptions (color y talla)
-                var productOption = existingProduct.ProductOptions.FirstOrDefault();
-                if (productOption != null)
+            var addedCombinations = new HashSet<(int categoryId, int colorId, int sizeId)>();
+            for (int i = 0; i < CategoryIds.Count; i++)
+            {
+                int categoryId = CategoryIds[i];
+                int colorId = ColorIds[i];
+                int sizeId = SizeIds[i];
+
+                if (!addedCombinations.Contains((categoryId, colorId, sizeId)))
                 {
-                    productOption.ColorId = ColorId;
-                    productOption.SizeId = SizeId;
-                }
-                else
-                {
-                    // Si no existe, crear una nueva opción de producto
-                    productOption = new ProductOption
+                    var productOption = new ProductOption
                     {
                         ProductId = existingProduct.ProductId,
-                        ColorId = ColorId,
-                        SizeId = SizeId
+                        CategoryId = categoryId,
+                        ColorId = colorId,
+                        SizeId = sizeId,
+                        Stock = product.Stock,
+                        StateId = StateId
                     };
+
                     _context.ProductOptions.Add(productOption);
+                    addedCombinations.Add((categoryId, colorId, sizeId));
                 }
+            }
 
-                // Guardar los cambios
-                await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-                // Devolver el producto actualizado como JSON
-                return Json(new
-                {
-                    success = true,
-                    product = new
-                    {
-                        product.ProductId,
-                        product.Name,
-                        product.Price,
-                        product.Description,
-                        imageUrl = product.ImageUrl ?? existingProduct.ImageUrl,
-                        color = _context.Colors.FirstOrDefault(c => c.ColorId == ColorId)?.ColorName,  // Obtener el nombre del color
-                        size = _context.Sizes.FirstOrDefault(s => s.SizeId == SizeId)?.SizeName        // Obtener el nombre de la talla
-                    }
-                });
-            }
-            catch (DbUpdateException ex)
+            // Obtener nombres de categorías, colores y tallas para la respuesta
+            var categoryNames = _context.ProductCategories
+                .Where(c => CategoryIds.Contains(c.CategoryId))
+                .Select(c => c.Description).ToList();
+
+            var colorNames = _context.Colors
+                .Where(c => ColorIds.Contains(c.ColorId))
+                .Select(c => c.ColorName).ToList();
+
+            var sizeNames = _context.Sizes
+                .Where(s => SizeIds.Contains(s.SizeId))
+                .Select(s => s.SizeName).ToList();
+
+            return Json(new
             {
-                // Capturar la excepción interna
-                var innerException = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                return Json(new { success = false, message = $"Error updating product: {innerException}" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
+                success = true,
+                productId = existingProduct.ProductId,
+                name = existingProduct.Name,
+                price = existingProduct.Price,
+                stock = existingProduct.Stock,
+                description = existingProduct.Description,
+                imageUrl = existingProduct.ImageUrl,
+                state = StateId == 1 ? "Activo" : "Inactivo",
+                categories = categoryNames,
+                colors = colorNames,
+                sizes = sizeNames
+            });
         }
+
+
+
+
+
+
+        //Aqui va lo de delete productos
+
+
+
+
+
+
+
+
 
         [HttpPost]
         public async Task<IActionResult> ProcessPayment(IFormFile comprobante)
