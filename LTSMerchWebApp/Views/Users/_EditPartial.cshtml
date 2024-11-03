@@ -18,8 +18,7 @@
         </div>
 
         <div class="sidepanel-form-group">
-            <label asp-for="PasswordHash" class="sidepanel-form-label"></label>
-            <input asp-for="PasswordHash" class="sidepanel-form-control" />
+            <input type="hidden" asp-for="PasswordHash" />
             <span asp-validation-for="PasswordHash" class="sidepanel-validation-error"></span>
         </div>
 

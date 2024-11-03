@@ -1,35 +1,14 @@
-﻿@model LTSMerchWebApp.Models.Product
-<!-- Modal de confirmación de producto agregado -->
-<div id="productDeletedModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5>ELIMINAR</h5>
-        </div>
-
-        <div class="modal-body">
-            <i class="fa-solid fa-circle-check icon-large" style="color: #000000;"></i>
-            <div class="modal-text">
-                <h2>Producto eliminado</h2>
-                <p>Producto eliminado correctamente</p>
-            </div>
-            <div class="sidebar-footer">
-                <button onclick="closeDeleteModal()">ACEPTAR</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Sidebar de Agregar Producto -->
+﻿@{
+    var id = Model.ProductId;
+}
 <div id="deleteProductSidebar" class="sidebar">
     <div class="sidebar-header">
         <h5>ELIMINAR</h5>
         <button type="button" class="close-btn" onclick="closeDeletedSidebar()">×</button>
     </div>
-
-
     <div class="sidebar-content">
-        <form id="deleteProductForm" asp-action="Deleted" enctype="multipart/form-data">
+        <form id="deleteProductForm" data-product-id="@Model.ProductId" action="@Url.Action("Deleted", "Products")">
+            <input type="hidden" id="productId" name="id" value="@Model.ProductId" />
             <div class="form-group">
                 <p class="question-text">¿Está seguro de que quiere eliminar este producto?</p>
                 <div class="product-preview">
@@ -37,7 +16,6 @@
                     <p class="product-name">@Model.Name</p>
                 </div>
             </div>
-
             <div class="form-group">
                 <p class="text-continue">Para continuar:</p>
                 <label for="password">Ingrese la contraseña</label>
@@ -48,7 +26,6 @@
                     </button>
                 </div>
             </div>
-
             <div class="form-group">
                 <label for="confirmPassword">Confirmar contraseña</label>
                 <div class="password-container">
@@ -58,16 +35,12 @@
                     </button>
                 </div>
             </div>
-
-
-
             <div class="sidebar-footer">
-                <button id="deleteProductBtn" type="submit" class="btn btn-primary">Confirmar</button>
+                <button id="deleteProductBtn" type="button" class="btn btn-primary" onclick="submitDeleteProductForm()">Confirmar</button>
             </div>
         </form>
     </div>
 </div>
-
 
 <script>
     function closeDeleteModal() {
@@ -91,5 +64,31 @@
             icon.classList.remove('fa-eye');
             icon.classList.add('fa-eye-slash');
         }
+    }
+
+    function submitDeleteProductForm() {
+        var form = $('#deleteProductForm');
+        var id = @id ;
+        var password = $('#password').val();
+        var confirmPassword = $('#confirmPassword').val();
+
+        console.log("Product ID:", id);  // Para verificar que el ID está correcto
+
+        $.ajax({
+            url: form.attr('action'),  // Utiliza la URL especificada en el atributo action
+            type: 'POST',
+            data: { id: id, password: password, confirmPassword: confirmPassword },
+            success: function (response) {
+                if (response.success) {
+                    closeDeletedSidebar();
+                    $('#productDeletedModal').fadeIn();
+                } else {
+                    alert(response.message || "Ocurrió un error al eliminar el producto.");
+                }
+            },
+            error: function () {
+                alert("Error al eliminar el producto.");
+            }
+        });
     }
 </script>

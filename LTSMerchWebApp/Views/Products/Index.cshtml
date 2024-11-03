@@ -115,7 +115,7 @@
                   function openDeleteSidebar(productId, productName, imageUrl) {
                     // Resetea los inputs del agregar productos
                     document.getElementById("deleteProductForm").reset();
-                    document.getElementById("deleteProductForm").action = `/Products/Delete/${productId}`; // Cambia el action del form para que haga el cambio de estado
+                    document.getElementById("deleteProductForm").action = `/Products/Index`;
                     document.querySelector("#deleteProductSidebar .product-image").src = `/img/${imageUrl}`;
                     document.querySelector("#deleteProductSidebar .product-name").textContent = productName;
 
