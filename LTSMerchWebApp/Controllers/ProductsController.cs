@@ -76,6 +76,55 @@ namespace LTSMerchWebApp.Controllers
         }
 
         [HttpPost]
+        public IActionResult Deleted(int id, string password, string confirmPassword)
+        {
+            // Valida que las contraseñas coincidan
+            if (password != confirmPassword)
+            {
+                ModelState.AddModelError("", "Las contraseñas no coinciden.");
+                return BadRequest("Las contraseñas no coinciden.");
+            }
+
+            // Busca el producto por ID, incluyendo sus opciones y relaciones necesarias
+            var product = _context.Products
+                                  .Include(p => p.ProductOptions)
+                                  .ThenInclude(po => po.CartItems)
+                                  .Include(p => p.ProductOptions)
+                                  .ThenInclude(po => po.OrderDetails)
+                                  .FirstOrDefault(p => p.ProductId == id);
+
+            if (product == null)
+            {
+                return NotFound("Producto no encontrado.");
+            }
+
+            // Verificar si alguna ProductOption está en uso en CartItems o OrderDetails
+            bool isOptionInUse = product.ProductOptions.Any(po => po.CartItems.Any() || po.OrderDetails.Any());
+
+            if (isOptionInUse)
+            {
+                return Json(new { success = false, message = "No se puede eliminar el producto porque una o más opciones están en uso." });
+            }
+
+            // Si ninguna opción está en uso, procedemos a eliminar las opciones de producto
+            try
+            {
+                _context.ProductOptions.RemoveRange(product.ProductOptions); // Eliminar todas las opciones del producto
+                _context.Products.Remove(product); // Eliminar el producto
+                _context.SaveChanges();
+
+                // Retorna un mensaje de éxito
+                return Json(new { success = true, message = "Producto y opciones eliminados correctamente." });
+            }
+            catch (Exception ex)
+            {
+                // Captura cualquier error inesperado durante la eliminación
+                return Json(new { success = false, message = "Ocurrió un error al eliminar el producto: " + ex.Message });
+            }
+        }
+
+
+        [HttpPost]
         public IActionResult AddToCart(int size, int color, int quantity)
         {
             // Buscar la opción de producto según la talla y el color seleccionados
@@ -582,24 +631,56 @@ namespace LTSMerchWebApp.Controllers
         }
 
         // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpPost]
+        public IActionResult Delete(int id, string password, string confirmPassword)
         {
-            if (id == null)
+            // Valida que las contraseñas coincidan
+            if (password != confirmPassword)
             {
-                return NotFound();
+                ModelState.AddModelError("", "Las contraseñas no coinciden.");
+                return BadRequest("Las contraseñas no coinciden.");
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+            // Busca el producto por ID, incluyendo sus opciones y relaciones necesarias
+            var product = _context.Products
+                                  .Include(p => p.ProductOptions)
+                                  .ThenInclude(po => po.CartItems)
+                                  .Include(p => p.ProductOptions)
+                                  .ThenInclude(po => po.OrderDetails)
+                                  .FirstOrDefault(p => p.ProductId == id);
+
             if (product == null)
             {
-                return NotFound();
+                return NotFound("Producto no encontrado.");
             }
 
-            return View(product);
+            // Verificar si alguna ProductOption está en uso en CartItems o OrderDetails
+            bool isOptionInUse = product.ProductOptions.Any(po => po.CartItems.Any() || po.OrderDetails.Any());
+
+            if (isOptionInUse)
+            {
+                return Json(new { success = false, message = "No se puede eliminar el producto porque una o más opciones están en uso." });
+            }
+
+            // Si ninguna opción está en uso, procedemos a eliminar las opciones de producto
+            try
+            {
+                _context.ProductOptions.RemoveRange(product.ProductOptions); // Eliminar todas las opciones del producto
+                _context.Products.Remove(product); // Eliminar el producto
+                _context.SaveChanges();
+
+                // Retorna un mensaje de éxito
+                return Json(new { success = true, message = "Producto y opciones eliminados correctamente." });
+            }
+            catch (Exception ex)
+            {
+                // Captura cualquier error inesperado durante la eliminación
+                return Json(new { success = false, message = "Ocurrió un error al eliminar el producto: " + ex.Message });
+            }
         }
 
         // POST: Products/Delete/5
+        /*
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -613,7 +694,7 @@ namespace LTSMerchWebApp.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        */
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.ProductId == id);
