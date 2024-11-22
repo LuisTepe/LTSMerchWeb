@@ -1,0 +1,31 @@
+﻿@model LTSMerchWebApp.Models.User
+
+<div class="sidepanel-form">
+    <h2 class="sidepanel-title">Eliminar cuenta</h2>
+    <span class="sidepanel-close-button" onclick="closeSidebar()">&times;</span>
+
+    @if (Model == null || Model.UserId <= 0)
+    {
+        <div class="alert alert-danger">Error: Usuario no válido.</div>
+    }
+    else
+    {
+        <div class="sidepanel-form-group">
+            <p class="sidepanel-form-label">
+                No podrás recuperar tu cuenta una vez que haya sido eliminada. Perderás toda la información relacionada con tu historial de pedidos y cualquier otra información asociada con tu cuenta.
+            </p>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <p class="sidepanel-form-label">¿Estás seguro de que deseas eliminar tu cuenta?</p>
+        </div>
+
+        <div class="sidepanel-button-container">
+            <form asp-action="DeleteAccount" method="post">
+                <input type="hidden" name="UserId" value="@Model.UserId" />
+                <button type="submit" class="sidepanel-submit-button danger">ELIMINAR</button>
+            </form>
+            <button class="sidepanel-submit-button" onclick="closeSidebar()" style="background: #ccc; color: #000; margin-top: 10px;">CANCELAR</button>
+        </div>
+    }
+</div>

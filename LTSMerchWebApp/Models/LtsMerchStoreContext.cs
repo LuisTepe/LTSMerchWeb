@@ -56,7 +56,7 @@ public partial class LtsMerchStoreContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;database=lts_merch_store;user=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
+        => optionsBuilder.UseMySql("server=localhost;database=lts_merch_store;user=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.32-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -549,6 +549,10 @@ public partial class LtsMerchStoreContext : DbContext
             entity.Property(e => e.Address)
                 .HasColumnType("text")
                 .HasColumnName("address");
+            entity.Property(e => e.BirthDate).HasColumnName("birth_date");
+            entity.Property(e => e.City)
+                .HasMaxLength(255)
+                .HasColumnName("city");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
@@ -559,15 +563,27 @@ public partial class LtsMerchStoreContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
+            entity.Property(e => e.Neighborhood)
+                .HasMaxLength(255)
+                .HasColumnName("neighborhood");
             entity.Property(e => e.PasswordHash)
                 .HasMaxLength(255)
                 .HasColumnName("password_hash");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(15)
                 .HasColumnName("phone_number");
+            entity.Property(e => e.PostalCode)
+                .HasMaxLength(20)
+                .HasColumnName("postal_code");
             entity.Property(e => e.RoleTypeId)
                 .HasColumnType("int(11)")
                 .HasColumnName("role_type_id");
+            entity.Property(e => e.State)
+                .HasMaxLength(255)
+                .HasColumnName("state");
+            entity.Property(e => e.StreetAddress)
+                .HasMaxLength(255)
+                .HasColumnName("street_address");
 
             entity.HasOne(d => d.RoleType).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleTypeId)
