@@ -1,0 +1,7 @@
+ALTER TABLE `users`
+ADD COLUMN `birth_date` DATE NULL AFTER `created_at`,
+ADD COLUMN `street_address` VARCHAR(255) NULL AFTER `birth_date`,
+ADD COLUMN `postal_code` VARCHAR(20) NULL AFTER `street_address`,
+ADD COLUMN `neighborhood` VARCHAR(255) NULL AFTER `postal_code`,
+ADD COLUMN `city` VARCHAR(255) NULL AFTER `neighborhood`,
+ADD COLUMN `state` VARCHAR(255) NULL AFTER `city`;
