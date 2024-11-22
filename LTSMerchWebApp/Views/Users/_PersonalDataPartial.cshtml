@@ -1,0 +1,34 @@
+﻿@model LTSMerchWebApp.Models.User
+
+<div class="sidepanel-form">
+    <h2 class="sidepanel-title">Datos Personales</h2>
+    <span class="sidepanel-close-button" onclick="closeSidebar()">&times;</span>
+    <form asp-action="UpdatePersonalData" method="post">
+        <input type="hidden" name="UserId" value="@Model.UserId" />
+        <validation-summary model-only="true" class="text-danger"></validation-summary>
+
+        <div class="sidepanel-form-group">
+            <label for="nombres" class="sidepanel-form-label">Nombres</label>
+            <input type="text" id="nombres" name="Name" value="@Model.Name" placeholder="Ingresar nombres" class="sidepanel-form-control" required />
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label for="telefono" class="sidepanel-form-label">Número de teléfono</label>
+            <div class="sidepanel-input-group">
+                <span class="sidepanel-input-prefix">+52</span>
+                <input type="text" id="telefono" name="PhoneNumber" value="@Model.PhoneNumber" placeholder="Ingresar número de teléfono" class="sidepanel-form-control" pattern="^\d{10}$" title="El número debe tener 10 dígitos" required />
+            </div>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label for="cumpleanos" class="sidepanel-form-label">Fecha de Nacimiento</label>
+            <div class="sidepanel-input-group">
+                <input type="date" id="cumpleanos" name="BirthDate" value="@Model.BirthDate?.ToString("yyyy-MM-dd")" class="sidepanel-form-control" />
+            </div>
+        </div>
+
+        <div class="sidepanel-button-container">
+            <button type="submit" class="sidepanel-submit-button">Guardar Cambios</button>
+        </div>
+    </form>
+</div>

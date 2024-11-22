@@ -1,0 +1,39 @@
+﻿@model LTSMerchWebApp.Models.User
+
+<div class="sidepanel-form">
+    <h2 class="sidepanel-title">Correo electrónico</h2>
+    <span class="sidepanel-close-button" onclick="closeSidebar()">&times;</span>
+
+    <!-- Success or error messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <form asp-action="ChangeEmail" method="post">
+        <h3 class="sidepanel-section-title">Cambiar correo electrónico</h3>
+
+        <div class="sidepanel-form-group">
+            <label for="current-password" class="sidepanel-form-label">Contraseña actual</label>
+            <input type="password" id="current-password" name="currentPassword" placeholder="Ingresar contraseña actual" class="sidepanel-form-control" required />
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label for="new-email" class="sidepanel-form-label">Nuevo correo electrónico</label>
+            <input type="email" id="new-email" name="newEmail" placeholder="Ingresar nuevo correo electrónico" class="sidepanel-form-control" required />
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label for="confirm-new-email" class="sidepanel-form-label">Confirmar nuevo correo electrónico</label>
+            <input type="email" id="confirm-new-email" name="confirmEmail" placeholder="Repetir correo electrónico nuevo" class="sidepanel-form-control" required />
+        </div>
+
+        <div class="sidepanel-button-container">
+            <button type="submit" class="sidepanel-submit-button">Actualizar correo</button>
+        </div>
+    </form>
+</div>

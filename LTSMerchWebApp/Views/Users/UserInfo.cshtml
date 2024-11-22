@@ -1,0 +1,137 @@
+﻿@model LTSMerchWebApp.Models.User
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/UserInfo.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/UserInfoPartials.css" asp-append-version="true" />
+    <title>User Info</title>
+</head>
+<body>
+    <div class="container">
+        <main class="content">
+            <header>
+                <a asp-area="" asp-controller="Products" asp-action="ProductsList" class="back-arrow">←</a>
+                <img src="~/img/firma.png" alt="Logo"/>
+            </header>
+            <section class="account-data">
+                <h2>DATOS DE LA CUENTA</h2>
+                <div class="buttons">
+                    <button class="ButtonUserInfo" onclick="openSidebar('PersonalData')">
+                        Datos personales
+                        <img src="~/img/userIcon.png" alt="Datos personales" class="imgButtonUserInfo" />
+                    </button>
+                    <button class="ButtonUserInfo" onclick="openSidebar('Password')">
+                        Contraseña
+                        <img src="~/img/lockIcon.png" alt="Contraseña" class="imgButtonUserInfo" />
+                    </button>
+                    <button class="ButtonUserInfo" onclick="openSidebar('Email')">
+                        Correo electrónico
+                        <img src="~/img/mailIcon.png" alt="Correo electrónico" class="imgButtonUserInfo" />
+                    </button>
+                    <button class="ButtonUserInfo" onclick="openSidebar('DeleteAccount')">
+                        Eliminar cuenta
+                        <img src="~/img/trashIcon.png" alt="Eliminar cuenta" class="imgButtonUserInfo" />
+                    </button>
+                </div>
+            </section>
+            <section class="address-data">
+                <h2>Datos de la dirección</h2>
+                <div class="address-box">
+                    <p><strong>Nombre:</strong> @Model.Name</p>
+                    <p><strong>Teléfono:</strong> @Model.PhoneNumber</p>
+                    <p><strong>Fecha de nacimiento:</strong> @Model.BirthDate?.ToString("yyyy-MM-dd")</p>
+                    <p><strong>Dirección:</strong> @Model.StreetAddress, @Model.PostalCode</p>
+                    <p><strong>Colonia:</strong> @Model.Neighborhood</p>
+                    <p><strong>Ciudad:</strong> @Model.City, @Model.State</p>
+                    <button class="" onclick="openSidebar('Address')">Editar</button>
+                </div>
+            </section>
+            <footer>
+                <div class="footer-content">
+                    <div class="contact">
+                        <p>CONTACTANOS</p>
+                        <p>662 XXX XXXX</p>
+                    </div>
+                    <div class="social-media">
+                        <a target ="_blank" href="https://open.spotify.com/artist/5KnpqEkqOmyLOHlnyuT3Sd?si=VvSmzF8aRzaQvB87Bm_QJQ" title="Spotify"><img src="~/img/spotify.png" alt="Spotify" /></a>
+                        <a target="_blank" href="https://music.apple.com/mx/artist/luis-ts/1767461351" title="Music"><img src="~/img/Music.png" alt="Music" /></a>
+                        <a target="_blank" href="https://www.instagram.com/luistssss?igsh=MWYxM3hpbzJrY2FhNQ%3D%3D&utm_source=qr" title="Instagram"><img src="~/img/instagram.png" alt="Instagram" /></a>
+                        <a target="_blank" href="#" title="Twitter"><img src="~/img/twitter.png" alt="Twitter"          /></a>
+                        <a target="_blank" href="#" title="Facebook"><img src="~/img/facebook.png" alt="Facebook" /></a>
+                        <a target="_blank" href="#" title="YouTube"><img src="~/img/youtube.png" alt="YouTube" /></a>
+                    </div>
+                </div>
+                <hr />
+                <div class="policies">
+                    <a href="#">AYUDA Y SOPORTE</a>
+                    <a href="#">TERMINOS</a>
+                    <a href="#">PRIVACIDAD</a>
+                    <a href="#">OPCION DE COOKIES</a>
+                </div>
+            </footer>
+
+        </main>
+
+        <!-- Static Right Bar -->
+        <aside class="right-bar">
+            <h2>Hola @Model.Name</h2>
+            <nav>
+                <button class="sidebar-button"><span>📋</span> Mis pedidos</button>
+                <button class="sidebar-button"><span>👤</span> Datos personales</button>
+                <button class="sidebar-button"><span>🔔</span> Notificaciones</button>
+            </nav>
+            <button class="logout">Cerrar sesión</button>
+        </aside>
+    </div>
+
+    
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="hidden-sidebar">
+        <div id="sidebar-content"></div>
+    </div>
+
+    <script>
+        function openSidebar(partialName) {
+            let url = '';
+            switch (partialName) {
+                case 'PersonalData':
+                    url = '@Url.Action("_PersonalDataPartial", "Users", new { id = Model.UserId })';
+                    break;
+                case 'Password':
+                    url = '@Url.Action("_PasswordPartial", "Users")';
+                    break;
+                case 'Email':
+                    url = '@Url.Action("_EmailPartial", "Users")';
+                    break;
+                case 'DeleteAccount':
+                    url = '@Url.Action("_DeleteAccountPartial", "Users")';
+                    break;
+                default:
+                    console.error("Invalid partial name");
+                    return;
+            }
+
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('sidebar-content').innerHTML = html;
+                    document.getElementById('sidebar').classList.add("active");
+                })
+                .catch(error => console.error("Error loading sidebar content:", error));
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove("active");
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿@model LTSMerchWebApp.Models.User
+
+<div class="sidepanel-form">
+    <h2 class="sidepanel-title">Dirección</h2>
+    <span class="sidepanel-close-button" onclick="closeSidebar()">&times;</span>
+    <form asp-action="UpdateAddress" asp-controller="Users" method="post">
+        <h3 class="sidepanel-section-title">Cambiar dirección de envíos</h3>
+        <input type="hidden" name="UserId" value="@Model.UserId" />
+
+        <div class="sidepanel-form-group">
+            <label for="direccion" class="sidepanel-form-label">Dirección</label>
+            <input type="text" id="direccion" name="StreetAddress" value="@Model.StreetAddress" placeholder="Dirección" class="sidepanel-form-control" />
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label for="colonia" class="sidepanel-form-label">Colonia</label>
+            <input type="text" id="colonia" name="Neighborhood" value="@Model.Neighborhood" placeholder="Colonia" class="sidepanel-form-control" />
+        </div>
+
+        <div class="sidepanel-form-group sidepanel-row">
+            <div class="sidepanel-col">
+                <label for="ciudad" class="sidepanel-form-label">Ciudad</label>
+                <input type="text" id="ciudad" name="City" value="@Model.City" placeholder="Ciudad" class="sidepanel-form-control" />
+            </div>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label for="estado" class="sidepanel-form-label">Estado</label>
+            <select id="estado" name="State" asp-for="State" asp-items="@(new SelectList(Model.States))" class="sidepanel-form-control"></select>
+        </div>
+
+        <div class="sidepanel-form-group">
+            <label for="codigo-postal" class="sidepanel-form-label">Código postal</label>
+            <input type="text" id="codigo-postal" name="PostalCode" value="@Model.PostalCode" placeholder="Código postal" class="sidepanel-form-control" />
+        </div>
+
+        <div class="sidepanel-button-container">
+            <button type="submit" class="sidepanel-submit-button">Guardar Cambios</button>
+        </div>
+    </form>
+</div>

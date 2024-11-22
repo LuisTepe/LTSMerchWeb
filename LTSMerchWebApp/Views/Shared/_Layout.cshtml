@@ -39,7 +39,19 @@
                         </button>
                         <input type="text" placeholder="Buscar" class="search-input">
                     </div>
-                    <a asp-area="" asp-controller="Home" asp-action="Login"><img src="~/img/user.png" alt="Iniciar Sesion" width="24"></a>
+                    @if (contextAccessor.HttpContext.Session.GetInt32("UserId") != null)
+                    {
+                        <a asp-area="" asp-controller="Users" asp-action="UserInfo" asp-route-id="@contextAccessor.HttpContext.Session.GetInt32("UserId")">
+                            <img src="~/img/user.png" alt="User Info" width="24">
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-area="" asp-controller="Home" asp-action="Login">
+                            <img src="~/img/user.png" alt="Iniciar Sesion" width="24">
+                        </a>
+                    }
+
                     <a asp-area="" asp-controller="Products" asp-action="ShoppingCart"><img src="~/img/carrito.png" alt="Carrito" width="30"></a>
                     @if (contextAccessor.HttpContext.Session.GetInt32("UserId") != null)
                     {

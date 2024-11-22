@@ -1,0 +1,302 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.content {
+    width: 66%;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    header .back-arrow {
+        font-size: 24px;
+        margin-right: 10px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    header img {
+        height: 70px;
+        margin-left: 40%;
+
+    }
+
+.account-data, .address-data {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+    .account-data h2, .address-data h2 {
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid black;
+}
+
+    .buttons button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        background-color: white;
+        cursor: pointer;
+        flex: 1;
+        min-width: 40%;
+    }
+
+
+.ButtonUserInfo {
+    border: 1px;
+}
+
+.imgButtonUserInfo {
+    width: 20px;
+}
+
+.address-box {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: white;
+}
+
+    .address-box button {
+        align-self: flex-end;
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+footer {
+    margin-top: 20px;
+    padding: 20px 10px;
+    border-top: 2px solid black;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+    footer .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 0 20px;
+    }
+
+    footer .contact p {
+        margin: 0;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    footer .social-media {
+        display: flex;
+        gap: 10px;
+    }
+
+        footer .social-media a img {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+        }
+
+    footer hr {
+        border: none;
+        border-top: 1px solid black;
+        margin: 10px 0;
+    }
+
+    footer .policies {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+        padding: 0 20px;
+        margin-top: 10px;
+    }
+
+        footer .policies a {
+            color: black;
+            text-decoration: none;
+        }
+
+            footer .policies a:hover {
+                text-decoration: underline;
+            }
+
+
+.sidebar {
+    width: 30%;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-left: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+    .sidebar h2 {
+        margin-bottom: 20px;
+        font-size: 16px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+    }
+
+    .sidebar nav {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+.sidebar-button {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.logout {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.sidebar-container {
+    position: fixed;
+    top: 0;
+    right: 0; /* Adjust this for left-side placement */
+    width: 30%; /* Set sidebar width */
+    height: 100%;
+    background-color: #f4f4f4;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    z-index: 1000;
+    padding: 20px;
+    display: none; /* Hidden by default */
+}
+
+/* Show the sidebar when active */
+.sidebar-container.active {
+    display: block;
+}
+
+/* Add this to your UserInfo.css file */
+.hidden-sidebar {
+    display: none;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 30%;
+    height: 100%;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+    z-index: 1000;
+    padding: 20px;
+}
+
+    .hidden-sidebar.active {
+        display: block;
+    }
+
+
+.right-bar {
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background-color: #f4f4f4;
+    border-left: 1px solid #ccc;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    z-index: 900; /* Ensure it is below the dynamic sidebar */
+}
+
+    .right-bar h2 {
+        margin-bottom: 20px;
+        font-size: 16px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+    }
+
+    .right-bar nav {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .right-bar .sidebar-button {
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 15px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .right-bar .logout {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
