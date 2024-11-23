@@ -112,16 +112,20 @@
             document.getElementById("addProductSidebar").classList.remove("sidebar-open");
         }
 
-                  function openDeleteSidebar(productId, productName, imageUrl) {
-                    // Resetea los inputs del agregar productos
-                    document.getElementById("deleteProductForm").reset();
-                    document.getElementById("deleteProductForm").action = `/Products/Index`;
-                    document.querySelector("#deleteProductSidebar .product-image").src = `/img/${imageUrl}`;
-                    document.querySelector("#deleteProductSidebar .product-name").textContent = productName;
+        function openDeleteSidebar(productId, productName, imageUrl) {
+            console.log("ID del producto:", productId); // Depuración
 
-                    // Abre el sidebar del delete
-                    document.getElementById("deleteProductSidebar").classList.add("sidebar-open");
-                }
+            // Actualizar el ID del producto en el campo oculto
+            document.getElementById("productId").value = productId;
+
+            // Actualizar la imagen y el nombre del producto en el modal
+            document.querySelector("#deleteProductSidebar .product-image").src = `/img/${imageUrl}`;
+            document.querySelector("#deleteProductSidebar .product-name").textContent = productName;
+
+            // Abre el sidebar de eliminar
+            document.getElementById("deleteProductSidebar").classList.add("sidebar-open");
+        }
+
 
                 function closeDeletedSidebar() {
                     document.getElementById("deleteProductSidebar").classList.remove("sidebar-open");

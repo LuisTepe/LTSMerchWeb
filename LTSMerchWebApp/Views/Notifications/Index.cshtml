@@ -1,0 +1,36 @@
+﻿@model IEnumerable<LTSMerchWebApp.Models.Notification>
+
+
+     <head>
+        <link rel="stylesheet" href="/css/notifications.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    </head>
+
+<div class="main-container">
+    <!-- Contenido principal -->
+    <div class="content">
+        <h1>NOTIFICACIONES</h1>
+        <hr />
+        <main>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var notification in Model)
+                {
+                            <div class="notification">
+                                <div class="notification-header">
+                                    <h3>@notification.Message</h3>
+                                    <span>@notification.CreatedAt.ToString("dd/MM")</span>
+                                </div>
+                                <p>Pedido</p>
+                                <p>Su ha actualizado el pedido</p>
+                                <a href="/OrderDetails/Index">Ver detalles</a>
+                            </div>
+                }
+            }
+            else
+            {
+                    <p>No hay notificaciones disponibles.</p>
+            }
+        </main>
+    </div>
+@Html.Partial("_Sidebar")

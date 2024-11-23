@@ -1,0 +1,143 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 20%; /* Ajusta el ancho según sea necesario */
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-left: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-greeting {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.menu {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 9px;
+    margin-bottom: 25px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+    .menu-item:hover {
+        background-color: #ddd;
+        color: #333;
+    }
+
+.menu-item i {
+        font-size: 24px; /* Ajusta el tamaño del ícono */
+        margin-right: 15px; /* Espaciado entre el ícono y el texto */
+        color: #333; /* Color del ícono */
+    }
+.menu-item.active {
+    background-color: #ddd;
+}
+
+.menu-item.active i {
+    color: #000; /* Color para el ícono del menú activo */
+}
+
+.logout-button {
+
+    margin-top: 130px;
+    margin-right: 20px;
+    padding: 12px 20px;
+    border: none;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: #000;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    width:100%;
+}
+
+.logout-button:hover {
+    background-color: #333;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.notification {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.notification h3{
+    font-weight:bold;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.notification-header h3 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.notification-header span {
+    font-size: 14px;
+    color: #888;
+}
+
+.notification p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.notification a {
+    color: black;
+    text-decoration: none;
+    font-size: 14px;
+    text-decoration:underline;
+}
+
+.notification a:hover {
+    text-decoration: underline;
+}
+
+hr {
+    border: 1px solid; /* Elimina cualquier borde por defecto */
+    height: 1px; /* Define un grosor específico */
+    margin: 10px 0; /* Espaciado arriba y abajo */
+    width: 100%;
+}
