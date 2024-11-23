@@ -1,0 +1,104 @@
+﻿@model IEnumerable<LTSMerchWebApp.Models.Order>
+
+@{
+    ViewData["Title"] = "MIS PEDIDOS";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/UserInfo.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/UserOrders.css" asp-append-version="true" />
+    <link rel="stylesheet" href="/css/notifications.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <title>Mis Pedidos</title>
+</head>
+<body>
+    <div class="container">
+        <main class="content">
+            <header>
+                <a asp-area="" asp-controller="Products" asp-action="ProductsList" class="back-arrow">←</a>
+                <img src="~/img/firma.png" alt="Logo" />
+            </header>
+            <section class="orders-section">
+                <h2 class="title">MIS PEDIDOS</h2>
+
+                @if (ViewBag.Message != null)
+                {
+                    <p class="no-orders">@ViewBag.Message</p>
+                }
+                else if (!Model.Any())
+                {
+                    <p class="no-orders">No tienes pedidos actualmente.</p>
+                }
+                else
+                {
+                    <div class="orders-table-container">
+                        <table class="table orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Total</th>
+                                    <th>Shipping Address</th>
+                                    <th>Status</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span>@order.OrderId</span>
+                                        </td>
+                                        <td>@order.Total.ToString("C")</td>
+                                        <td>@order.ShippingAddress</td>
+                                        <td>@order.StatusType?.StatusName</td>
+                                        <td>@order.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </section>
+            <footer>
+                <div class="footer-content">
+                    <div class="contact">
+                        <p>CONTACTANOS</p>
+                        <p>662 XXX XXXX</p>
+                    </div>
+                    <div class="social-media">
+                        <a target="_blank" href="https://open.spotify.com/artist/5KnpqEkqOmyLOHlnyuT3Sd?si=VvSmzF8aRzaQvB87Bm_QJQ" title="Spotify"><img src="~/img/spotify.png" alt="Spotify" /></a>
+                        <a target="_blank" href="https://music.apple.com/mx/artist/luis-ts/1767461351" title="Music"><img src="~/img/Music.png" alt="Music" /></a>
+                        <a target="_blank" href="https://www.instagram.com/luistssss?igsh=MWYxM3hpbzJrY2FhNQ%3D%3D&utm_source=qr" title="Instagram"><img src="~/img/instagram.png" alt="Instagram" /></a>
+                        <a target="_blank" href="#" title="Twitter"><img src="~/img/twitter.png" alt="Twitter" /></a>
+                        <a target="_blank" href="#" title="Facebook"><img src="~/img/facebook.png" alt="Facebook" /></a>
+                        <a target="_blank" href="#" title="YouTube"><img src="~/img/youtube.png" alt="YouTube" /></a>
+                    </div>
+                </div>
+                <hr />
+                <div class="policies">
+                    <a href="#">AYUDA Y SOPORTE</a>
+                    <a href="#">TERMINOS</a>
+                    <a href="#">PRIVACIDAD</a>
+                    <a href="#">OPCION DE COOKIES</a>
+                </div>
+            </footer>
+        </main>
+
+        <!-- Static Right Bar -->
+        @Html.Partial("~/Views/Notifications/_Sidebar.cshtml")
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Cualquier script adicional si es necesario
+        });
+    </script>
+</body>
+</html>

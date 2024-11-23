@@ -162,5 +162,27 @@ namespace LTSMerchWebApp.Controllers
         {
             return _context.Orders.Any(e => e.OrderId == id);
         }
+
+        // GET: Orders/UserOrders
+        public async Task<IActionResult> UserOrders()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            var userOrders = await _context.Orders
+                .Where(o => o.UserId == userId)
+                .Include(o => o.StatusType)
+                .ToListAsync();
+
+            if (!userOrders.Any())
+            {
+                ViewBag.Message = "No tienes pedidos por el momento.";
+            }
+
+            return View("UserOrders", userOrders);
+        }
     }
 }
