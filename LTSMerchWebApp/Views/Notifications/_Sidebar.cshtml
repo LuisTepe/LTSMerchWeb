@@ -1,0 +1,19 @@
+﻿
+
+<!-- Sidebar Partial -->
+<aside class="sidebar">
+    <p class="user-greeting">Hola @(ViewBag.User != null ? ViewBag.User.Name : "Usuario")</p>
+    <hr />
+    <nav class="menu">
+        <a href="#" class="menu-item">
+            <i class="fa-solid fa-bag-shopping"></i> Mis pedidos
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fa-regular fa-circle-user"></i> Datos personales
+        </a>
+        <a href="/Notifications/Index" class="menu-item active">
+            <i class="fa-solid fa-bell"></i> Notificaciones
+        </a>
+    </nav>
+    <button class="logout-button">CERRAR SESIÓN</button>
+</aside>

@@ -51,9 +51,16 @@ namespace LTSMerchWebApp.Controllers
 
         public async Task<IActionResult> ProductsList()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _context.Products
+    .Include(p => p.ProductOptions)
+        .ThenInclude(po => po.State)
+    .Where(p => p.ProductOptions.Any(po => po.State != null && po.State.IsActive == true))
+    .ToListAsync();
+
+
             return View(products);
         }
+
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int id)
@@ -74,54 +81,51 @@ namespace LTSMerchWebApp.Controllers
 
             return View(product);
         }
-
         [HttpPost]
         public IActionResult Deleted(int id, string password, string confirmPassword)
         {
-            // Valida que las contraseñas coincidan
-            if (password != confirmPassword)
+            // Validar que las contraseñas no estén vacías
+            if (string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
             {
-                ModelState.AddModelError("", "Las contraseñas no coinciden.");
-                return BadRequest("Las contraseñas no coinciden.");
+                return Json(new { success = false, message = "Ambos campos de contraseña son obligatorios." });
             }
 
-            // Busca el producto por ID, incluyendo sus opciones y relaciones necesarias
+            // Validar que las contraseñas coincidan
+            if (password != confirmPassword)
+            {
+                return Json(new { success = false, message = "Las contraseñas no coinciden." });
+            }
+
+            // Buscar el producto por ID
             var product = _context.Products
-                                  .Include(p => p.ProductOptions)
-                                  .ThenInclude(po => po.CartItems)
-                                  .Include(p => p.ProductOptions)
-                                  .ThenInclude(po => po.OrderDetails)
-                                  .FirstOrDefault(p => p.ProductId == id);
+                .Include(p => p.ProductOptions)
+                .FirstOrDefault(p => p.ProductId == id);
 
             if (product == null)
             {
-                return NotFound("Producto no encontrado.");
+                return Json(new { success = false, message = "Producto no encontrado." });
             }
 
-            // Verificar si alguna ProductOption está en uso en CartItems o OrderDetails
-            bool isOptionInUse = product.ProductOptions.Any(po => po.CartItems.Any() || po.OrderDetails.Any());
-
-            if (isOptionInUse)
-            {
-                return Json(new { success = false, message = "No se puede eliminar el producto porque una o más opciones están en uso." });
-            }
-
-            // Si ninguna opción está en uso, procedemos a eliminar las opciones de producto
             try
             {
-                _context.ProductOptions.RemoveRange(product.ProductOptions); // Eliminar todas las opciones del producto
-                _context.Products.Remove(product); // Eliminar el producto
-                _context.SaveChanges();
+                foreach (var option in product.ProductOptions)
+                {
+                    option.StateId = 2; // Cambiar a inactivo (Estado ID 2)
+                }
 
-                // Retorna un mensaje de éxito
-                return Json(new { success = true, message = "Producto y opciones eliminados correctamente." });
+                _context.SaveChanges();
+                return Json(new { success = true, message = "Producto marcado como inactivo correctamente." });
             }
             catch (Exception ex)
             {
-                // Captura cualquier error inesperado durante la eliminación
-                return Json(new { success = false, message = "Ocurrió un error al eliminar el producto: " + ex.Message });
+                return Json(new { success = false, message = "Error al cambiar el estado del producto: " + ex.Message });
             }
         }
+
+
+
+
+
 
 
         [HttpPost]
