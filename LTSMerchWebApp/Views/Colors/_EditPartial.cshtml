@@ -12,6 +12,12 @@
             <span asp-validation-for="ColorName" class="sidepanel-validation-error"></span>
         </div>
 
+        <div class="sidepanel-form-group">
+            <label asp-for="ColorHexCode" class="sidepanel-form-label"></label>
+            <input asp-for="ColorHexCode" class="sidepanel-form-control" />
+            <span asp-validation-for="ColorHexCode" class="sidepanel-validation-error"></span>
+        </div>
+
         <div class="sidepanel-button-container">
             <input type="submit" value="Guardar" class="sidepanel-submit-button" />
         </div>

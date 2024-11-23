@@ -21,6 +21,7 @@ namespace LTSMerchWebApp.Controllers
         // GET: Colors
         public async Task<IActionResult> Index()
         {
+            ViewData["HideHeaderFooter"] = true;
             return View(await _context.Colors.ToListAsync());
         }
 
@@ -51,7 +52,7 @@ namespace LTSMerchWebApp.Controllers
         // POST: Colors/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ColorId,ColorName")] Color color)
+        public async Task<IActionResult> Create([Bind("ColorId,ColorName,ColorHexCode")] Color color)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +62,7 @@ namespace LTSMerchWebApp.Controllers
             }
             return PartialView("_CreatePartial", color);
         }
+
 
         // GET: Colors/Edit/5
         public async Task<IActionResult> Edit(int? id)

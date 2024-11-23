@@ -4,7 +4,6 @@
     ViewData["Title"] = "Colors";
 }
 
-<a asp-area="" asp-controller="Admin" asp-action="Index" class="btn btn-link">Admin</a>
 <h3>Colors</h3>
 
 <table class="generalTable">
@@ -12,6 +11,9 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.ColorName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ColorHexCode)
             </th>
             <th></th>
         </tr>
@@ -21,6 +23,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ColorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ColorHexCode)
             </td>
             <td>
                 <a href="javascript:void(0);" class="edit-link" data-colorid="@item.ColorId">Edit</a> |

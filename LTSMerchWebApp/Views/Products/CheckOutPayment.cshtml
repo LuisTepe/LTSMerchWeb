@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model LTSMerchWebApp.Models.PaymentViewModel
+
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -6,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Merch T-Shirt</title>
     <link rel="stylesheet" href="~/css/checkOutPaymentStyle.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -16,12 +19,18 @@
             <div class="datos-container">
                 <div class="fila">
                     <span>Contacto</span>
-                    <span class="datos-fila-centro">Nombres</span>
+                    <span class="datos-fila-centro">@Model.User?.Name</span>
                     <span><a href="#">Cambiar</a></span>
                 </div>
                 <div class="fila">
                     <span>Enviar a</span>
-                    <span class="datos-fila-centro">Dirección proporcionada</span>
+                    <span class="datos-fila-centro">
+                        @Model.User?.StreetAddress,
+                        @Model.User?.Neighborhood,
+                        @Model.User?.City,
+                        @Model.User?.State,
+                        @Model.User?.PostalCode
+                    </span>
                     <span><a href="#">Cambiar</a></span>
                 </div>
                 <div class="fila">
@@ -37,11 +46,14 @@
                     <!-- Input para subir el comprobante -->
                     <div class="comprobante-container">
                         <label for="comprobante">Sube tu comprobante de pago:</label>
-                        <input type="file" id="comprobante" name="comprobante" accept="image/*">
+                        <form action="@Url.Action("CompleteOrder", "Products")" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="orderId" value="@Model.Order.OrderId" />
+                            <input type="file" id="comprobante" name="comprobante" accept="image/*">
+                            <button type="submit" name="submit" class="btn-subir">Subir Comprobante</button>
+                        </form>
                     </div>
                 </div>
             </div>
-
 
             <div class="footer-container">
                 <!-- Sección de "Recuérdame" -->
@@ -53,9 +65,10 @@
                 <!-- Sección de Pago -->
                 <div class="compra-container">
                     <form action="@Url.Action("Thanks", "Home")" method="post" enctype="multipart/form-data">
-                        <button type="submit" name="submit" class="btn-pagar">PAGAR</button>
+                        <input type="hidden" name="orderId" value="@Model.Order.OrderId" />
+                        <button type="submit" name="submit" class="btn-pagar" disabled>PAGAR</button>
                     </form>
-                </div>  
+                </div>
 
                 <!-- Footer con enlaces de ayuda -->
                 <div class="footer">
@@ -66,12 +79,22 @@
                 </div>
             </div>
 
-
         </div>
         <div class="containerRight">
-            
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#comprobante').change(function () {
+                if ($(this).val()) {
+                    $('.btn-pagar').prop('disabled', false);
+                } else {
+                    $('.btn-pagar').prop('disabled', true);
+                }
+            });
+        });
+    </script>
 
 </body>
 

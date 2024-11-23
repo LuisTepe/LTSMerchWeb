@@ -201,20 +201,34 @@ namespace LTSMerchWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            // Busca el usuario por ID
             var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
+                // Busca el EmailConfirmation relacionado
+                var emailConfirmation = await _context.EmailConfirmations
+                    .FirstOrDefaultAsync(ec => ec.UserId == user.UserId);
+
+                // Si existe, elimina el EmailConfirmation
+                if (emailConfirmation != null)
+                {
+                    _context.EmailConfirmations.Remove(emailConfirmation);
+                }
+
+                // Elimina el usuario
                 _context.Users.Remove(user);
+
+                // Guarda los cambios
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
-
-            // If it's an AJAX call, you can send a JSON response or just close the panel via JavaScript.
+            // Si es una llamada AJAX, retorna una respuesta JSON
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 return Json(new { success = true });
             }
 
+            // Redirige al índice
             return RedirectToAction(nameof(Index));
         }
 
