@@ -25,7 +25,15 @@
                     </tr>
                     <tr>
                         <td>Enviar a</td>
-                        <td><span>@Model.Order.ShippingAddress</span></td>
+                        <td>
+                            <span>
+                                @Model.Order.User?.StreetAddress,
+                                @Model.Order.User?.Neighborhood,
+                                @Model.Order.User?.City,
+                                @Model.Order.User?.State,
+                                @Model.Order.User?.PostalCode
+                            </span>
+                        </td>
                         <td>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#changeAddressModal">Cambiar</a>
                         </td>
@@ -55,7 +63,12 @@
             <hr class="divider">
             <div class="action-container">
                 <a asp-area="" asp-controller="Products" asp-action="ShoppingCart" class="back-link">Regresar a información</a>
-                <form asp-action="CheckOutShipping" method="post">
+                <form id="checkoutForm" asp-action="CheckOutShipping" method="post">
+                    <input type="hidden" id="ShippingStreetAddress" name="StreetAddress" value="@Model.Order.User?.StreetAddress">
+                    <input type="hidden" id="ShippingNeighborhood" name="Neighborhood" value="@Model.Order.User?.Neighborhood">
+                    <input type="hidden" id="ShippingCity" name="City" value="@Model.Order.User?.City">
+                    <input type="hidden" id="ShippingState" name="State" value="@Model.Order.User?.State">
+                    <input type="hidden" id="ShippingPostalCode" name="PostalCode" value="@Model.Order.User?.PostalCode">
                     <button type="submit" class="btn-next">Siguiente</button>
                 </form>
             </div>
@@ -75,12 +88,28 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="changeAddressForm" asp-action="CheckOutShipping" method="post">
+                    <form id="changeAddressForm">
                         <div class="mb-3">
-                            <label for="ShippingAddress" class="form-label">Nueva Dirección de Envío</label>
-                            <input type="text" class="form-control" id="ShippingAddress" name="ShippingAddress" value="@Model.Order.ShippingAddress" required>
+                            <label for="StreetAddress" class="form-label">Calle</label>
+                            <input type="text" class="form-control" id="StreetAddress" name="StreetAddress" value="@Model.Order.User?.StreetAddress" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Guardar Dirección</button>
+                        <div class="mb-3">
+                            <label for="Neighborhood" class="form-label">Colonia</label>
+                            <input type="text" class="form-control" id="Neighborhood" name="Neighborhood" value="@Model.Order.User?.Neighborhood" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="City" class="form-label">Ciudad</label>
+                            <input type="text" class="form-control" id="City" name="City" value="@Model.Order.User?.City" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="State" class="form-label">Estado</label>
+                            <input type="text" class="form-control" id="State" name="State" value="@Model.Order.User?.State" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="PostalCode" class="form-label">Código Postal</label>
+                            <input type="text" class="form-control" id="PostalCode" name="PostalCode" value="@Model.Order.User?.PostalCode" required>
+                        </div>
+                        <button type="button" id="saveAddressBtn" class="btn btn-primary">Guardar Dirección</button>
                     </form>
                 </div>
             </div>
@@ -88,5 +117,52 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#saveAddressBtn').click(function () {
+                var formData = {
+                    StreetAddress: $('#StreetAddress').val(),
+                    Neighborhood: $('#Neighborhood').val(),
+                    City: $('#City').val(),
+                    State: $('#State').val(),
+                    PostalCode: $('#PostalCode').val()
+                };
+
+                $.ajax({
+                    url: '@Url.Action("UpdateShippingAddress", "Products")', // Nueva acción en el controlador para actualizar la dirección
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            // Actualiza la dirección en la tabla sin recargar la página
+                            var updatedAddress = formData.StreetAddress + ', ' +
+                                formData.Neighborhood + ', ' +
+                                formData.City + ', ' +
+                                formData.State + ', ' +
+                                formData.PostalCode;
+
+                            $('td:contains("Enviar a")').next('td').html(updatedAddress);
+
+                            // Actualiza los inputs ocultos del formulario principal
+                            $('#ShippingStreetAddress').val(formData.StreetAddress);
+                            $('#ShippingNeighborhood').val(formData.Neighborhood);
+                            $('#ShippingCity').val(formData.City);
+                            $('#ShippingState').val(formData.State);
+                            $('#ShippingPostalCode').val(formData.PostalCode);
+
+                            // Cierra el modal correctamente
+                            $('#changeAddressModal').modal('hide');
+                            $('body').removeClass('modal-open');
+                            $('.modal-backdrop').remove();
+                        }
+                    },
+                    error: function () {
+                        alert('Error al actualizar la dirección. Inténtalo nuevamente.');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

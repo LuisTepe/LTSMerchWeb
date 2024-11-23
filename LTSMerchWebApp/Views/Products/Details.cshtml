@@ -60,6 +60,7 @@
 
                 <!-- Botón para agregar al carrito -->
                 <form id="addToCartForm" action="@Url.Action("AddToCart", "Products")" method="post" onsubmit="return setFormValues()">
+                    <input type="hidden" name="productId" id="productId" value="@Model.ProductId" />
                     <input type="hidden" name="size" id="selectedSize" />
                     <input type="hidden" name="color" id="selectedColor" />
                     <input type="hidden" name="quantity" id="quantityInput" />
@@ -128,18 +129,20 @@
         selectedSize = sizeId;
         document.getElementById("selectedSize").value = sizeId;
 
-        // Cambiar el estilo del botón seleccionado
-        document.querySelectorAll(".size-option").forEach(button => button.classList.remove("bg-primary"));
-        document.querySelector(`.size-option[data-size="${sizeId}"]`).classList.add("bg-primary");
+        // Remover clases de borde de todas las opciones de talla
+        document.querySelectorAll(".size-option").forEach(button => button.classList.remove("border", "border-primary", "border-2"));
+        // Agregar clases de borde azul a la opción seleccionada
+        document.querySelector(`.size-option[data-size="${sizeId}"]`).classList.add("border", "border-primary", "border-2");
     }
 
     function selectColor(colorId) {
         selectedColor = colorId;
         document.getElementById("selectedColor").value = colorId;
 
-        // Cambiar el estilo del botón seleccionado
-        document.querySelectorAll(".color-option").forEach(button => button.classList.remove("border"));
-        document.querySelector(`.color-option[data-color="${colorId}"]`).classList.add("border", "border-dark");
+        // Remover clases de borde de todas las opciones de color
+        document.querySelectorAll(".color-option").forEach(button => button.classList.remove("border", "border-primary", "border-2"));
+        // Agregar clases de borde azul a la opción seleccionada
+        document.querySelector(`.color-option[data-color="${colorId}"]`).classList.add("border", "border-primary", "border-2");
     }
 
     function setFormValues() {
@@ -169,11 +172,6 @@
     function showCartConfirmationModal() {
         // Usa jQuery para mostrar el modal
         $('#cartConfirmationModal').modal('show');
-
-        // Opcional: ocultar el modal automáticamente después de 2 segundos
-        setTimeout(function () {
-            $('#cartConfirmationModal').modal('hide');
-        }, 2000);
     }
 
     // Ejemplo de uso: Al hacer clic en "Agregar al Carrito"

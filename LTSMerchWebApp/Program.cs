@@ -1,5 +1,6 @@
 using DotNetEnv; // Asegúrate de agregar esta línea para usar DotNetEnv
 using LTSMerchWebApp.Models;
+using LTSMerchWebApp.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,8 @@ builder.Services.AddDbContext<LtsMerchStoreContext>(options =>
 // Agregar servicios de sesión
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
+
+builder.Services.AddScoped<EmailService>();
 
 // Añadir servicios al contenedor.
 builder.Services.AddControllersWithViews();

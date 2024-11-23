@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using LTSMerchWebApp.Services;
 
 namespace LTSMerchWebApp.Controllers
 {
@@ -12,12 +13,14 @@ namespace LTSMerchWebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly LtsMerchStoreContext _context;
         private readonly PasswordHasher<User> _passwordHasher;
+        private readonly EmailService _emailService;
         private readonly int _adminId = 1;
-        public HomeController(ILogger<HomeController> logger, LtsMerchStoreContext context)
+        public HomeController(ILogger<HomeController> logger, LtsMerchStoreContext context, EmailService emailService)
         {
             _logger = logger;
             _context = context;
             _passwordHasher = new PasswordHasher<User>();
+            _emailService = emailService;
         }
 
         public IActionResult Index()
@@ -31,7 +34,7 @@ namespace LTSMerchWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel model, string action)
+        public async Task<IActionResult> LoginAsync(LoginViewModel model, string action)
         {
             if (action == "Login")
             {
@@ -55,13 +58,13 @@ namespace LTSMerchWebApp.Controllers
                 }
                 TempData["ErrorMessage"] = "Correo o contrasena incorrectos.";
             }
-            else if (action == "Register")
+            if (action == "Register")
             {
                 if (ModelState.IsValid)
                 {
                     if (_context.Users.Any(u => u.Email == model.Email))
                     {
-                        TempData["ErrorMessage"] = "Ya existe una cuenta con ese correo electronico.";
+                        TempData["ErrorMessage"] = "Ya existe una cuenta con ese correo electrónico.";
                     }
                     else
                     {
@@ -75,12 +78,48 @@ namespace LTSMerchWebApp.Controllers
                         _context.Users.Add(newUser);
                         _context.SaveChanges();
 
-                        TempData["SuccessMessage"] = "Cuenta creada correctamente.";
+                        // Generar token de confirmación
+                        var token = Guid.NewGuid().ToString();
+                        var emailConfirmation = new EmailConfirmation
+                        {
+                            UserId = newUser.UserId,
+                            Token = token,
+                            IsConfirmed = false,
+                            CreatedAt = DateTime.UtcNow
+                        };
+                        _context.EmailConfirmations.Add(emailConfirmation);
+                        _context.SaveChanges();
+
+                        // Enviar correo de confirmación
+                        var confirmationLink = Url.Action("ConfirmEmail", "Home", new { token }, Request.Scheme);
+                        var emailBody = $"<p>Gracias por registrarte en LTS Merch Store.</p><p>Haz clic en el siguiente enlace para confirmar tu cuenta:</p><a href='{confirmationLink}'>Confirmar cuenta</a>";
+
+                        await _emailService.SendEmailAsync(newUser.Email, "Confirmación de cuenta", emailBody);
+
+                        TempData["SuccessMessage"] = "Cuenta creada correctamente. Revisa tu correo para confirmar tu cuenta.";
                         return RedirectToAction("Login", "Home");
                     }
                 }
             }
             return View(model);
+        }
+
+        public IActionResult ConfirmEmail(string token)
+        {
+            var emailConfirmation = _context.EmailConfirmations.FirstOrDefault(ec => ec.Token == token);
+
+            if (emailConfirmation == null || emailConfirmation.IsConfirmed == true)
+            {
+                TempData["ErrorMessage"] = "El enlace de confirmación no es válido o ya fue usado.";
+                return RedirectToAction("Login");
+            }
+
+            // Confirmar el correo
+            emailConfirmation.IsConfirmed = true;
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Correo confirmado correctamente. Ya puedes iniciar sesión.";
+            return RedirectToAction("Login");
         }
 
         public IActionResult Logout()
