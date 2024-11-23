@@ -1,6 +1,4 @@
-﻿
-
-<!-- Sidebar Partial -->
+﻿<!-- Sidebar Partial -->
 <aside class="sidebar">
     <p class="user-greeting">Hola @(ViewBag.User != null ? ViewBag.User.Name : "Usuario")</p>
     <hr />
@@ -8,12 +6,30 @@
         <a href="#" class="menu-item">
             <i class="fa-solid fa-bag-shopping"></i> Mis pedidos
         </a>
-        <a href="#" class="menu-item">
+        <a href="/Users/UserInfo/@ViewContext.HttpContext.Session.GetInt32("UserId")" class="menu-item">
             <i class="fa-regular fa-circle-user"></i> Datos personales
         </a>
-        <a href="/Notifications/Index" class="menu-item active">
+        <a href="/Notifications/Index" class="menu-item">
             <i class="fa-solid fa-bell"></i> Notificaciones
         </a>
     </nav>
-    <button class="logout-button">CERRAR SESIÓN</button>
+    <form method="post" action="/Home/Logout">
+        <button type="submit" class="logout-button">CERRAR SESIÓN</button>
+    </form>
 </aside>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const menuItems = document.querySelectorAll(".menu-item"); // Selecciona todos los elementos con la clase 'menu-item'
+
+        menuItems.forEach(item => {
+            item.addEventListener("click", function () {
+                // Elimina la clase 'menu-item-active' de todos los elementos
+                menuItems.forEach(menuItem => menuItem.classList.remove("menu-item-active"));
+
+                // Agrega la clase 'menu-item-active' al elemento clicado
+                this.classList.add("menu-item-active");
+            });
+        });
+    });
+</script>

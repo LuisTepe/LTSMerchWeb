@@ -11,6 +11,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/UserInfo.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/UserInfoPartials.css" asp-append-version="true" />
+    <link rel="stylesheet" href="/css/notifications.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     <title>User Info</title>
 </head>
 <body>
@@ -80,16 +83,7 @@
         </main>
 
         <!-- Static Right Bar -->
-        <aside class="right-bar">
-            <h2>Hola @Model.Name</h2>
-            <nav>
-                <button class="sidebar-button"><span>📋</span> Mis pedidos</button>
-                <button class="sidebar-button"><span>👤</span> Datos personales</button>
-                <button class="sidebar-button"><span>🔔</span> Notificaciones</button>
-            </nav>
-            <button class="logout">Cerrar sesión</button>
-        </aside>
-    </div>
+        @Html.Partial("~/Views/Notifications/_Sidebar.cshtml")
 
     
 
