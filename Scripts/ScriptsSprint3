@@ -5,3 +5,9 @@ ADD COLUMN `postal_code` VARCHAR(20) NULL AFTER `street_address`,
 ADD COLUMN `neighborhood` VARCHAR(255) NULL AFTER `postal_code`,
 ADD COLUMN `city` VARCHAR(255) NULL AFTER `neighborhood`,
 ADD COLUMN `state` VARCHAR(255) NULL AFTER `city`;
+
+INSERT INTO payment_status_types (status_name)
+VALUES
+    ('Pagado'),
+    ('Enviado'),
+    ('Entregado');
