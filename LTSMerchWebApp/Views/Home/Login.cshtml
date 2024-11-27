@@ -90,7 +90,7 @@
             <div class="modal-content custom-modal-content">
                 <div class="custom-modal-header">
                     <img src="~/img/logo.png" alt="Logo" class="custom-modal-logo">
-                    <button type="button" class="custom-close-btn" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="custom-close-btn" onclick="closeAndClear('#successModal', '/Home/ClearTempData')" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -108,7 +108,7 @@
             <div class="modal-content custom-modal-content">
                 <div class="custom-modal-header">
                     <img src="~/img/logo.png" alt="Logo" class="custom-modal-logo">
-                    <button type="button" class="custom-close-btn" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="custom-close-btn" onclick="closeAndClear('#errorModal', '/Home/ClearTempData')" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -136,6 +136,21 @@
                 $('#errorModal').modal('show');
             }
         });
+        function closeAndClear(modalId, clearUrl) {
+            $(modalId).modal('hide'); // Cierra el modal
+
+            // Llama a la acción del controlador para limpiar TempData
+            $.ajax({
+                url: clearUrl,
+                method: 'POST', // Puedes usar GET si prefieres
+                success: function () {
+                    console.log('TempData cleared');
+                },
+                error: function () {
+                    console.error('Error clearing TempData');
+                }
+            });
+        }
     </script>
 
 </body>

@@ -28,19 +28,21 @@
                 @Html.DisplayFor(modelItem => item.ColorHexCode)
             </td>
             <td>
-                <a href="javascript:void(0);" class="edit-link" data-colorid="@item.ColorId">Edit</a> |
-                <a href="javascript:void(0);" class="details-link" data-colorid="@item.ColorId">Details</a> |
-                <a href="javascript:void(0);" class="delete-link" data-colorid="@item.ColorId">Delete</a>
+                    <a href="javascript:void(0);" class="edit-link" data-colorid="@item.ColorId"><i class="fa fa-edit"></i></a> |
+                    <a href="javascript:void(0);" class="details-link" data-colorid="@item.ColorId"><i class="fa fa-info-circle"></i></a> |
+                    <a href="javascript:void(0);" class="delete-link" data-colorid="@item.ColorId"><i class="fa fa-trash"></i></a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
 <div class="button-container">
     <button href="javascript:void(0);" class="create-link">
         AGREGAR
     </button>
 </div>
+
 <!-- Side Panel for Create Form -->
 <div id="side-panel-create" class="side-panel">
     <button class="close-panel btn btn-secondary">Close</button>

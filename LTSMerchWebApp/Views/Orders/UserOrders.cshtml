@@ -11,8 +11,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/UserInfo.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/UserOrders.css" asp-append-version="true" />
-    <link rel="stylesheet" href="/css/notifications.css">
+    <link rel="stylesheet" href="~/css/userorders.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Notifications.css" asp-append-version="true" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <title>Mis Pedidos</title>
@@ -37,32 +37,35 @@
                 }
                 else
                 {
-                    <div class="orders-table-container">
-                        <table class="table orders-table">
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Total</th>
-                                    <th>Shipping Address</th>
-                                    <th>Status</th>
-                                    <th>Created At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var order in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            <span>@order.OrderId</span>
-                                        </td>
-                                        <td>@order.Total.ToString("C")</td>
-                                        <td>@order.ShippingAddress</td>
-                                        <td>@order.StatusType?.StatusName</td>
-                                        <td>@order.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                    <div class="orders-container">
+                        @foreach (var order in Model)
+                        {
+                            <div class="order-card">
+                                <div class="order-header">
+                                    <div>
+                                        <p><strong>Numero de pedido @order.OrderId</strong></p>
+                                        <p>@order.StatusType?.StatusName</p>
+                                    </div>
+                                    <p class="order-total">@order.Total.ToString("C")</p>
+                                </div>
+                                <div class="order-body">
+                                    <div class="order-items">
+                                        <!-- Aquí se iteran los productos del pedido -->
+                                        @foreach (var item in order.OrderDetails)
+                                        {
+                                            <img src="~/img/cap.png" alt="@item.ProductOption.Product.ImageUrl" class="order-item-image" />
+                                        }
+                                    </div>
+                                </div>
+                                <div class="order-footer">
+                                    @if (order.StatusType?.StatusName == "Procesando")
+                                    {
+                                        <button class="btn cancel-order-btn">Cancelar pedido</button>
+                                    }
+                                    <button class="btn details-order-btn">Ver detalles</button>
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
             </section>

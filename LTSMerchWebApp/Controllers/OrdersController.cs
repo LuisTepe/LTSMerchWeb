@@ -240,7 +240,10 @@ namespace LTSMerchWebApp.Controllers
 
             var userOrders = await _context.Orders
                 .Where(o => o.UserId == userId)
-                .Include(o => o.StatusType)
+                .Include(o => o.StatusType) // Incluir el tipo de estado
+                .Include(o => o.OrderDetails) // Incluir los detalles del pedido
+                    .ThenInclude(od => od.ProductOption) // Incluir las opciones de producto
+                    .ThenInclude(po => po.Product) // Incluir el producto
                 .ToListAsync();
 
             if (!userOrders.Any())
