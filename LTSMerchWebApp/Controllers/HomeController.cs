@@ -48,7 +48,6 @@ namespace LTSMerchWebApp.Controllers
                         HttpContext.Session.SetInt32("UserId", user.UserId);
                         HttpContext.Session.SetInt32("RoleTypeId", (int)user.RoleTypeId);
 
-                        TempData["SuccessMessage"] = "Inicio de sesion exitoso.";
                         if (user.RoleTypeId == _adminId)
                         {
                             return RedirectToAction("Index", "Admin");
@@ -142,6 +141,13 @@ namespace LTSMerchWebApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        public IActionResult ClearTempData()
+        {
+            TempData.Clear();
+            return Ok();
         }
     }
 }

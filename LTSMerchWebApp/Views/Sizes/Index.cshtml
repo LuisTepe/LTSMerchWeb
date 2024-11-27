@@ -12,7 +12,7 @@
 
     <h1>Tallas</h1>
 
-    <table class="TableQuerys">
+    <table class="generalTable">
         <thead>
 
             <tr>
@@ -20,13 +20,7 @@
                     @Html.DisplayNameFor(model => model.SizeId)
                 </th>
                 <th>
-                    Nombre del producto
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.SizeName)
-                </th>
-                <th>
-                    Stock
                 </th>
                 <th>
                     Acciones
@@ -41,29 +35,25 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.SizeId)
                     </td>
-                    <td>Producto 1</td>
                     <td>
                         @Html.DisplayFor(modelItem => item.SizeName)
                     </td>
                     <td>
-                        Cantidad Disponible
+                        <a href="javascript:void(0);" class="edit-link btn" onclick="openSidebar('edit', @item.SizeId)">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="delete-link btn" onclick="openSidebar('delete', @item.SizeId)">
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </td>
-                    <td>
-                        <button onclick="openSidebar('edit', @item.SizeId)">Edit</button>
-                        <button onclick="openSidebar('delete', @item.SizeId)">Delete</button>
-                    </td>
+
                 </tr>
             }
-
-            <tr class="no-border">
-                <td colspan="4"></td>
-                <td style="text-align: center;">
-                    <button class="btnCreate" onclick="openSidebar('create')">Agregar talla</button>
-                </td>
-            </tr>
-
         </tbody>
     </table>
+    <div class="button-container">
+        <button class="btnCreate" onclick="openSidebar('create')">Agregar talla</button>
+    </div>
 
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">

@@ -12,20 +12,10 @@
     <form asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="sidepanel-validation-summary"></div>
 
-        <div class="productinput">
-            <label class="sidepanel-form-label">Producto</label>
-            <input type="text" name="ProductName" class="form-control" />
-        </div>
-
         <div class="sizeinput">
             <label asp-for="SizeName" class="sidepanel-form-label">Talla</label>
             <input asp-for="SizeName" class="sidepanel-form-control" />
             <span asp-validation-for="SizeName" class="sidepanel-validation-error"></span>
-        </div>
-
-        <div class="stockinput">
-            <label class="sidepanel-form-label">Stock</label>
-            <input type="text" name="ProductName" class="form-control" />
         </div>
 
         <div class="CreateButton">

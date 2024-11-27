@@ -150,17 +150,17 @@
             // Delegar eventos para asegurarse de que funcionen incluso si se cargan dinámicamente
             $(document).on('click', '.edit-link', function () {
                 var orderId = $(this).data('orderid');
-                loadSidePanel('/Admin/Edit/' + orderId, '#edit-form-container', '#side-panel-edit');
+                loadSidePanel('/Orders/Edit/' + orderId, '#edit-form-container', '#side-panel-edit');
             });
 
             $(document).on('click', '.details-link', function () {
                 var orderId = $(this).data('orderid');
-                loadSidePanel('/Admin/Details/' + orderId, '#details-container', '#side-panel-details');
+                loadSidePanel('/Orders/Details/' + orderId, '#details-container', '#side-panel-details');
             });
 
             $(document).on('click', '.delete-link', function () {
                 var orderId = $(this).data('orderid');
-                loadSidePanel('/Admin/Delete/' + orderId, '#delete-container', '#side-panel-delete');
+                loadSidePanel('/Orders/Delete/' + orderId, '#delete-container', '#side-panel-delete');
             });
 
             // Cerrar los paneles laterales
